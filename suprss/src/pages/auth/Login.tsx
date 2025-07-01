@@ -1,0 +1,254 @@
+import {
+    Stack,
+    Card,
+    Box,
+    FormControl,
+    FormLabel,
+    TextField,
+    FormControlLabel,
+    Checkbox,
+    Button,
+    Divider,
+    Typography,
+} from "@mui/material";
+import { Link } from "react-router-dom";
+import TwoWomen from "../../assets/two_women.webp";
+import GoogleIcon from '@mui/icons-material/Google';
+import MicrosoftIcon from '@mui/icons-material/Microsoft';
+
+const Login = () => {
+    return (
+        <Stack
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+            sx={{
+                minHeight: "100vh",
+                backgroundColor: "#121417",
+            }}
+        >
+            <Card
+                sx={{
+                    display: "flex",
+                    flexDirection: { xs: "column", md: "row" },
+                    justifyContent: "center",
+                    width: { xs: "95%", sm: "80%", md: "70%" },
+                    height: "60%",
+                    maxHeight: "550px",
+                    maxWidth: "1000px",
+                    borderRadius: "50px",
+                    overflow: "hidden",
+                    boxShadow: "0px 10px 15px -3px rgba(0,0,0,0.3)",
+                    backgroundColor: "#121A21",
+                }}
+            >
+                <Box
+                    sx={{
+                        width: { xs: "100%", md: "50%" },
+                        backgroundColor: "transparent",
+                        padding: { xs: 3, sm: 5 },
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        textAlign: "center",
+                    }}
+                >
+                    <Typography variant="h5" sx={{ color: "#FFFFFF", my: 2, fontWeight: 'bold' }}>
+                        Login to SUPRSS
+                    </Typography>
+
+                    <Box component="form" noValidate sx={{ width: "100%", maxWidth: "350px" }}>
+                        <FormControl fullWidth sx={{ mt: 2 }}>
+                            <FormLabel htmlFor="username" sx={{ color: "#FFFFFF", mb: 0.5, alignSelf: "start",fontSize: "0.9rem" }}>Username</FormLabel>
+                            <TextField
+                                id="username"
+                                type="text"
+                                name="username"
+                                placeholder="Enter your username"
+                                autoComplete="username"
+                                autoFocus
+                                required
+                                fullWidth
+                                InputProps={{
+                                    sx: {
+                                        borderRadius: "8px",
+                                        backgroundColor: "#1C262E",
+                                        color: "#E2E8F0",
+                                        '& fieldset': {
+                                            borderColor: '#99ABC2',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: '#63B3ED',
+                                        }, '& input': {
+                                            padding: "10px",
+                                            fontSize: "0.87rem"
+                                        },
+                                    }
+                                }}
+                                InputLabelProps={{ sx: { color: "#E2E8F0" } }}
+                                error={false}
+                                helperText={""}
+                            />
+                        </FormControl>
+
+                        <FormControl fullWidth sx={{ my: 2 }}>
+                            <FormLabel htmlFor="password" sx={{ color: "#FFFFFF", mb: 0.5, alignSelf: "start",fontSize: "0.9rem" }}>Password</FormLabel>
+                            <TextField
+                                name="password"
+                                type="password"
+                                id="password"
+                                placeholder="Enter your password"
+                                autoComplete="current-password"
+                                required
+                                fullWidth
+                                InputProps={{
+                                    sx: {
+                                        borderRadius: "8px",
+                                        backgroundColor: "#1C262E",
+                                        color: "#E2E8F0",
+                                        '& fieldset': {
+                                            borderColor: '#99ABC2',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: '#63B3ED',
+                                        }, '& input': {
+                                            padding: "10px",
+                                            fontSize: "0.87rem"
+                                        },
+                                    }
+                                }}
+                                InputLabelProps={{ sx: { color: "#E2E8F0" } }}
+                                error={false}
+                                helperText={""}
+                            />
+                        </FormControl>
+
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                            <FormControlLabel
+                                control={<Checkbox sx={{
+                                    color: "#CBD5E0",
+                                    '& .MuiSvgIcon-root': {
+                                        fontSize: 20,
+                                    }
+                                }} />}
+                                label={<Typography variant="body2" sx={{ color: "#CBD5E0", fontSize: "0.8rem" }}>Remember Me</Typography>}
+                            />
+                            <Link to="/forgot-password" style={{ textDecoration: 'none' }}>
+                                <Typography variant="body2" sx={{ color: "#63B3ED", '&:hover': { textDecoration: 'underline' }, fontSize: "0.8rem" }}>
+                                    Forgot Password?
+                                </Typography>
+                            </Link>
+                        </Box>
+
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            fullWidth
+                            sx={{
+                                color: "#FFFFFF",
+                                backgroundColor: "#63B3ED",
+                                '&:hover': {
+                                    backgroundColor: "#4299E1",
+                                },
+                                borderRadius: "50px",
+                                fontSize: "0.75rem",
+                                fontWeight: "bold"
+                            }}
+                        >
+                            Login
+                        </Button>
+                    </Box>
+
+                    <Divider sx={{
+                        my: 2,
+                        width: "100%",
+                        maxWidth: "250px",
+                        "&::before, &::after": {
+                            borderColor: "#99ABC2",
+                        },
+                    }}>
+                        <Typography variant="body1" sx={{ color: "#CBD5E0", fontSize: "0.7rem" }}>Or login with</Typography>
+                    </Divider>
+
+                    <Box sx={{ display: "flex", flexDirection: "row", gap: 2, width: "100%", maxWidth: "350px", justifyContent: "center" }}>
+                        <Button
+                            variant="outlined"
+                            fullWidth
+                            startIcon={<GoogleIcon />}
+                            sx={{
+                                borderColor: "#FFFFFF",
+                                backgroundColor: "#293642",
+                                color: "#E2E8F0",
+                                '&:hover': {
+                                    borderColor: "#63B3ED",
+                                    backgroundColor: "rgba(99, 179, 237, 0.1)",
+                                },
+                                borderRadius: "50px",
+                                fontSize: "0.75rem",
+                                fontWeight: "bold"
+                            }}
+                        >
+                            Google
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            fullWidth
+                            startIcon={<MicrosoftIcon />}
+                            sx={{
+                                borderColor: "#FFFFFF",
+                                backgroundColor: "#293642",
+                                color: "#E2E8F0",
+                                '&:hover': {
+                                    borderColor: "#63B3ED",
+                                    backgroundColor: "rgba(99, 179, 237, 0.1)",
+                                },
+                                borderRadius: "50px",
+                                fontSize: "0.75rem",
+                                fontWeight: "bold",
+                            }}
+                        >
+                            Microsoft
+                        </Button>
+                    </Box>
+
+                    <Typography variant="body1" align="center" sx={{ color: "#CBD5E0", my: 2, fontSize: "0.7rem" }}>
+                        Don&apos;t have an account?{" "}
+                        <Link to="/auth/register" style={{ textDecoration: 'none' }}>
+                            <Typography component="span" sx={{ color: "#63B3ED", '&:hover': { textDecoration: 'underline' }, fontSize: "0.7rem" }}>
+                                Sign up
+                            </Typography>
+                        </Link>
+                    </Typography>
+                </Box>
+
+                <Box
+                    sx={{
+                        width: { xs: "100%", md: "50%" },
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        textAlign: "center",
+                        position: "relative",
+                        overflow: 'hidden',
+                        backgroundImage: `url(${TwoWomen})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                    }}
+                >
+                    <Box sx={{ position: "absolute", top: 40, textAlign: "center", width: "80%" }}>
+                        <Typography variant="h4" sx={{ color: "#FFFFFF", mb: 2, fontWeight: 'bold' }}>
+                            Stay informed, Together
+                        </Typography>
+                        <Typography variant="body1" sx={{ color: "#FFFFFF" }}>
+                            A collaborative RSS feed reader that helps you and your team stay up-to-date.
+                        </Typography>
+                    </Box>
+                </Box>
+            </Card>
+        </Stack>
+    );
+};
+
+export default Login;
