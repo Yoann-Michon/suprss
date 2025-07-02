@@ -9,14 +9,26 @@ import {
     Checkbox,
     Button,
     Divider,
-    Typography,
+    Typography, IconButton, InputAdornment
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TwoWomen from "../../assets/two_women.webp";
 import GoogleIcon from '@mui/icons-material/Google';
 import MicrosoftIcon from '@mui/icons-material/Microsoft';
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { useState, type FormEvent } from "react";
 
 const Login = () => {
+    const [showPassword, setShowPassword] = useState(false);
+    const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
+    const navigate = useNavigate();
+
+    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        navigate("/home");
+    };
+
     return (
         <Stack
             direction="column"
@@ -58,9 +70,9 @@ const Login = () => {
                         Login to SUPRSS
                     </Typography>
 
-                    <Box component="form" noValidate sx={{ width: "100%", maxWidth: "350px" }}>
+                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ width: "100%", maxWidth: "350px" }}>
                         <FormControl fullWidth sx={{ mt: 2 }}>
-                            <FormLabel htmlFor="username" sx={{ color: "#FFFFFF", mb: 0.5, alignSelf: "start",fontSize: "0.9rem" }}>Username</FormLabel>
+                            <FormLabel htmlFor="username" sx={{ color: "#FFFFFF", mb: 0.5, alignSelf: "start", fontSize: "0.9rem" }}>Username</FormLabel>
                             <TextField
                                 id="username"
                                 type="text"
@@ -93,35 +105,41 @@ const Login = () => {
                         </FormControl>
 
                         <FormControl fullWidth sx={{ my: 2 }}>
-                            <FormLabel htmlFor="password" sx={{ color: "#FFFFFF", mb: 0.5, alignSelf: "start",fontSize: "0.9rem" }}>Password</FormLabel>
+                            <FormLabel htmlFor="password" sx={{ color: "#FFFFFF", mb: 0.5, alignSelf: "start", fontSize: "0.9rem" }}>Password</FormLabel>
                             <TextField
-                                name="password"
-                                type="password"
                                 id="password"
-                                placeholder="Enter your password"
+                                name="password"
+                                type={showPassword ? "text" : "password"}
                                 autoComplete="current-password"
                                 required
                                 fullWidth
+                                placeholder="Enter your password"
                                 InputProps={{
                                     sx: {
                                         borderRadius: "8px",
                                         backgroundColor: "#1C262E",
                                         color: "#E2E8F0",
-                                        '& fieldset': {
-                                            borderColor: '#99ABC2',
-                                        },
-                                        '&.Mui-focused fieldset': {
-                                            borderColor: '#63B3ED',
-                                        }, '& input': {
+                                        '& fieldset': { borderColor: '#99ABC2' },
+                                        '&.Mui-focused fieldset': { borderColor: '#63B3ED' },
+                                        '& input': {
                                             padding: "10px",
                                             fontSize: "0.87rem"
                                         },
-                                    }
+                                    },
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                onClick={togglePasswordVisibility}
+                                                edge="end"
+                                                sx={{ color: "#E2E8F0" }}
+                                            >
+                                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
                                 }}
-                                InputLabelProps={{ sx: { color: "#E2E8F0" } }}
-                                error={false}
-                                helperText={""}
                             />
+
                         </FormControl>
 
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>

@@ -7,14 +7,23 @@ import {
     TextField,
     Button,
     Divider,
-    Typography,
+    Typography,IconButton, InputAdornment
 } from "@mui/material";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import TwoWomen from "../../assets/two_women.webp";
 import GoogleIcon from '@mui/icons-material/Google';
 import MicrosoftIcon from '@mui/icons-material/Microsoft';
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const Register = () => {
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
+    const toggleConfirmPasswordVisibility = () => setShowConfirmPassword((prev) => !prev);
+
     return (
         <Stack
             direction="column"
@@ -59,11 +68,13 @@ const Register = () => {
                         {[
                             { id: 'username', label: 'Username', type: 'text', autoComplete: 'username' },
                             { id: 'email', label: 'Email', type: 'email', autoComplete: 'email' },
-                            { id: 'password', label: 'Password', type: 'password', autoComplete: 'new-password' },
-                            { id: 'confirmPassword', label: 'Confirm Password', type: 'password', autoComplete: 'new-password' },
+                            { id: 'password', label: 'Password', type: showPassword ? 'text' : 'password', autoComplete: 'new-password' },
+                            { id: 'confirmPassword', label: 'Confirm Password', type: showConfirmPassword ? 'text' : 'password', autoComplete: 'new-password' },
                         ].map(({ id, label, type, autoComplete }) => (
                             <FormControl key={id} fullWidth sx={{ my: 1 }}>
-                                <FormLabel htmlFor={id} sx={{ color: "#FFFFFF", mb: 0.5, alignSelf: "start", fontSize: "0.9rem" }}>{label}</FormLabel>
+                                <FormLabel htmlFor={id} sx={{ color: "#FFFFFF", mb: 0.5, alignSelf: "start", fontSize: "0.9rem" }}>
+                                    {label}
+                                </FormLabel>
                                 <TextField
                                     id={id}
                                     name={id}
@@ -83,7 +94,25 @@ const Register = () => {
                                                 padding: "10px",
                                                 fontSize: "0.87rem"
                                             },
-                                        }
+                                        },
+                                        ...(id === 'password' && {
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton onClick={togglePasswordVisibility} edge="end" sx={{ color: "#E2E8F0" }}>
+                                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            )
+                                        }),
+                                        ...(id === 'confirmPassword' && {
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton onClick={toggleConfirmPasswordVisibility} edge="end" sx={{ color: "#E2E8F0" }}>
+                                                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            )
+                                        })
                                     }}
                                     InputLabelProps={{ sx: { color: "#E2E8F0" } }}
                                 />

@@ -5,17 +5,14 @@ import {
   Navigate,
   Outlet,
 } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
+import Layout from "./component/layer/Layout";
 
 const PrivateRoute = () => {
-  return true ? (
-      <Outlet />
-  ) : (
-    <Navigate to="/signin" />
-  );
+  const isAuthenticated = true; 
+  return isAuthenticated ? <Outlet /> : <Navigate to="/auth/login" />;
 };
 
 const App = () => {
@@ -26,7 +23,7 @@ const App = () => {
         <Route path="auth/register" element={<Register />} />
         <Route path="/" element={<Navigate to="auth/login" />} />
         <Route element={<PrivateRoute />}>
-          <Route path="/dashboard" element={<Dashboard />}>
+          <Route element={<Layout />}>
             <Route path="home" element={<Home />} />
             {/*<Route path="my_feed" element={<MyFeed />} />*/}
             {/*<Route path="shared_collections" element={<ShqredCollections />} />*/}
