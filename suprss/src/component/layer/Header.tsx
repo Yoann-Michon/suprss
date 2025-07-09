@@ -9,19 +9,18 @@ import {
     Menu,
     MenuItem,
 } from "@mui/material";
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { useState, type MouseEvent } from "react";
-import { useThemeMode } from "../ThemeModeContext";
+import { useThemeMode, useThemeColors } from "../ThemeModeContext";
+import { Link } from "react-router-dom";
 
 const Header = () => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-    
-    // Correction : destructurer les propriétés du contexte
+    const colors = useThemeColors();
     const { darkMode, toggleDarkMode } = useThemeMode();
-    
+
     const handleClick = (event: MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -34,40 +33,34 @@ const Header = () => {
         <Box
             component="header"
             sx={{
-                backgroundColor: "#1A2027",
                 px: 3,
-                color: "#fff",
+                color: colors.text.primary,
                 width: "100%",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                height: 50
             }}
         >
-            <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: 200, alignSelf:"end" }}>
-                <Box>
-                    <IconButton
-                        size="small"
-                        sx={{ p: 0 }}
-                        aria-controls={open ? "account-menu" : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? "true" : undefined}
-                    >
-                        <NotificationsIcon sx={{ color: "#FFFFFF" }} />
-                    </IconButton>
-                    
-                    <IconButton
-                        onClick={toggleDarkMode}
-                        size="small"
-                        sx={{ p: 0, ml: 1 }}
-                        aria-label="Toggle dark mode"
-                    >
-                        {darkMode ? (
-                            <LightModeIcon sx={{ color: "#FFFFFF" }} />
-                        ) : (
-                            <DarkModeIcon sx={{ color: "#3D99F5" }} />
-                        )}
-                    </IconButton>
-                </Box>
+            <Box sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: 100,
+                alignSelf: "end"
+            }}>
+                <IconButton
+                    onClick={toggleDarkMode}
+                    size="small"
+                    sx={{ p: 0, ml: 1 }}
+                    aria-label="Toggle dark mode"
+                >
+                    {darkMode ? (
+                        <LightModeIcon sx={{ color: colors.text.secondary }} />
+                    ) : (
+                        <DarkModeIcon sx={{ color: colors.primary }} />
+                    )}
+                </IconButton>
                 <Tooltip title="Account settings">
                     <IconButton
                         onClick={handleClick}
@@ -78,20 +71,25 @@ const Header = () => {
                         aria-expanded={open ? "true" : undefined}
                     >
                         <Avatar
-                            alt="Remy Sharp"
+                            alt="User Avatar"
                             src="/static/images/avatar/1.jpg"
-                            sx={{ width: 40, height: 40 }}
+                            sx={{ width: 30, height: 30 }}
                         />
                     </IconButton>
                 </Tooltip>
             </Box>
-            
+
             <Divider
                 orientation="horizontal"
                 flexItem
-                sx={{ my: 2, bgcolor: "#FFFFFF", width: "100%", alignSelf: "center" }}
+                sx={{
+                    mt: 2,
+                    bgcolor: colors.divider,
+                    width: "100%",
+                    alignSelf: "center"
+                }}
             />
-            
+
             <Menu
                 anchorEl={anchorEl}
                 id="account-menu"
@@ -105,6 +103,8 @@ const Header = () => {
                         filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
                         mt: 1.5,
                         minWidth: 180,
+                        backgroundColor: colors.background.paper,
+                        color: colors.text.primary,
                         "& .MuiAvatar-root": {
                             width: 32,
                             height: 32,
@@ -119,7 +119,7 @@ const Header = () => {
                             right: 14,
                             width: 10,
                             height: 10,
-                            bgcolor: "background.paper",
+                            bgcolor: colors.background.paper,
                             transform: "translateY(-50%) rotate(45deg)",
                             zIndex: 0,
                         },
@@ -128,18 +128,36 @@ const Header = () => {
                 transformOrigin={{ horizontal: "right", vertical: "top" }}
                 anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
-                <MenuItem>
+                <MenuItem component={Link} to="/account" sx={{
+                    color: colors.text.primary,
+                    "&:hover": {
+                        color: colors.primary,
+                        backgroundColor: "transparent",
+                    },
+                }}>
                     <Avatar /> Profile
                 </MenuItem>
-                <Divider />
-                <MenuItem>
-                    <ListItemIcon>
+                <Divider sx={{ borderColor: colors.divider }} />
+                <MenuItem component={Link} to="/settings" sx={{
+                    color: colors.text.primary,
+                    "&:hover": {
+                        color: colors.primary,
+                        backgroundColor: "transparent",
+                    },
+                }}>
+                    <ListItemIcon sx={{ color: colors.icon }}>
                         <Settings fontSize="small" />
                     </ListItemIcon>
                     Settings
                 </MenuItem>
-                <MenuItem>
-                    <ListItemIcon>
+                <MenuItem sx={{
+                    color: colors.text.primary,
+                    "&:hover": {
+                        color: colors.primary,
+                        backgroundColor: "transparent",
+                    },
+                }}>
+                    <ListItemIcon sx={{ color: colors.icon }}>
                         <Logout fontSize="small" />
                     </ListItemIcon>
                     Logout

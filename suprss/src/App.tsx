@@ -9,6 +9,10 @@ import Home from "./pages/Home";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Layout from "./component/layer/Layout";
+import SharedCollections from "./pages/SharedCollections";
+import Account from "./pages/Account";
+import Settings from "./pages/Settings";
+import MyFeed from "./MyFeed";
 
 const PrivateRoute = () => {
   const isAuthenticated = true; 
@@ -25,10 +29,10 @@ const App = () => {
         <Route element={<PrivateRoute />}>
           <Route element={<Layout />}>
             <Route path="home" element={<Home />} />
-            {/*<Route path="my_feed" element={<MyFeed />} />*/}
-            {/*<Route path="shared_collections" element={<ShqredCollections />} />*/}
-            {/*<Route path="favorite" element={<Favorite />} />*/}
-            {/*<Route path="settings" element={<Settings />} />*/}
+            <Route path="my_feed" element={<MyFeed />}/>
+            <Route path="shared_collections" element={<SharedCollections />} />
+            <Route path="account" element={<Account />} />
+           <Route path="settings" element={<Settings />} />
           </Route>
         </Route>
       </Routes>

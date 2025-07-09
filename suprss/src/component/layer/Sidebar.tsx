@@ -3,6 +3,9 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 import { useState } from 'react';
 import {
     List,
@@ -13,16 +16,40 @@ import {
     Stack,
     Typography,
     Divider,
-    Box
+    Box,
+    Collapse,
+    IconButton,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useThemeColors } from '../ThemeModeContext';
 
-const SideContent = () => {
+const Sidebar = () => {
+    const colors = useThemeColors();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const currentPath = location.pathname;
+
+    const [openSubMenu, setOpenSubMenu] = useState<string | null>(null);
+
+    const handleToggleSubMenu = (text: string) => {
+        setOpenSubMenu((prev) => (prev === text ? null : text));
+    };
+
+    const handleSelect = (path: string) => {
+        navigate(path);
+    };
+
     const nav = {
         header: [
-            { text: 'Home', icon: <HomeRoundedIcon />, path: '/dashboard' },
+            { text: 'Home', icon: <HomeRoundedIcon />, path: '/home' },
             { text: 'My Feed', icon: <FormatListBulletedIcon />, path: '/my_feed' },
-            { text: 'Shared Collections', icon: <PeopleOutlineIcon />, path: '/shared_collections' },
+            {
+                text: 'Shared Collections', icon: <PeopleOutlineIcon />, path: '/shared_collections',
+                subItems: [
+                    { title: "Collections 1", path: '/shared_collections/1' },
+                    { title: "Collections 2", path: '/shared_collections/2' },
+                ]
+            },
             { text: 'Collections', icon: <CollectionsBookmarkIcon />, path: '/my_collections' },
         ],
         footer: [
@@ -30,71 +57,140 @@ const SideContent = () => {
         ]
     };
 
-    const [selectedPage, setSelectedPage] = useState('Home');
-    const navigate = useNavigate();
-
-    const handleSelect = (text: string, path: string) => {
-        setSelectedPage(text);
-        navigate(path);
-    };
-
     return (
-        <Stack sx={{ px: 2, width: 250, height: '100vh', backgroundColor: '#121A21', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <Stack sx={{
+            px: 2,
+            minWidth: 250,
+            height: '100vh',
+            backgroundColor: colors.background.sidebar,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            borderRight: `1px solid ${colors.border}`
+        }}>
             <Box>
-
-                <Typography variant="h5" sx={{ color: '#FFFFFF', fontWeight: 'bold', my: 2, textAlign: 'center' }}>
+                <Typography variant="h5" sx={{
+                    color: colors.text.primary,
+                    fontWeight: 'bold',
+                    my: 2,
+                    textAlign: 'center'
+                }}>
                     SUPRSS
                 </Typography>
-
                 <List dense>
                     {nav.header.map((item, index) => (
-                        <ListItem key={index} disablePadding>
-                            <ListItemButton
-                                onClick={() => handleSelect(item.text, item.path)}
-                                sx={{
-                                    backgroundColor: selectedPage === item.text ? "#243347" : "transparent",
-                                    borderRadius: "50px",
-                                    px: 2,
-                                    py: 1,
-                                    color: "#E2E8F0",
-                                    '&:hover': {
-                                        color: "#3D99F5"
-                                    }
-                                }}
-                            >
-                                <ListItemIcon sx={{ color: selectedPage === item.text ? "#3D99F5" : "#99ABC2" }}>
-                                    {item.icon}
-                                </ListItemIcon>
-                                <ListItemText primary={item.text} />
-                            </ListItemButton>
-                        </ListItem>
+                        <Box key={index}>
+                            <ListItem disablePadding secondaryAction={
+                                item.subItems && (
+                                    <IconButton
+                                        edge="end"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleToggleSubMenu(item.text);
+                                        }}
+                                        sx={{ color: colors.icon, p: 0, m: 0 }}
+                                    >
+                                        {openSubMenu === item.text ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                                    </IconButton>
+                                )
+                            }>
+                                <ListItemButton
+                                    onClick={() => handleSelect(item.path)}
+                                    sx={{
+                                        backgroundColor: currentPath.startsWith(item.path) ? colors.background.selected : "transparent",
+                                        borderRadius: "50px",
+                                        px: 2,
+                                        pl: 1,
+                                        color: currentPath.startsWith(item.path) ? colors.primary : colors.text.secondary,
+                                        '&:hover': {
+                                            color: colors.primary,
+                                            backgroundColor: "transparent",
+                                        }
+                                    }}
+                                >
+                                    <ListItemIcon sx={{
+                                        color: currentPath.startsWith(item.path) ? colors.iconSelected : colors.icon,
+                                        minWidth: '40px'
+                                    }}>
+                                        {item.icon}
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={item.text}
+                                        primaryTypographyProps={{
+                                            fontSize: '14px',
+                                            fontWeight: currentPath.startsWith(item.path) ? 600 : 400
+                                        }}
+                                    />
+                                </ListItemButton>
+                            </ListItem>
+
+                            {item.subItems && (
+                                <Collapse in={openSubMenu === item.text} timeout="auto" unmountOnExit>
+                                    <List component="div" disablePadding>
+                                        {item.subItems.map((subItem, subIndex) => (
+                                            <ListItem key={subIndex} disablePadding>
+                                                <ListItemButton
+                                                    onClick={() => handleSelect(subItem.path)}
+                                                    sx={{
+                                                        pl: 6,
+                                                        py: 0.5,
+                                                        color: currentPath === subItem.path ? colors.primary : colors.text.secondary,
+                                                        '&:hover': {
+                                                            color: colors.primary,
+                                                            backgroundColor: "transparent",
+                                                        }
+                                                    }}
+                                                >
+                                                    <ListItemText
+                                                        primary={subItem.title}
+                                                        primaryTypographyProps={{
+                                                            fontSize: '13px',
+                                                            fontWeight: currentPath === subItem.path ? 600 : 400,
+                                                        }}
+                                                    />
+                                                </ListItemButton>
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                </Collapse>
+                            )}
+                        </Box>
                     ))}
                 </List>
             </Box>
+
             <Box>
-
-                <Divider sx={{ my: 2, borderColor: "#243347" }} />
-
+                <Divider sx={{ my: 2, borderColor: colors.divider }} />
                 <List dense>
                     {nav.footer.map((item, index) => (
                         <ListItem key={index} disablePadding>
                             <ListItemButton
-                                onClick={() => handleSelect(item.text, item.path)}
+                                onClick={() => handleSelect(item.path)}
                                 sx={{
-                                    backgroundColor: selectedPage === item.text ? "#243347" : "transparent",
+                                    backgroundColor: currentPath === item.path ? colors.background.selected : "transparent",
                                     borderRadius: "50px",
                                     px: 2,
                                     py: 1,
-                                    color: "#E2E8F0",
+                                    color: currentPath === item.path ? colors.primary : colors.text.secondary,
                                     '&:hover': {
-                                        color: "#3D99F5",
+                                        color: colors.primary,
+                                        backgroundColor: "transparent",
                                     }
                                 }}
                             >
-                                <ListItemIcon sx={{ color: selectedPage === item.text ? "#3D99F5" : "#99ABC2" }}>
+                                <ListItemIcon sx={{
+                                    color: currentPath === item.path ? colors.iconSelected : colors.icon,
+                                    minWidth: '40px'
+                                }}>
                                     {item.icon}
                                 </ListItemIcon>
-                                <ListItemText primary={item.text} />
+                                <ListItemText
+                                    primary={item.text}
+                                    primaryTypographyProps={{
+                                        fontSize: '14px',
+                                        fontWeight: currentPath === item.path ? 600 : 400
+                                    }}
+                                />
                             </ListItemButton>
                         </ListItem>
                     ))}
@@ -104,4 +200,4 @@ const SideContent = () => {
     );
 };
 
-export default SideContent;
+export default Sidebar;
