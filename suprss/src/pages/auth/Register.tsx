@@ -16,13 +16,46 @@ import GoogleIcon from '@mui/icons-material/Google';
 import MicrosoftIcon from '@mui/icons-material/Microsoft';
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { useTranslation } from "react-i18next";
 
 const Register = () => {
+    const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
     const toggleConfirmPasswordVisibility = () => setShowConfirmPassword((prev) => !prev);
+
+    const formFields = [
+        { 
+            id: 'username', 
+            label: t('register.username'), 
+            type: 'text', 
+            autoComplete: 'username',
+            placeholder: t('register.usernamePlaceholder')
+        },
+        { 
+            id: 'email', 
+            label: t('register.email'), 
+            type: 'email', 
+            autoComplete: 'email',
+            placeholder: t('register.emailPlaceholder')
+        },
+        { 
+            id: 'password', 
+            label: t('register.password'), 
+            type: showPassword ? 'text' : 'password', 
+            autoComplete: 'new-password',
+            placeholder: t('register.passwordPlaceholder')
+        },
+        { 
+            id: 'confirmPassword', 
+            label: t('register.confirmPassword'), 
+            type: showConfirmPassword ? 'text' : 'password', 
+            autoComplete: 'new-password',
+            placeholder: t('register.confirmPasswordPlaceholder')
+        },
+    ];
 
     return (
         <Stack
@@ -61,16 +94,11 @@ const Register = () => {
                     }}
                 >
                     <Typography variant="h5" sx={{ color: "#FFFFFF", my: 2, fontWeight: 'bold' }}>
-                        Create your account
+                        {t('register.title')}
                     </Typography>
 
                     <Box component="form" noValidate sx={{ width: "100%", maxWidth: "350px" }}>
-                        {[
-                            { id: 'username', label: 'Username', type: 'text', autoComplete: 'username' },
-                            { id: 'email', label: 'Email', type: 'email', autoComplete: 'email' },
-                            { id: 'password', label: 'Password', type: showPassword ? 'text' : 'password', autoComplete: 'new-password' },
-                            { id: 'confirmPassword', label: 'Confirm Password', type: showConfirmPassword ? 'text' : 'password', autoComplete: 'new-password' },
-                        ].map(({ id, label, type, autoComplete }) => (
+                        {formFields.map(({ id, label, type, autoComplete, placeholder }) => (
                             <FormControl key={id} fullWidth sx={{ my: 1 }}>
                                 <FormLabel htmlFor={id} sx={{ color: "#FFFFFF", mb: 0.5, alignSelf: "start", fontSize: "0.9rem" }}>
                                     {label}
@@ -79,7 +107,7 @@ const Register = () => {
                                     id={id}
                                     name={id}
                                     type={type}
-                                    placeholder={`Enter your ${label.toLowerCase()}`}
+                                    placeholder={placeholder}
                                     autoComplete={autoComplete}
                                     required
                                     fullWidth
@@ -135,7 +163,7 @@ const Register = () => {
                                 mt: 2
                             }}
                         >
-                            Register
+                            {t('register.registerButton')}
                         </Button>
                     </Box>
 
@@ -147,7 +175,9 @@ const Register = () => {
                             borderColor: "#99ABC2",
                         },
                     }}>
-                        <Typography variant="body1" sx={{ color: "#CBD5E0", fontSize: "0.7rem" }}>Or register with</Typography>
+                        <Typography variant="body1" sx={{ color: "#CBD5E0", fontSize: "0.7rem" }}>
+                            {t('register.orRegisterWith')}
+                        </Typography>
                     </Divider>
 
                     <Box sx={{ display: "flex", flexDirection: "row", gap: 2, width: "100%", maxWidth: "350px", justifyContent: "center" }}>
@@ -192,10 +222,10 @@ const Register = () => {
                     </Box>
 
                     <Typography variant="body1" align="center" sx={{ color: "#CBD5E0", my: 2, fontSize: "0.7rem" }}>
-                        Already have an account?{" "}
+                        {t('register.alreadyHaveAccount')}{" "}
                         <Link to="/auth/login" style={{ textDecoration: 'none' }}>
                             <Typography component="span" sx={{ color: "#63B3ED", '&:hover': { textDecoration: 'underline' }, fontSize: "0.7rem" }}>
-                                Login
+                                {t('register.login')}
                             </Typography>
                         </Link>
                     </Typography>
@@ -218,10 +248,10 @@ const Register = () => {
                 >
                     <Box sx={{ position: "absolute", top: 40, textAlign: "center", width: "80%" }}>
                         <Typography variant="h4" sx={{ color: "#FFFFFF", mb: 2, fontWeight: 'bold' }}>
-                            Stay informed, Together
+                            {t('register.stayInformedTogether')}
                         </Typography>
                         <Typography variant="body1" sx={{ color: "#FFFFFF" }}>
-                            A collaborative RSS feed reader that helps you and your team stay up-to-date.
+                            {t('register.collaborativeDescription')}
                         </Typography>
                     </Box>
                 </Box>

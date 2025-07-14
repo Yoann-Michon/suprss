@@ -1,6 +1,8 @@
 import { InputAdornment, TextField } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { useThemeColors } from "../ThemeModeContext";
+import { useTranslation } from 'react-i18next';
+
 
 interface SearchBarProps {
   searchText: string;
@@ -9,10 +11,10 @@ interface SearchBarProps {
 
 const SearchBar = ({ searchText, onSearchChange }: SearchBarProps) => {
   const colors = useThemeColors();
-
+  const { t } = useTranslation();
   return (
     <TextField
-      placeholder="Search articles..."
+      placeholder={t('filters.search')}
       variant="outlined"
       fullWidth
       size="small"

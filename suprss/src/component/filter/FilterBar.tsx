@@ -1,5 +1,6 @@
 import { Stack } from "@mui/material";
 import FilterDropdown from "./FilterDropdown";
+import { useTranslation } from 'react-i18next';
 
 interface FilterBarProps {
   sources: string[];
@@ -30,41 +31,47 @@ const FilterBar = ({
   sort,
   setSort,
 }: FilterBarProps) => {
+  const { t } = useTranslation();
   return (
     <Stack direction="row" spacing={1} flexWrap="wrap" paddingBottom={1} justifyContent="center" alignItems="center">
       <FilterDropdown
-        label="Source"
+        label={t('filters.source')}
         options={sources}
         selected={selectedSources}
         onChange={setSelectedSources}
       />
+
       <FilterDropdown
-        label="Category"
+        label={t('filters.category')}
         options={categories}
         selected={selectedCategories}
         onChange={setSelectedCategories}
       />
+
       <FilterDropdown
-        label="Read/Unread"
-        options={["Read", "Unread"]}
+        label={t('filters.readStatus')}
+        options={[t('filters.read'), t('filters.unread')]}
         selected={readState}
         onChange={setReadState}
         multiple={false}
       />
+
       <FilterDropdown
-        label="Favorites"
-        options={["Only Favorites", "All"]}
+        label={t('filters.favorites')}
+        options={[t('filters.onlyFavorites'), t('filters.all')]}
         selected={favorites}
         onChange={setFavorites}
         multiple={false}
       />
+
       <FilterDropdown
-        label="Sort"
-        options={["Newest", "Oldest"]}
+        label={t('filters.sort')}
+        options={[t('filters.newest'), t('filters.oldest')]}
         selected={sort}
         onChange={setSort}
         multiple={false}
       />
+
     </Stack>
   );
 };

@@ -14,6 +14,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LockResetIcon from '@mui/icons-material/LockReset';
 import { useThemeColors } from '../component/ThemeModeContext';
+import { useTranslation } from 'react-i18next';
 
 const mockUser = {
   name: 'Jane Doe',
@@ -25,6 +26,7 @@ const mockUser = {
 
 const Account = () => {
   const colors = useThemeColors();
+  const { t } = useTranslation();
 
   return (
     <Box
@@ -51,7 +53,7 @@ const Account = () => {
         }}
       >
         <Typography variant="h5" fontWeight={600} color={colors.text.primary}>
-          Account Settings
+          {t('account.title')}
         </Typography>
 
         <Stack direction="row" spacing={3} alignItems="center">
@@ -68,10 +70,10 @@ const Account = () => {
               {mockUser.email}
             </Typography>
             <Typography variant="body2" color={colors.text.secondary}>
-              Joined: {mockUser.joined}
+              {t('account.joined')}: {mockUser.joined}
             </Typography>
           </Box>
-          <Tooltip title="Edit profile">
+          <Tooltip title={t('account.editProfile')}>
             <IconButton>
               <EditIcon sx={{ color: colors.icon }} />
             </IconButton>
@@ -82,10 +84,10 @@ const Account = () => {
 
         <Stack spacing={2}>
           <Typography variant="subtitle1" fontWeight={500} color={colors.text.primary}>
-            Linked Provider
+            {t('account.linkedProvider')}
           </Typography>
           <TextField
-            label="Authentication Provider"
+            label={t('account.authProvider')}
             value={mockUser.provider}
             disabled
             fullWidth
@@ -108,7 +110,7 @@ const Account = () => {
               },
             }}
           >
-            Change Password
+            {t('account.changePassword')}
           </Button>
           <Button
             variant="contained"
@@ -116,7 +118,7 @@ const Account = () => {
             color="error"
             sx={{ fontWeight: 600 }}
           >
-            Logout
+            {t('account.logout')}
           </Button>
         </Stack>
       </Paper>

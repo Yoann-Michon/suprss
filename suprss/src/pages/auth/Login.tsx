@@ -18,8 +18,10 @@ import MicrosoftIcon from '@mui/icons-material/Microsoft';
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState, type FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
+    const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
     const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
     const navigate = useNavigate();
@@ -67,17 +69,19 @@ const Login = () => {
                     }}
                 >
                     <Typography variant="h5" sx={{ color: "#FFFFFF", my: 2, fontWeight: 'bold' }}>
-                        Login to SUPRSS
+                        {t('login.title')}
                     </Typography>
 
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ width: "100%", maxWidth: "350px" }}>
                         <FormControl fullWidth sx={{ mt: 2 }}>
-                            <FormLabel htmlFor="username" sx={{ color: "#FFFFFF", mb: 0.5, alignSelf: "start", fontSize: "0.9rem" }}>Username</FormLabel>
+                            <FormLabel htmlFor="username" sx={{ color: "#FFFFFF", mb: 0.5, alignSelf: "start", fontSize: "0.9rem" }}>
+                                {t('login.username')}
+                            </FormLabel>
                             <TextField
                                 id="username"
                                 type="text"
                                 name="username"
-                                placeholder="Enter your username"
+                                placeholder={t('login.usernamePlaceholder')}
                                 autoComplete="username"
                                 autoFocus
                                 required
@@ -105,7 +109,9 @@ const Login = () => {
                         </FormControl>
 
                         <FormControl fullWidth sx={{ my: 2 }}>
-                            <FormLabel htmlFor="password" sx={{ color: "#FFFFFF", mb: 0.5, alignSelf: "start", fontSize: "0.9rem" }}>Password</FormLabel>
+                            <FormLabel htmlFor="password" sx={{ color: "#FFFFFF", mb: 0.5, alignSelf: "start", fontSize: "0.9rem" }}>
+                                {t('login.password')}
+                            </FormLabel>
                             <TextField
                                 id="password"
                                 name="password"
@@ -113,7 +119,7 @@ const Login = () => {
                                 autoComplete="current-password"
                                 required
                                 fullWidth
-                                placeholder="Enter your password"
+                                placeholder={t('login.passwordPlaceholder')}
                                 InputProps={{
                                     sx: {
                                         borderRadius: "8px",
@@ -139,7 +145,6 @@ const Login = () => {
                                     )
                                 }}
                             />
-
                         </FormControl>
 
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
@@ -150,11 +155,13 @@ const Login = () => {
                                         fontSize: 20,
                                     }
                                 }} />}
-                                label={<Typography variant="body2" sx={{ color: "#CBD5E0", fontSize: "0.8rem" }}>Remember Me</Typography>}
+                                label={<Typography variant="body2" sx={{ color: "#CBD5E0", fontSize: "0.8rem" }}>
+                                    {t('login.rememberMe')}
+                                </Typography>}
                             />
                             <Link to="/forgot-password" style={{ textDecoration: 'none' }}>
                                 <Typography variant="body2" sx={{ color: "#63B3ED", '&:hover': { textDecoration: 'underline' }, fontSize: "0.8rem" }}>
-                                    Forgot Password?
+                                    {t('login.forgotPassword')}
                                 </Typography>
                             </Link>
                         </Box>
@@ -174,7 +181,7 @@ const Login = () => {
                                 fontWeight: "bold"
                             }}
                         >
-                            Login
+                            {t('login.loginButton')}
                         </Button>
                     </Box>
 
@@ -186,7 +193,9 @@ const Login = () => {
                             borderColor: "#99ABC2",
                         },
                     }}>
-                        <Typography variant="body1" sx={{ color: "#CBD5E0", fontSize: "0.7rem" }}>Or login with</Typography>
+                        <Typography variant="body1" sx={{ color: "#CBD5E0", fontSize: "0.7rem" }}>
+                            {t('login.orLoginWith')}
+                        </Typography>
                     </Divider>
 
                     <Box sx={{ display: "flex", flexDirection: "row", gap: 2, width: "100%", maxWidth: "350px", justifyContent: "center" }}>
@@ -231,10 +240,10 @@ const Login = () => {
                     </Box>
 
                     <Typography variant="body1" align="center" sx={{ color: "#CBD5E0", my: 2, fontSize: "0.7rem" }}>
-                        Don&apos;t have an account?{" "}
+                        {t('login.noAccount')}{" "}
                         <Link to="/auth/register" style={{ textDecoration: 'none' }}>
                             <Typography component="span" sx={{ color: "#63B3ED", '&:hover': { textDecoration: 'underline' }, fontSize: "0.7rem" }}>
-                                Sign up
+                                {t('login.signUp')}
                             </Typography>
                         </Link>
                     </Typography>
@@ -257,10 +266,10 @@ const Login = () => {
                 >
                     <Box sx={{ position: "absolute", top: 40, textAlign: "center", width: "80%" }}>
                         <Typography variant="h4" sx={{ color: "#FFFFFF", mb: 2, fontWeight: 'bold' }}>
-                            Stay informed, Together
+                            {t('login.stayInformedTogether')}
                         </Typography>
                         <Typography variant="body1" sx={{ color: "#FFFFFF" }}>
-                            A collaborative RSS feed reader that helps you and your team stay up-to-date.
+                            {t('login.collaborativeDescription')}
                         </Typography>
                     </Box>
                 </Box>

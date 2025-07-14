@@ -22,12 +22,15 @@ import {
 } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useThemeColors } from '../ThemeModeContext';
+import { useTranslation } from 'react-i18next';
+
 
 const Sidebar = () => {
     const colors = useThemeColors();
     const navigate = useNavigate();
     const location = useLocation();
     const currentPath = location.pathname;
+    const { t } = useTranslation();
 
     const [openSubMenu, setOpenSubMenu] = useState<string | null>(null);
 
@@ -40,22 +43,23 @@ const Sidebar = () => {
     };
 
     const nav = {
-        header: [
-            { text: 'Home', icon: <HomeRoundedIcon />, path: '/home' },
-            { text: 'My Feed', icon: <FormatListBulletedIcon />, path: '/my_feed' },
-            {
-                text: 'Shared Collections', icon: <PeopleOutlineIcon />, path: '/shared_collections',
-                subItems: [
-                    { title: "Collections 1", path: '/shared_collections/1' },
-                    { title: "Collections 2", path: '/shared_collections/2' },
-                ]
-            },
-            { text: 'Collections', icon: <CollectionsBookmarkIcon />, path: '/my_collections' },
-        ],
-        footer: [
-            { text: 'Documentation', icon: <AutoStoriesIcon />, path: '/documentation' },
-        ]
-    };
+  header: [
+    { text: t('sidebar.home'), icon: <HomeRoundedIcon />, path: '/home' },
+    { text: t('sidebar.myFeed'), icon: <FormatListBulletedIcon />, path: '/my_feed' },
+    {
+      text: t('sidebar.sharedCollections'), icon: <PeopleOutlineIcon />, path: '/shared_collections',
+      subItems: [
+        { title: t('sidebar.collection1'), path: '/shared_collections/1' },
+        { title: t('sidebar.collection2'), path: '/shared_collections/2' },
+      ]
+    },
+    { text: t('sidebar.collections'), icon: <CollectionsBookmarkIcon />, path: '/my_collections' },
+  ],
+  footer: [
+    { text: t('sidebar.documentation'), icon: <AutoStoriesIcon />, path: '/documentation' },
+  ]
+};
+
 
     return (
         <Stack sx={{

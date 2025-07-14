@@ -7,14 +7,11 @@ import {
     ListItemButton,
     ListItemText,
     Divider,
-    SpeedDial,
-    SpeedDialAction,
 } from '@mui/material';
-import ManageSearchIcon from '@mui/icons-material/ManageSearch';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
-import AddLinkIcon from '@mui/icons-material/AddLink';
 import { useNavigate } from 'react-router-dom';
-import { useThemeColors } from './component/ThemeModeContext';
+import { useThemeColors } from '../component/ThemeModeContext';
+import { useTranslation } from 'react-i18next';
+import CustomSpeedDial from '../component/CustomSpeedDial';
 
 interface Article {
     id: string;
@@ -35,7 +32,7 @@ const mockArticles: Article[] = [
     {
         id: '2',
         title: 'Latest updates in React 18',
-        summary: 'React 18 brings exciting features. Learn what’s new and how to migrate.',
+        summary: 'React 18 brings exciting features. Learn what\'s new and how to migrate.',
         date: '2025-07-08',
         source: 'React News',
     },
@@ -51,30 +48,12 @@ const mockArticles: Article[] = [
 const MyFeed = () => {
     const colors = useThemeColors();
     const navigate = useNavigate();
-
-    const actions = [
-        {
-            icon: <ManageSearchIcon />,
-            name: 'Manage Feeds',
-            onClick: () => navigate('/manage_feeds'),
-        },
-        {
-            icon: <AddLinkIcon />,
-            name: 'Add from URL',
-            onClick: () => true,
-        },
-        {
-            icon: <UploadFileIcon />,
-            name: 'Add from File',
-            onClick: () => true,
-
-        },
-    ];
+    const { t } = useTranslation();
 
     return (
         <Box p={{ xs: 2, md: 4 }} height="100%" sx={{ backgroundColor: colors.background.default }}>
             <Typography variant="h4" gutterBottom>
-                My Feed
+                {t('myFeed.title')}
             </Typography>
 
             <Paper elevation={2} sx={{ p: 2, backgroundColor: colors.background.paper }}>
@@ -109,23 +88,8 @@ const MyFeed = () => {
                         </Box>
                     ))}
                 </List>
-
             </Paper>
-
-            <SpeedDial
-                ariaLabel="Manage feeds actions"
-                sx={{ position: 'fixed', bottom: 24, right: 24 }}
-                icon={<ManageSearchIcon />}
-            >
-                {actions.map((action) => (
-                    <SpeedDialAction
-                        key={action.name}
-                        icon={action.icon}
-                        tooltipTitle={action.name}
-                        onClick={action.onClick}
-                    />
-                ))}
-            </SpeedDial>
+            <CustomSpeedDial />
         </Box>
     );
 };

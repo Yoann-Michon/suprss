@@ -1,0 +1,119 @@
+{
+  "login": {
+    "title": "Connexion à votre compte",
+    "username": "Nom d'utilisateur",
+    "usernamePlaceholder": "Entrez votre nom d'utilisateur",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "Entrez votre mot de passe",
+    "rememberMe": "Se souvenir de moi",
+    "forgotPassword": "Mot de passe oublié ?",
+    "loginButton": "Se connecter",
+    "orLoginWith": "ou connectez-vous avec",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "signUp": "Inscrivez-vous",
+    "stayInformedTogether": "Restez informé. Ensemble.",
+    "collaborativeDescription": "Suivez vos flux préférés avec votre équipe, en temps réel."
+  },
+  "register": {
+    "title": "Créer votre compte",
+    "username": "Nom d'utilisateur",
+    "usernamePlaceholder": "Choisissez un nom d'utilisateur",
+    "email": "Adresse email",
+    "emailPlaceholder": "Entrez votre adresse email",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "Créez un mot de passe",
+    "confirmPassword": "Confirmez le mot de passe",
+    "confirmPasswordPlaceholder": "Répétez votre mot de passe",
+    "registerButton": "S'inscrire",
+    "orRegisterWith": "ou inscrivez-vous avec",
+    "alreadyHaveAccount": "Vous avez déjà un compte ?",
+    "login": "Connexion",
+    "stayInformedTogether": "Restez informé. Ensemble.",
+    "collaborativeDescription": "Suivez vos flux préférés avec votre équipe, en temps réel."
+  },
+  "account": {
+    "title": "Mon compte",
+    "joined": "Inscrit depuis",
+    "editProfile": "Modifier le profil",
+    "linkedProvider": "Fournisseur d'authentification lié",
+    "authProvider": "Fournisseur d'authentification",
+    "changePassword": "Changer le mot de passe",
+    "logout": "Se déconnecter"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "appearance": {
+      "darkMode": "Mode sombre",
+      "darkModeDescription": "Activez le mode sombre pour un confort de lecture dans un environnement peu éclairé.",
+      "language": "Langue",
+      "languageDescription": "Choisissez la langue de l'application."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Configurez vos préférences de notification (bientôt disponible)."
+    }
+  },
+  "header": {
+    "tooltip": "Paramètres du compte",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "logout": "Se déconnecter"
+  },
+  "sidebar": {
+    "home": "Accueil",
+    "myFeed": "Mon Feed",
+    "sharedCollections": "Collections Partagées",
+    "collection1": "Collection 1",
+    "collection2": "Collection 2",
+    "collections": "Mes Collections",
+    "documentation": "Documentation"
+  },
+  "filters": {
+    "search": "Rechercher des articles...",
+    "source": "Source",
+    "category": "Catégorie",
+    "readStatus": "Lu/Non lu",
+    "read": "Lu",
+    "unread": "Non lu",
+    "favorites": "Favoris",
+    "onlyFavorites": "Uniquement les favoris",
+    "all": "Tous",
+    "sort": "Trier",
+    "newest": "Les plus récents",
+    "oldest": "Les plus anciens"
+  },
+  "manageFeeds": {
+    "title": "Gérer les flux",
+    "addFromUrl": "Ajouter par URL",
+    "addFromFile": "Ajouter par fichier",
+    "editFeed": "Modifier le flux",
+    "feedUrl": "URL du flux",
+    "selectFile": "Sélectionner un fichier",
+    "table": {
+      "feedTitle": "Titre du flux",
+      "url": "URL",
+      "tags": "Étiquettes",
+      "updateFrequency": "Fréquence",
+      "description": "Description",
+      "actions": "Actions"
+    },
+    "fields": {
+      "title": "Titre",
+      "url": "URL",
+      "tags": "Étiquettes",
+      "frequency": "Fréquence",
+      "description": "Description"
+    }
+  },
+  "common": {
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "add": "Ajouter"
+  },
+  "error": {
+    "notFound": "Page non trouvée",
+    "unauthorized": "Accès non autorisé",
+    "serverError": "Erreur du serveur, veuillez réessayer plus tard.",
+    "networkError": "Erreur réseau, veuillez vérifier votre connexion."
+  }
+}

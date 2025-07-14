@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useThemeColors } from "../component/ThemeModeContext";
+import { useTranslation } from 'react-i18next';
 import SearchBar from "../component/filter/SearchBar";
 import FilterBar from "../component/filter/FilterBar";
 
@@ -53,10 +54,11 @@ const Home = () => {
   const [sort, setSort] = useState<string[]>(["Newest"]);
   
   const colors = useThemeColors();
+  const { t } = useTranslation();
 
   // Extraire les sources et catégories disponibles
   const availableSources = feedUrls.map(feed => feed.label);
-  const availableCategories = ["AI", "Mobile", "Web", "Hardware"]; // Ces catégories peuvent être extraites dynamiquement des articles si nécessaire
+  const availableCategories = ["AI", "Mobile", "Web", "Hardware"];
 
   useEffect(() => {
     (async () => {
@@ -91,7 +93,6 @@ const Home = () => {
       .includes(searchText.toLowerCase());
 
     const matchesSource = selectedSources.length === 0 || selectedSources.includes(item.source);
-
     const matchesCategory = selectedCategories.length === 0; 
 
     return matchesSearch && matchesSource && matchesCategory;
@@ -133,7 +134,7 @@ const Home = () => {
         setSort={setSort}
       />
       <Typography variant="h5" fontWeight="bold" gutterBottom>
-        All Feeds
+        {t('home.allFeeds')}
       </Typography>
 
       {loading ? (
@@ -144,7 +145,7 @@ const Home = () => {
         <>
           {sortedItems.length === 0 ? (
             <Typography variant="body2" color="text.secondary">
-              No results found.
+              {t('home.noResults')}
             </Typography>
           ) : (
             <>
@@ -202,7 +203,7 @@ const Home = () => {
                         }}
                       />
                       <Button
-                        title="Read"
+                        title={t('home.read')}
                         variant="contained"
                         size="small"
                         href={item.link}
@@ -216,7 +217,7 @@ const Home = () => {
                           borderRadius: 50,
                         }}
                       >
-                        Read
+                        {t('home.read')}
                       </Button>
                     </CardContent>
                     {item.thumbnail && (

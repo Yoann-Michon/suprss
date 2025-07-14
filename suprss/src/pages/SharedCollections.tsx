@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import GroupIcon from '@mui/icons-material/Group';
 import { useThemeColors } from '../component/ThemeModeContext';
+import { useTranslation } from 'react-i18next';
 
 const mockCollections = [
   { id: 1, name: 'AI Watch', role: 'owner', users: ['alice', 'bob', 'carol'] },
@@ -26,6 +27,7 @@ const mockCollections = [
 ];
 
 const SharedCollectionsPage = () => {
+  const { t } = useTranslation();
   const colors = useThemeColors();
   const [tabIndex, setTabIndex] = useState(0);
   const [ownerCollections, setOwnerCollections] = useState<any[]>([]);
@@ -67,7 +69,7 @@ const SharedCollectionsPage = () => {
               {collection.name}
             </Typography>
             <Chip
-              label={collection.role === 'owner' ? 'Owner' : 'Reader'}
+              label={collection.role === 'owner' ? t('sharedCollections.owner') : t('sharedCollections.reader')}
               size="small"
               sx={{
                 alignSelf: 'start',
@@ -90,7 +92,7 @@ const SharedCollectionsPage = () => {
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  {collection.users.length} user(s)
+                  {t('sharedCollections.userCount', { count: collection.users.length })}
                 </Typography>
               </Tooltip>
             </Stack>
@@ -120,7 +122,7 @@ const SharedCollectionsPage = () => {
         }}
       >
         <Tab
-          label="Owned Collections"
+          label={t('sharedCollections.ownedCollections')}
           sx={{
             alignItems: 'flex-start',
             color: colors.text.secondary,
@@ -131,7 +133,7 @@ const SharedCollectionsPage = () => {
           }}
         />
         <Tab
-          label="Shared With Me"
+          label={t('sharedCollections.sharedWithMe')}
           sx={{
             alignItems: 'flex-start',
             color: colors.text.secondary,
@@ -147,7 +149,7 @@ const SharedCollectionsPage = () => {
         {tabIndex === 0 && (
           <Stack spacing={3}>
             <Typography variant="h5" fontWeight="bold" color={colors.text.primary}>
-              Collections You Own
+              {t('sharedCollections.collectionsYouOwn')}
             </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {ownerCollections.slice(0, visibleOwnerCount).map(renderCollectionCard)}
@@ -159,7 +161,7 @@ const SharedCollectionsPage = () => {
                   onClick={() => setVisibleOwnerCount((prev) => prev + 4)}
                   sx={{ mt: 1, color: colors.primary, borderColor: colors.primary }}
                 >
-                  Load more
+                  {t('sharedCollections.loadMore')}
                 </Button>
               </Box>
             )}
@@ -169,7 +171,7 @@ const SharedCollectionsPage = () => {
         {tabIndex === 1 && (
           <Stack spacing={3}>
             <Typography variant="h5" fontWeight="bold" color={colors.text.primary}>
-              Collections Shared With You
+              {t('sharedCollections.collectionsSharedWithYou')}
             </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {readerCollections.slice(0, visibleReaderCount).map(renderCollectionCard)}
@@ -181,7 +183,7 @@ const SharedCollectionsPage = () => {
                   onClick={() => setVisibleReaderCount((prev) => prev + 4)}
                   sx={{ mt: 1, color: colors.primary, borderColor: colors.primary }}
                 >
-                  Load more
+                  {t('sharedCollections.loadMore')}
                 </Button>
               </Box>
             )}

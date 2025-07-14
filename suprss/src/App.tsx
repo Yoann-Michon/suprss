@@ -12,10 +12,11 @@ import Layout from "./component/layer/Layout";
 import SharedCollections from "./pages/SharedCollections";
 import Account from "./pages/Account";
 import Settings from "./pages/Settings";
-import MyFeed from "./MyFeed";
+import MyFeed from "./pages/MyFeed";
+import ManageFeeds from "./pages/ManageFeed";
 
 const PrivateRoute = () => {
-  const isAuthenticated = true; 
+  const isAuthenticated = true;
   return isAuthenticated ? <Outlet /> : <Navigate to="/auth/login" />;
 };
 
@@ -29,10 +30,11 @@ const App = () => {
         <Route element={<PrivateRoute />}>
           <Route element={<Layout />}>
             <Route path="home" element={<Home />} />
-            <Route path="my_feed" element={<MyFeed />}/>
+            <Route path="my_feed" element={<MyFeed />} />
+            <Route path="my_feed/manage" element={<ManageFeeds />} />
             <Route path="shared_collections" element={<SharedCollections />} />
             <Route path="account" element={<Account />} />
-           <Route path="settings" element={<Settings />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
         </Route>
       </Routes>
