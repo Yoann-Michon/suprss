@@ -8,7 +8,10 @@
     "title": "Title",
     "url": "URL",
     "description": "Description",
-    "actions": "Actions"
+    "actions": "Actions",
+    "previous": "Previous",
+    "next": "Next",
+    "back": "Back"
   },
   "auth": {
     "login": {
@@ -148,36 +151,35 @@
     "networkError": "Network error, please check your connection."
   },
   "documentation": {
-  "title": "Documentation",
-  "description": "Learn how to use SUPRSS and get the most out of your feeds.",
-  "introTitle": "Getting Started",
-  "introDescription": "SUPRSS helps you manage and share your favorite RSS feeds. You can import feeds, organize them into collections, and collaborate with others in real time.",
-  "faqTitle": "Frequently Asked Questions",
-  "faq": {
-    "q1": "How do I add a new RSS feed?",
-    "a1": "Click the Speed Dial at the bottom right and select 'Add from URL' or 'Add from File'.",
-    "q2": "Can I share my feeds with my team?",
-    "a2": "Yes. Create a shared collection and invite your team members to collaborate.",
-    "q3": "Which formats are supported for import?",
-    "a3": "We support OPML, XML, and JSON formats for bulk import.",
-    "q4": "Is there a dark mode?",
-    "a4": "Yes. You can toggle dark mode in the settings or from the header menu.",
-    "q5": "How often are feeds updated?",
-    "a5": "Feeds are refreshed based on the update frequency you define during setup."
-  },"contact": {
-    "title": "Contact Us",
-    "description": "For any support, questions, or suggestions, feel free to reach out to us.",
-    "hours": "Support Hours:"
+    "title": "Documentation",
+    "description": "Learn how to use SUPRSS and get the most out of your feeds.",
+    "introTitle": "Getting Started",
+    "introDescription": "SUPRSS helps you manage and share your favorite RSS feeds. You can import feeds, organize them into collections, and collaborate with others in real time.",
+    "faqTitle": "Frequently Asked Questions",
+    "faq": {
+      "q1": "How do I add a new RSS feed?",
+      "a1": "Click the Speed Dial at the bottom right and select 'Add from URL' or 'Add from File'.",
+      "q2": "Can I share my feeds with my team?",
+      "a2": "Yes. Create a shared collection and invite your team members to collaborate.",
+      "q3": "Which formats are supported for import?",
+      "a3": "We support OPML, XML, and JSON formats for bulk import.",
+      "q4": "Is there a dark mode?",
+      "a4": "Yes. You can toggle dark mode in the settings or from the header menu.",
+      "q5": "How often are feeds updated?",
+      "a5": "Feeds are refreshed based on the update frequency you define during setup."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "description": "For any support, questions, or suggestions, feel free to reach out to us.",
+      "hours": "Support Hours:"
+    },
+    "privacy": {
+      "title": "Privacy & GDPR",
+      "description": "SUPRSS only collects the minimum necessary data to operate your account, such as your email and subscribed feeds. Reading activity is private and stored locally.",
+      "rgpdNotice": "In compliance with the GDPR, you can request access, modification, or deletion of your data via the account settings."
+    }
   },
-  "privacy": {
-    "title": "Privacy & GDPR",
-    "description": "SUPRSS only collects the minimum necessary data to operate your account, such as your email and subscribed feeds. Reading activity is private and stored locally.",
-    "rgpdNotice": "In compliance with the GDPR, you can request access, modification, or deletion of your data via the account settings."
+  "loading": {
+    "message": "Thank you for your patience while we prepare your dashboard..."
   }
-},
-"loading": {
-  "message": "Thank you for your patience while we prepare your dashboard..."
-}
-
-
 }

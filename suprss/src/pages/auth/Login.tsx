@@ -28,7 +28,7 @@ const Login = () => {
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        navigate("/loading");
+        navigate("/home");
     };
 
     return (

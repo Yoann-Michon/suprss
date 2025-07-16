@@ -14,11 +14,13 @@ import { useThemeColors } from "../component/ThemeModeContext";
 import { useTranslation } from 'react-i18next';
 import SearchBar from "../component/filter/SearchBar";
 import FilterBar from "../component/filter/FilterBar";
+import { useArticle } from "../context/ArticleContext";
 
 export interface FeedItem {
   title: string;
   link: string;
   description: string;
+  content: string;
   thumbnail: string;
   source: string;
 }
@@ -45,20 +47,22 @@ const Home = () => {
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  
-  // États pour les filtres
+
   const [selectedSources, setSelectedSources] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [readState, setReadState] = useState<string[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [sort, setSort] = useState<string[]>(["Newest"]);
-  
+
   const colors = useThemeColors();
   const { t } = useTranslation();
-
-  // Extraire les sources et catégories disponibles
+  const { showArticle } = useArticle();
   const availableSources = feedUrls.map(feed => feed.label);
   const availableCategories = ["AI", "Mobile", "Web", "Hardware"];
+
+  const openArticle = (item: FeedItem) => {
+    showArticle(item);
+  };
 
   useEffect(() => {
     (async () => {
@@ -72,6 +76,7 @@ const Home = () => {
               ...json.items.slice(0, 3).map((item: any) => ({
                 title: item.title,
                 link: item.link,
+                content: item.content || item.description,
                 description: item.description,
                 thumbnail: item.thumbnail || item.enclosure?.link || "",
                 source: feed.label,
@@ -93,16 +98,16 @@ const Home = () => {
       .includes(searchText.toLowerCase());
 
     const matchesSource = selectedSources.length === 0 || selectedSources.includes(item.source);
-    const matchesCategory = selectedCategories.length === 0; 
+    const matchesCategory = selectedCategories.length === 0;
 
     return matchesSearch && matchesSource && matchesCategory;
   });
 
   const sortedItems = [...filteredItems].sort((a, b) => {
     if (sort.includes("Oldest")) {
-      return a.title.localeCompare(b.title); 
+      return a.title.localeCompare(b.title);
     }
-    return b.title.localeCompare(a.title); 
+    return b.title.localeCompare(a.title);
   });
 
   const paginatedItems = sortedItems.slice(
@@ -116,10 +121,10 @@ const Home = () => {
         searchText={searchText}
         onSearchChange={(text) => {
           setSearchText(text);
-          setPage(1); 
+          setPage(1);
         }}
       />
-      <FilterBar 
+      <FilterBar
         sources={availableSources}
         categories={availableCategories}
         selectedSources={selectedSources}
@@ -206,8 +211,7 @@ const Home = () => {
                         title={t('home.read')}
                         variant="contained"
                         size="small"
-                        href={item.link}
-                        target="_blank"
+                         onClick={() => openArticle(item)}
                         sx={{
                           textTransform: "none",
                           width: "50px",
@@ -219,6 +223,7 @@ const Home = () => {
                       >
                         {t('home.read')}
                       </Button>
+
                     </CardContent>
                     {item.thumbnail && (
                       <CardMedia

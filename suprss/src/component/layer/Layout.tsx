@@ -1,12 +1,14 @@
 import { Box } from "@mui/material";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { useThemeColors } from "../ThemeModeContext";
+import ArticlePage from "../../pages/ArticleView";
 
 const Layout = () => {
   const colors = useThemeColors();
-
+  const location = useLocation();
+  const article = location.state?.article ?? null;
   return (
     <Box
       sx={{
@@ -29,8 +31,8 @@ const Layout = () => {
         }}
       >
         <Header />
-        <Box sx={{ flexGrow: 1, height: "calc(100vh - 50px)", overflow: "auto" }}>
-          <Outlet />
+        <Box sx={{ flexGrow: 1, height: "calc(100vh - 50px)", overflow: "auto", justifyContent: "center" }}>
+          {article ? <ArticlePage /> : <Outlet />}
         </Box>
       </Box>
     </Box>
