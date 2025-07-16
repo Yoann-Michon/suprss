@@ -4,7 +4,6 @@ import {
   TextField,
   Button,
   MenuItem,
-  Typography,
   Chip,
   Autocomplete,
 } from '@mui/material';

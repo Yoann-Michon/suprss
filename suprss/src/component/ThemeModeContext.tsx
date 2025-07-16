@@ -1,36 +1,31 @@
 import { createContext, useContext, useState, useMemo, type ReactNode } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
-// Définition des couleurs pour chaque mode
 const COLORS = {
   light: {
-    // Couleurs de fond
+    
     background: {
-      default: '#F5F5F5',
-      paper: '#FFFFFF',
-      sidebar: '#F8F9FA',
-      selected: '#E3F2FD',
-      hover: 'rgba(61, 153, 245, 0.05)',
+      default: '#f2f8f9',      
+      paper: '#deebef',       
+      sidebar: '#c0d7e1',      
+      selected: '#95bbcb',    
+      hover: 'rgba(98, 150, 174, 0.1)', 
     },
-    // Couleurs de texte
     text: {
-      primary: '#000000',
-      secondary: '#6B7280',
-      tertiary: '#9CA3AF',
+      primary: '#2e3e4b',      
+      secondary: '#334757',    
+      tertiary: '#375467',    
     },
-    // Couleurs d'interface
-    border: '#E5E7EB',
-    divider: '#E5E7EB',
-    icon: '#6B7280',
-    iconSelected: '#3D99F5',
-    // Couleurs d'état
-    primary: '#3D99F5',
+    border: '#95bbcb',         
+    divider: '#c0d7e1',        
+    icon: '#3d647d',          
+    iconSelected: '#3D99F5',   
+    primary: '#477a93',        
     success: '#10B981',
     warning: '#F59E0B',
     error: '#EF4444',
   },
   dark: {
-    // Couleurs de fond
     background: {
       default: '#121A21',
       paper: '#1A2027',
@@ -38,18 +33,15 @@ const COLORS = {
       selected: '#243347',
       hover: 'rgba(61, 153, 245, 0.1)',
     },
-    // Couleurs de texte
     text: {
       primary: '#FFFFFF',
       secondary: '#E2E8F0',
       tertiary: '#99ABC2',
     },
-    // Couleurs d'interface
     border: '#243347',
     divider: '#243347',
     icon: '#99ABC2',
     iconSelected: '#3D99F5',
-    // Couleurs d'état
     primary: '#3D99F5',
     success: '#10B981',
     warning: '#F59E0B',
@@ -90,8 +82,7 @@ const ThemeModeContext = createContext<ThemeModeContextType | undefined>(undefin
 
 export const ThemeModeProvider = ({ children }: { children: ReactNode }) => {
   const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-const [darkMode, setDarkMode] = useState(prefersDarkMode);
-
+  const [darkMode, setDarkMode] = useState(prefersDarkMode);
 
   const toggleDarkMode = () => setDarkMode((prev) => !prev);
 

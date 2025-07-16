@@ -1,133 +1,183 @@
 {
-  "login": {
-    "title": "Login to your account",
-    "username": "Username",
-    "usernamePlaceholder": "Enter your username",
-    "password": "Password",
-    "passwordPlaceholder": "Enter your password",
-    "rememberMe": "Remember me",
-    "forgotPassword": "Forgot password?",
-    "loginButton": "Log In",
-    "orLoginWith": "or login with",
-    "noAccount": "Don't have an account?",
-    "signUp": "Sign up",
-    "stayInformedTogether": "Stay informed. Together.",
-    "collaborativeDescription": "Follow your favorite feeds with your team, in real-time."
-  },
-  "register": {
-    "title": "Create your account",
-    "username": "Username",
-    "usernamePlaceholder": "Choose a username",
-    "email": "Email",
-    "emailPlaceholder": "Enter your email",
-    "password": "Password",
-    "passwordPlaceholder": "Create a password",
-    "confirmPassword": "Confirm password",
-    "confirmPasswordPlaceholder": "Re-enter your password",
-    "registerButton": "Register",
-    "orRegisterWith": "or register with",
-    "alreadyHaveAccount": "Already have an account?",
-    "login": "Log in",
-    "stayInformedTogether": "Stay informed. Together.",
-    "collaborativeDescription": "Follow your favorite feeds with your team, in real-time."
-  },
-  "account": {
-    "title": "My Account",
-    "joined": "Joined",
-    "editProfile": "Edit profile",
-    "linkedProvider": "Linked Authentication Provider",
-    "authProvider": "Authentication Provider",
-    "changePassword": "Change Password",
-    "logout": "Log Out"
-  },
-  "settings": {
-    "title": "Settings",
-    "appearance": {
-      "darkMode": "Dark Mode",
-      "darkModeDescription": "Enable dark mode for a comfortable reading experience in low-light conditions.",
-      "language": "Language",
-      "languageDescription": "Choose the language of the application."
-    },
-    "notifications": {
-      "title": "Notifications",
-      "description": "Configure your notification preferences (coming soon)."
-    }
-  },
-  "header": {
-    "tooltip": "Account settings",
-    "profile": "Profile",
-    "settings": "Settings",
-    "logout": "Logout"
-  },
-  "sidebar": {
-    "home": "Home",
-    "myFeed": "My Feed",
-    "sharedCollections": "Shared Collections",
-    "collection1": "Collection 1",
-    "collection2": "Collection 2",
-    "collections": "Collections",
-    "documentation": "Documentation"
-  },
-  "filters": {
-    "search": "Search articles...",
-    "source": "Source",
-    "category": "Category",
-    "readStatus": "Read/Unread",
-    "read": "Read",
-    "unread": "Unread",
-    "favorites": "Favorites",
-    "onlyFavorites": "Only Favorites",
-    "all": "All",
-    "sort": "Sort",
-    "newest": "Newest",
-    "oldest": "Oldest"
-  },
-  "manageFeeds": {
-    "title": "Manage Feeds",
-    "addFromUrl": "Add from URL",
-    "addFromFile": "Add from File",
-    "editFeed": "Edit Feed",
-    "feedUrl": "Feed URL",
-    "selectFile": "Select File",
-    "table": {
-      "feedTitle": "Feed Title",
-      "url": "URL",
-      "tags": "Tags",
-      "updateFrequency": "Update Frequency",
-      "description": "Description",
-      "actions": "Actions"
-    },
-    "fields": {
-      "title": "Title",
-      "url": "URL",
-      "tags": "Tags",
-      "frequency": "Frequency",
-      "description": "Description"
-    }
-  },
   "common": {
     "cancel": "Cancel",
     "save": "Save",
-    "add": "Add"
+    "add": "Add",
+    "all": "All",
+    "search": "Search articles...",
+    "title": "Title",
+    "url": "URL",
+    "description": "Description",
+    "actions": "Actions"
   },
-  "customSpeedDial": {
+  "auth": {
+    "login": {
+      "title": "Login to your account",
+      "username": "Username",
+      "usernamePlaceholder": "Enter your username",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "loginButton": "Log In",
+      "orLoginWith": "or login with",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "stayInformedTogether": "Stay informed. Together.",
+      "collaborativeDescription": "Follow your favorite feeds with your team, in real-time."
+    },
+    "register": {
+      "title": "Create your account",
+      "username": "Username",
+      "usernamePlaceholder": "Choose a username",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email",
+      "password": "Password",
+      "passwordPlaceholder": "Create a password",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordPlaceholder": "Re-enter your password",
+      "registerButton": "Register",
+      "orRegisterWith": "or register with",
+      "alreadyHaveAccount": "Already have an account?",
+      "login": "Log in",
+      "stayInformedTogether": "Stay informed. Together.",
+      "collaborativeDescription": "Follow your favorite feeds with your team, in real-time."
+    }
+  },
+  "navigation": {
+    "header": {
+      "tooltip": "Account settings",
+      "profile": "Profile",
+      "settings": "Settings",
+      "logout": "Logout"
+    },
+    "sidebar": {
+      "home": "Home",
+      "myFeed": "My Feed",
+      "sharedCollections": "Shared Collections",
+      "collection1": "Collection 1",
+      "collection2": "Collection 2",
+      "collections": "Collections",
+      "documentation": "Documentation"
+    }
+  },
+  "pages": {
+    "account": {
+      "title": "My Account",
+      "joined": "Joined",
+      "editProfile": "Edit profile",
+      "linkedProvider": "Linked Authentication Provider",
+      "authProvider": "Authentication Provider",
+      "changePassword": "Change Password",
+      "logout": "Log Out"
+    },
+    "settings": {
+      "title": "Settings",
+      "appearance": {
+        "darkMode": "Dark Mode",
+        "darkModeDescription": "Enable dark mode for a comfortable reading experience in low-light conditions.",
+        "language": "Language",
+        "languageDescription": "Choose the language of the application."
+      },
+      "notifications": {
+        "title": "Notifications",
+        "description": "Configure your notification preferences (coming soon)."
+      }
+    },
+    "myFeed": {
+      "title": "My Feed",
+      "emptyState": {
+        "title": "No articles found",
+        "description": "Start by adding feeds to your collection."
+      }
+    },
+    "sharedCollections": {
+      "title": "Shared Collections",
+      "emptyState": {
+        "title": "No shared collections",
+        "description": "You can create and share collections with your team."
+      }
+    }
+  },
+  "features": {
+    "filters": {
+      "source": "Source",
+      "category": "Category",
+      "readStatus": "Read/Unread",
+      "read": "Read",
+      "unread": "Unread",
+      "favorites": "Favorites",
+      "onlyFavorites": "Only Favorites",
+      "sort": "Sort",
+      "newest": "Newest",
+      "oldest": "Oldest"
+    },
+    "manageFeeds": {
+      "editFeed": "Edit Feed",
+      "feedUrl": "Feed URL",
+      "selectFile": "Select File",
+      "exportTitle": "Export Feeds",
+      "selectExportFormat": "Select the format to export your feeds:",
+      "table": {
+        "feedTitle": "Feed Title",
+        "tags": "Tags",
+        "updateFrequency": "Update Frequency"
+      },
+      "fields": {
+        "tags": "Tags",
+        "frequency": "Frequency"
+      }
+    },
+    "speedDial": {
+      "ariaLabel": "Feed actions"
+    }
+  },
+  "actions": {
+    "manageFeeds": "Manage Feeds",
+    "addFromUrl": "Add from URL",
+    "addFromFile": "Add from File",
     "addFeed": "Add Feed",
-    "importFeeds": "Import Feeds",
     "exportFeeds": "Export Feeds",
-    "manageFeeds": "Manage Feeds"
+    "importFeeds": "Import Feeds",
+    "download": "Download Feeds"
   },
-  "myFeed": {
-    "title": "My Feed",
-    "emptyState": {
-      "title": "No articles found",
-      "description": "Start by adding feeds to your collection."
-    }
+  "error": {
+    "notFound": "Page not found",
+    "unauthorized": "Unauthorized access",
+    "serverError": "Server error, please try again later.",
+    "networkError": "Network error, please check your connection."
   },
-  "sharedCollections": {
-    "title": "Shared Collections",
-    "emptyState": {
-      "title": "No shared collections",
-      "description": "You can create and share collections with your team."
-    }
+  "documentation": {
+  "title": "Documentation",
+  "description": "Learn how to use SUPRSS and get the most out of your feeds.",
+  "introTitle": "Getting Started",
+  "introDescription": "SUPRSS helps you manage and share your favorite RSS feeds. You can import feeds, organize them into collections, and collaborate with others in real time.",
+  "faqTitle": "Frequently Asked Questions",
+  "faq": {
+    "q1": "How do I add a new RSS feed?",
+    "a1": "Click the Speed Dial at the bottom right and select 'Add from URL' or 'Add from File'.",
+    "q2": "Can I share my feeds with my team?",
+    "a2": "Yes. Create a shared collection and invite your team members to collaborate.",
+    "q3": "Which formats are supported for import?",
+    "a3": "We support OPML, XML, and JSON formats for bulk import.",
+    "q4": "Is there a dark mode?",
+    "a4": "Yes. You can toggle dark mode in the settings or from the header menu.",
+    "q5": "How often are feeds updated?",
+    "a5": "Feeds are refreshed based on the update frequency you define during setup."
+  },"contact": {
+    "title": "Contact Us",
+    "description": "For any support, questions, or suggestions, feel free to reach out to us.",
+    "hours": "Support Hours:"
+  },
+  "privacy": {
+    "title": "Privacy & GDPR",
+    "description": "SUPRSS only collects the minimum necessary data to operate your account, such as your email and subscribed feeds. Reading activity is private and stored locally.",
+    "rgpdNotice": "In compliance with the GDPR, you can request access, modification, or deletion of your data via the account settings."
   }
+},
+"loading": {
+  "message": "Thank you for your patience while we prepare your dashboard..."
+}
+
+
 }

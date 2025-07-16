@@ -16,6 +16,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useThemeColors } from '../component/ThemeModeContext';
 import { useTranslation } from 'react-i18next';
 import CustomSpeedDial from '../component/CustomSpeedDial';
+import ModalWrapper from '../component/modal/ModalWrapper';
+import ExportData from '../component/modal/ExportData';
 
 interface Feed {
   id: number;
@@ -72,7 +74,7 @@ const initialFeeds: Feed[] = [
 const ManageFeeds = () => {
   const colors = useThemeColors();
   const { t } = useTranslation();
-
+  const [openExportModal, setOpenExportModal] = useState(false);
   const [feeds, setFeeds] = useState<Feed[]>(initialFeeds);
   const [editForm, setEditForm] = useState<Feed | null>(null);
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -135,12 +137,11 @@ const ManageFeeds = () => {
             height: '100%', width: '100%',
             border: 'none',
             '& .MuiDataGrid-cell': { color: colors.text.primary },
-            '& .MuiDataGrid-columnHeaders': { backgroundColor: colors.background.hover },
+            '& .MuiDataGrid-columnHeaders': { backgroundColor: colors.background.hover }
           }}
         />
       </Paper>
 
-      {/* Edit Modal */}
       <Dialog open={openEditModal} onClose={() => setOpenEditModal(false)} fullWidth>
         <DialogTitle>{t('manageFeeds.editFeed')}</DialogTitle>
         <DialogContent>
@@ -166,7 +167,6 @@ const ManageFeeds = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Add from URL Modal */}
       <Dialog open={openUrlModal} onClose={() => setOpenUrlModal(false)} fullWidth>
         <DialogTitle>{t('manageFeeds.addFromUrl')}</DialogTitle>
         <DialogContent>
@@ -178,7 +178,6 @@ const ManageFeeds = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Add from File Modal */}
       <Dialog open={openFileModal} onClose={() => setOpenFileModal(false)} fullWidth>
         <DialogTitle>{t('manageFeeds.addFromFile')}</DialogTitle>
         <DialogContent>
@@ -192,7 +191,19 @@ const ManageFeeds = () => {
           <Button variant="contained">{t('common.add')}</Button>
         </DialogActions>
       </Dialog>
-      <CustomSpeedDial />
+      <CustomSpeedDial
+  showDownload
+  onDownloadClick={() => setOpenExportModal(true)}
+  onAddFromUrl={() => setOpenUrlModal(true)}
+  onAddFromFile={() => setOpenFileModal(true)}
+/>
+
+      <ModalWrapper
+  open={openExportModal}
+  onClose={() => setOpenExportModal(false)}
+  component={<ExportData feeds={feeds} onClose={() => setOpenExportModal(false)} />}
+/>
+
     </Box>
   );
 };

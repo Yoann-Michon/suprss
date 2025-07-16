@@ -23,9 +23,11 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useThemeColors } from '../ThemeModeContext';
 import { useTranslation } from 'react-i18next';
+import { liftWithBounce } from '../animation/Animations';
 
 
 const Sidebar = () => {
+    const title = 'SUPRSS';
     const colors = useThemeColors();
     const navigate = useNavigate();
     const location = useLocation();
@@ -43,22 +45,22 @@ const Sidebar = () => {
     };
 
     const nav = {
-  header: [
-    { text: t('sidebar.home'), icon: <HomeRoundedIcon />, path: '/home' },
-    { text: t('sidebar.myFeed'), icon: <FormatListBulletedIcon />, path: '/my_feed' },
-    {
-      text: t('sidebar.sharedCollections'), icon: <PeopleOutlineIcon />, path: '/shared_collections',
-      subItems: [
-        { title: t('sidebar.collection1'), path: '/shared_collections/1' },
-        { title: t('sidebar.collection2'), path: '/shared_collections/2' },
-      ]
-    },
-    { text: t('sidebar.collections'), icon: <CollectionsBookmarkIcon />, path: '/my_collections' },
-  ],
-  footer: [
-    { text: t('sidebar.documentation'), icon: <AutoStoriesIcon />, path: '/documentation' },
-  ]
-};
+        header: [
+            { text: t('sidebar.home'), icon: <HomeRoundedIcon />, path: '/home' },
+            { text: t('sidebar.myFeed'), icon: <FormatListBulletedIcon />, path: '/my_feed' },
+            {
+                text: t('sidebar.sharedCollections'), icon: <PeopleOutlineIcon />, path: '/shared_collections',
+                subItems: [
+                    { title: t('sidebar.collection1'), path: '/shared_collections/1' },
+                    { title: t('sidebar.collection2'), path: '/shared_collections/2' },
+                ]
+            },
+            { text: t('sidebar.collections'), icon: <CollectionsBookmarkIcon />, path: '/my_collections' },
+        ],
+        footer: [
+            { text: t('sidebar.documentation'), icon: <AutoStoriesIcon />, path: '/documentation' },
+        ]
+    };
 
 
     return (
@@ -77,9 +79,16 @@ const Sidebar = () => {
                     color: colors.text.primary,
                     fontWeight: 'bold',
                     my: 2,
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    fontFamily: 'Baggy Regular',
+                    letterSpacing: '0.5rem',
+                    textTransform: 'uppercase'
                 }}>
-                    SUPRSS
+                    {title.split('').map((letter, index) => (
+                        <Box key={index} component="span" sx={liftWithBounce}>
+                            {letter}
+                        </Box>
+                    ))}
                 </Typography>
                 <List dense>
                     {nav.header.map((item, index) => (

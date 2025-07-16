@@ -1,119 +1,183 @@
 {
-  "login": {
-    "title": "Connexion à votre compte",
-    "username": "Nom d'utilisateur",
-    "usernamePlaceholder": "Entrez votre nom d'utilisateur",
-    "password": "Mot de passe",
-    "passwordPlaceholder": "Entrez votre mot de passe",
-    "rememberMe": "Se souvenir de moi",
-    "forgotPassword": "Mot de passe oublié ?",
-    "loginButton": "Se connecter",
-    "orLoginWith": "ou connectez-vous avec",
-    "noAccount": "Vous n'avez pas de compte ?",
-    "signUp": "Inscrivez-vous",
-    "stayInformedTogether": "Restez informé. Ensemble.",
-    "collaborativeDescription": "Suivez vos flux préférés avec votre équipe, en temps réel."
-  },
-  "register": {
-    "title": "Créer votre compte",
-    "username": "Nom d'utilisateur",
-    "usernamePlaceholder": "Choisissez un nom d'utilisateur",
-    "email": "Adresse email",
-    "emailPlaceholder": "Entrez votre adresse email",
-    "password": "Mot de passe",
-    "passwordPlaceholder": "Créez un mot de passe",
-    "confirmPassword": "Confirmez le mot de passe",
-    "confirmPasswordPlaceholder": "Répétez votre mot de passe",
-    "registerButton": "S'inscrire",
-    "orRegisterWith": "ou inscrivez-vous avec",
-    "alreadyHaveAccount": "Vous avez déjà un compte ?",
-    "login": "Connexion",
-    "stayInformedTogether": "Restez informé. Ensemble.",
-    "collaborativeDescription": "Suivez vos flux préférés avec votre équipe, en temps réel."
-  },
-  "account": {
-    "title": "Mon compte",
-    "joined": "Inscrit depuis",
-    "editProfile": "Modifier le profil",
-    "linkedProvider": "Fournisseur d'authentification lié",
-    "authProvider": "Fournisseur d'authentification",
-    "changePassword": "Changer le mot de passe",
-    "logout": "Se déconnecter"
-  },
-  "settings": {
-    "title": "Paramètres",
-    "appearance": {
-      "darkMode": "Mode sombre",
-      "darkModeDescription": "Activez le mode sombre pour un confort de lecture dans un environnement peu éclairé.",
-      "language": "Langue",
-      "languageDescription": "Choisissez la langue de l'application."
-    },
-    "notifications": {
-      "title": "Notifications",
-      "description": "Configurez vos préférences de notification (bientôt disponible)."
-    }
-  },
-  "header": {
-    "tooltip": "Paramètres du compte",
-    "profile": "Profil",
-    "settings": "Paramètres",
-    "logout": "Se déconnecter"
-  },
-  "sidebar": {
-    "home": "Accueil",
-    "myFeed": "Mon Feed",
-    "sharedCollections": "Collections Partagées",
-    "collection1": "Collection 1",
-    "collection2": "Collection 2",
-    "collections": "Mes Collections",
-    "documentation": "Documentation"
-  },
-  "filters": {
-    "search": "Rechercher des articles...",
-    "source": "Source",
-    "category": "Catégorie",
-    "readStatus": "Lu/Non lu",
-    "read": "Lu",
-    "unread": "Non lu",
-    "favorites": "Favoris",
-    "onlyFavorites": "Uniquement les favoris",
-    "all": "Tous",
-    "sort": "Trier",
-    "newest": "Les plus récents",
-    "oldest": "Les plus anciens"
-  },
-  "manageFeeds": {
-    "title": "Gérer les flux",
-    "addFromUrl": "Ajouter par URL",
-    "addFromFile": "Ajouter par fichier",
-    "editFeed": "Modifier le flux",
-    "feedUrl": "URL du flux",
-    "selectFile": "Sélectionner un fichier",
-    "table": {
-      "feedTitle": "Titre du flux",
-      "url": "URL",
-      "tags": "Étiquettes",
-      "updateFrequency": "Fréquence",
-      "description": "Description",
-      "actions": "Actions"
-    },
-    "fields": {
-      "title": "Titre",
-      "url": "URL",
-      "tags": "Étiquettes",
-      "frequency": "Fréquence",
-      "description": "Description"
-    }
-  },
   "common": {
     "cancel": "Annuler",
     "save": "Enregistrer",
-    "add": "Ajouter"
+    "add": "Ajouter",
+    "all": "Tous",
+    "search": "Rechercher des articles...",
+    "title": "Titre",
+    "url": "URL",
+    "description": "Description",
+    "actions": "Actions"
+  },
+  "auth": {
+    "login": {
+      "title": "Connexion à votre compte",
+      "username": "Nom d'utilisateur",
+      "usernamePlaceholder": "Entrez votre nom d'utilisateur",
+      "password": "Mot de passe",
+      "passwordPlaceholder": "Entrez votre mot de passe",
+      "rememberMe": "Se souvenir de moi",
+      "forgotPassword": "Mot de passe oublié ?",
+      "loginButton": "Se connecter",
+      "orLoginWith": "ou se connecter avec",
+      "noAccount": "Vous n'avez pas de compte ?",
+      "signUp": "S'inscrire",
+      "stayInformedTogether": "Restez informé. Ensemble.",
+      "collaborativeDescription": "Suivez vos flux préférés avec votre équipe, en temps réel."
+    },
+    "register": {
+      "title": "Créer votre compte",
+      "username": "Nom d'utilisateur",
+      "usernamePlaceholder": "Choisissez un nom d'utilisateur",
+      "email": "Email",
+      "emailPlaceholder": "Entrez votre email",
+      "password": "Mot de passe",
+      "passwordPlaceholder": "Créez un mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "confirmPasswordPlaceholder": "Ressaisissez votre mot de passe",
+      "registerButton": "S'inscrire",
+      "orRegisterWith": "ou s'inscrire avec",
+      "alreadyHaveAccount": "Vous avez déjà un compte ?",
+      "login": "Se connecter",
+      "stayInformedTogether": "Restez informé. Ensemble.",
+      "collaborativeDescription": "Suivez vos flux préférés avec votre équipe, en temps réel."
+    }
+  },
+  "navigation": {
+    "header": {
+      "tooltip": "Paramètres du compte",
+      "profile": "Profil",
+      "settings": "Paramètres",
+      "logout": "Déconnexion"
+    },
+    "sidebar": {
+      "home": "Accueil",
+      "myFeed": "Mon flux",
+      "sharedCollections": "Collections partagées",
+      "collection1": "Collection 1",
+      "collection2": "Collection 2",
+      "collections": "Collections",
+      "documentation": "Documentation"
+    }
+  },
+  "pages": {
+    "account": {
+      "title": "Mon compte",
+      "joined": "Rejoint le",
+      "editProfile": "Modifier le profil",
+      "linkedProvider": "Fournisseur d'authentification lié",
+      "authProvider": "Fournisseur d'authentification",
+      "changePassword": "Changer le mot de passe",
+      "logout": "Se déconnecter"
+    },
+    "settings": {
+      "title": "Paramètres",
+      "appearance": {
+        "darkMode": "Mode sombre",
+        "darkModeDescription": "Activez le mode sombre pour une expérience de lecture confortable dans des conditions de faible luminosité.",
+        "language": "Langue",
+        "languageDescription": "Choisissez la langue de l'application."
+      },
+      "notifications": {
+        "title": "Notifications",
+        "description": "Configurez vos préférences de notification (à venir)."
+      }
+    },
+    "myFeed": {
+      "title": "Mon flux",
+      "emptyState": {
+        "title": "Aucun article trouvé",
+        "description": "Commencez par ajouter des flux à votre collection."
+      }
+    },
+    "sharedCollections": {
+      "title": "Collections partagées",
+      "emptyState": {
+        "title": "Aucune collection partagée",
+        "description": "Vous pouvez créer et partager des collections avec votre équipe."
+      }
+    }
+  },
+  "features": {
+    "filters": {
+      "source": "Source",
+      "category": "Catégorie",
+      "readStatus": "Lu/Non lu",
+      "read": "Lu",
+      "unread": "Non lu",
+      "favorites": "Favoris",
+      "onlyFavorites": "Favoris uniquement",
+      "sort": "Trier",
+      "newest": "Plus récent",
+      "oldest": "Plus ancien"
+    },
+    "manageFeeds": {
+      "editFeed": "Modifier le flux",
+      "feedUrl": "URL du flux",
+      "selectFile": "Sélectionner un fichier",
+      "exportTitle": "Exporter les flux",
+      "selectExportFormat": "Sélectionnez le format pour exporter vos flux :",
+      "table": {
+        "feedTitle": "Titre du flux",
+        "tags": "Étiquettes",
+        "updateFrequency": "Fréquence de mise à jour"
+      },
+      "fields": {
+        "tags": "Étiquettes",
+        "frequency": "Fréquence"
+      }
+    },
+    "speedDial": {
+      "ariaLabel": "Actions de flux"
+    }
+  },
+  "actions": {
+    "manageFeeds": "Gérer les flux",
+    "addFromUrl": "Ajouter depuis une URL",
+    "addFromFile": "Ajouter depuis un fichier",
+    "addFeed": "Ajouter un flux",
+    "exportFeeds": "Exporter les flux",
+    "importFeeds": "Importer les flux",
+    "download": "Télécharger les flux"
   },
   "error": {
     "notFound": "Page non trouvée",
     "unauthorized": "Accès non autorisé",
     "serverError": "Erreur du serveur, veuillez réessayer plus tard.",
     "networkError": "Erreur réseau, veuillez vérifier votre connexion."
+  },
+  "documentation": {
+  "title": "Documentation",
+  "description": "Apprenez à utiliser SUPRSS et tirez le meilleur parti de vos flux.",
+  "introTitle": "Bien démarrer",
+  "introDescription": "SUPRSS vous aide à gérer et partager vos flux RSS préférés. Vous pouvez importer des flux, les organiser en collections et collaborer en temps réel.",
+  "faqTitle": "Questions fréquentes",
+  "faq": {
+    "q1": "Comment ajouter un flux RSS ?",
+    "a1": "Cliquez sur le Speed Dial en bas à droite puis choisissez 'Ajouter via URL' ou 'via fichier'.",
+    "q2": "Puis-je partager mes flux avec mon équipe ?",
+    "a2": "Oui. Créez une collection partagée et invitez vos coéquipiers à collaborer.",
+    "q3": "Quels formats sont supportés à l'import ?",
+    "a3": "Nous supportons les formats OPML, XML et JSON pour l'import en masse.",
+    "q4": "Un mode sombre est-il disponible ?",
+    "a4": "Oui, vous pouvez activer le mode sombre dans les paramètres ou depuis le menu en haut.",
+    "q5": "À quelle fréquence mes flux sont-ils mis à jour ?",
+    "a5": "Les flux sont mis à jour selon la fréquence choisie lors de leur ajout."
+  },"contact": {
+    "title": "Nous contacter",
+    "description": "Pour toute question, assistance ou suggestion, n'hésitez pas à nous écrire.",
+    "hours": "Heures de support :"
+  },
+  "privacy": {
+    "title": "Confidentialité & RGPD",
+    "description": "SUPRSS collecte uniquement les données nécessaires au bon fonctionnement de votre compte (e-mail, flux). Vos activités de lecture restent privées et locales.",
+    "rgpdNotice": "Conformément au RGPD, vous pouvez à tout moment demander l'accès, la modification ou la suppression de vos données."
   }
+},
+"loading": {
+  "message": "Merci de patienter pendant que nous préparons votre tableau de bord..."
+}
+
+
 }
