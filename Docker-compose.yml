@@ -1,0 +1,65 @@
+services:
+  # === USER SERVICE ===
+  user-service:
+    build:
+      context: ./user_service
+    container_name: user-service
+    env_file:
+      - ./user-service/.env
+    depends_on:
+      user-db:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - trafine-network
+    restart: always
+
+  # === AUTH SERVICE ===
+  auth-service:
+    build:
+      context: ./auth-service
+    container_name: auth-service
+    env_file:
+      - ./auth-service/.env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      user-service:
+        condition: service_started
+    networks:
+      - trafine-network
+    restart: always
+
+  # === POSTGRES DB ===
+  user-db:
+    image: postgres:17
+    container_name: user-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+      POSTGRES_DB: user_db
+    volumes:
+      - user-db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - suprss-network
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d user_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+
+# === VOLUMES ===
+volumes:
+  user-db-data:
+    driver: local
+
+# === NETWORKS ===
+networks:
+  suprss-network:
+    driver: bridge
