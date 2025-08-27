@@ -44,6 +44,7 @@ const FilterDropdown = ({
     return (
         <>
             <Button
+                id={`filter_${label.toLowerCase()}`}
                 onClick={(e) => setAnchorEl(e.currentTarget)}
                 endIcon={<ExpandMore />}
                 sx={{

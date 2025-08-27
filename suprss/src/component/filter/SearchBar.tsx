@@ -14,6 +14,7 @@ const SearchBar = ({ searchText, onSearchChange }: SearchBarProps) => {
   const { t } = useTranslation();
   return (
     <TextField
+      id="search_bar"
       placeholder={t('filters.search')}
       variant="outlined"
       fullWidth

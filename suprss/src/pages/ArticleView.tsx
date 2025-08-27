@@ -12,7 +12,6 @@ const ArticleView = () => {
 
   const article = location.state?.article;
   const from = location.state?.from || "/home";
-  console.log("ArticleView location state:", location);
 
   const handleClose = () => {
     navigate(from, { replace: true });

@@ -33,7 +33,7 @@ const FilterBar = ({
 }: FilterBarProps) => {
   const { t } = useTranslation();
   return (
-    <Stack direction="row" spacing={1} flexWrap="wrap" paddingBottom={1} justifyContent="center" alignItems="center">
+    <Stack id={"filters"} direction="row" spacing={1} flexWrap="wrap" paddingBottom={1} justifyContent="center" alignItems="center">
       <FilterDropdown
         label={t('filters.source')}
         options={sources}

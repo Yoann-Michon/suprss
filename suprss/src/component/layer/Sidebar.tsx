@@ -6,7 +6,7 @@ import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     List,
     ListItem,
@@ -24,6 +24,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useThemeColors } from '../ThemeModeContext';
 import { useTranslation } from 'react-i18next';
 import { liftWithBounce } from '../animation/Animations';
+import SchoolIcon from '@mui/icons-material/School';
+import Tutorial from '../tutorial/Introjs';
+import { getSidebarSteps } from '../tutorial/TutorialSteps';
 
 
 const Sidebar = () => {
@@ -33,7 +36,7 @@ const Sidebar = () => {
     const location = useLocation();
     const currentPath = location.pathname;
     const { t } = useTranslation();
-
+    const [showTutorial, setShowTutorial] = useState(false);
     const [openSubMenu, setOpenSubMenu] = useState<string | null>(null);
 
     const handleToggleSubMenu = (text: string) => {
@@ -46,22 +49,34 @@ const Sidebar = () => {
 
     const nav = {
         header: [
-            { text: t('sidebar.home'), icon: <HomeRoundedIcon />, path: '/home' },
-            { text: t('sidebar.myFeed'), icon: <FormatListBulletedIcon />, path: '/my_feed' },
+            { id: "sidebar_home", text: t('sidebar.home'), icon: <HomeRoundedIcon />, path: '/home' },
+            { id: "sidebar_myFeed", text: t('sidebar.myFeed'), icon: <FormatListBulletedIcon />, path: '/my_feed' },
             {
+                id: "sidebar_sharedCollections",
                 text: t('sidebar.sharedCollections'), icon: <PeopleOutlineIcon />, path: '/shared_collections',
                 subItems: [
                     { title: t('sidebar.collection1'), path: '/shared_collections/1' },
                     { title: t('sidebar.collection2'), path: '/shared_collections/2' },
                 ]
             },
-            { text: t('sidebar.collections'), icon: <CollectionsBookmarkIcon />, path: '/my_collections' },
+            { id: "sidebar_collections", text: t('sidebar.collections'), icon: <CollectionsBookmarkIcon />, path: '/my_collections' },
         ],
         footer: [
-            { text: t('sidebar.documentation'), icon: <AutoStoriesIcon />, path: '/documentation' },
+            { id: "sidebar_tutorial", text: t('sidebar.tutorial'), icon: <SchoolIcon />, onclick: () => { localStorage.removeItem("sidebarTutorialDone"); setShowTutorial(true); } },
+            { id: "sidebar_documentation", text: t('sidebar.documentation'), icon: <AutoStoriesIcon />, path: '/documentation' },
         ]
     };
 
+    useEffect(() => {
+        if (!localStorage.getItem("sidebarTutorialDone")) {
+            setShowTutorial(true);
+        }
+    }, []);
+
+    const handleExitTutorial = () => {
+        localStorage.setItem("sidebarTutorialDone", "true");
+        setShowTutorial(false);
+    };
 
     return (
         <Stack sx={{
@@ -96,6 +111,7 @@ const Sidebar = () => {
                             <ListItem disablePadding secondaryAction={
                                 item.subItems && (
                                     <IconButton
+                                        id={item.id}
                                         edge="end"
                                         onClick={(e) => {
                                             e.stopPropagation();
@@ -108,6 +124,7 @@ const Sidebar = () => {
                                 )
                             }>
                                 <ListItemButton
+                                    id={item.id}
                                     onClick={() => handleSelect(item.path)}
                                     sx={{
                                         backgroundColor: currentPath.startsWith(item.path) ? colors.background.selected : "transparent",
@@ -178,7 +195,8 @@ const Sidebar = () => {
                     {nav.footer.map((item, index) => (
                         <ListItem key={index} disablePadding>
                             <ListItemButton
-                                onClick={() => handleSelect(item.path)}
+                                id={item.id}
+                                onClick={() => item?.path ? handleSelect(item.path) : item.onclick?.()}
                                 sx={{
                                     backgroundColor: currentPath === item.path ? colors.background.selected : "transparent",
                                     borderRadius: "50px",
@@ -209,6 +227,10 @@ const Sidebar = () => {
                     ))}
                 </List>
             </Box>
+
+            {showTutorial && (
+                <Tutorial steps={getSidebarSteps(t)} start={true} onExit={handleExitTutorial} />
+            )}
         </Stack>
     );
 };

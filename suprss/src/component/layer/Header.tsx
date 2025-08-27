@@ -34,6 +34,7 @@ const Header = () => {
   return (
     <Box
       component="header"
+      id="header_container"
       sx={{
         px: 3,
         color: colors.text.primary,
@@ -44,14 +45,18 @@ const Header = () => {
         height: 50
       }}
     >
-      <Box sx={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        width: 100,
-        alignSelf: "end"
-      }}>
+      <Box
+        id="header_actions"
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          width: 100,
+          alignSelf: "end"
+        }}
+      >
         <IconButton
+          id="header_darkmode_btn"
           onClick={toggleDarkMode}
           size="small"
           sx={{ p: 0, ml: 1 }}
@@ -63,8 +68,10 @@ const Header = () => {
             <DarkModeIcon sx={{ color: colors.primary }} />
           )}
         </IconButton>
+
         <Tooltip title={t('header.tooltip')}>
           <IconButton
+            id="header_avatar_btn"
             onClick={handleClick}
             size="small"
             sx={{ p: 0 }}
@@ -73,6 +80,7 @@ const Header = () => {
             aria-expanded={open ? "true" : undefined}
           >
             <Avatar
+              id="user_avatar"
               alt="User Avatar"
               src="/static/images/avatar/1.jpg"
               sx={{ width: 30, height: 30 }}
@@ -94,7 +102,7 @@ const Header = () => {
 
       <Menu
         anchorEl={anchorEl}
-        id="account-menu"
+        id="menu_account"
         open={open}
         onClose={handleClose}
         onClick={handleClose}
@@ -130,35 +138,51 @@ const Header = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem component={Link} to="/account" sx={{
-          color: colors.text.primary,
-          "&:hover": {
-            color: colors.primary,
-            backgroundColor: "transparent",
-          },
-        }}>
+        <MenuItem
+          id="menu_profile"
+          component={Link}
+          to="/account"
+          sx={{
+            color: colors.text.primary,
+            "&:hover": {
+              color: colors.primary,
+              backgroundColor: "transparent",
+            },
+          }}
+        >
           <Avatar /> {t('header.profile')}
         </MenuItem>
+
         <Divider sx={{ borderColor: colors.divider }} />
-        <MenuItem component={Link} to="/settings" sx={{
-          color: colors.text.primary,
-          "&:hover": {
-            color: colors.primary,
-            backgroundColor: "transparent",
-          },
-        }}>
+
+        <MenuItem
+          id="menu_settings"
+          component={Link}
+          to="/settings"
+          sx={{
+            color: colors.text.primary,
+            "&:hover": {
+              color: colors.primary,
+              backgroundColor: "transparent",
+            },
+          }}
+        >
           <ListItemIcon sx={{ color: colors.icon }}>
             <Settings fontSize="small" />
           </ListItemIcon>
           {t('header.settings')}
         </MenuItem>
-        <MenuItem sx={{
-          color: colors.text.primary,
-          "&:hover": {
-            color: colors.primary,
-            backgroundColor: "transparent",
-          },
-        }}>
+
+        <MenuItem
+          id="menu_logout"
+          sx={{
+            color: colors.text.primary,
+            "&:hover": {
+              color: colors.primary,
+              backgroundColor: "transparent",
+            },
+          }}
+        >
           <ListItemIcon sx={{ color: colors.icon }}>
             <Logout fontSize="small" />
           </ListItemIcon>

@@ -35,7 +35,6 @@ export const ArticleProvider = ({ children }: { children: ReactNode }) => {
     .slice(0, 100);
 
   const currentPath = window.location.pathname;
-    console.log("Navigating to article:", slug, "from path:", currentPath);
     
   navigate(`/article/${slug}`, {
     replace: false,

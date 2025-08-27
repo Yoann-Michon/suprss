@@ -246,6 +246,7 @@ const Home = () => {
               {sortedItems.length > ITEMS_PER_PAGE && (
                 <Box mt={4} display="flex" justifyContent="center">
                   <Pagination
+                    id="pagination"
                     count={Math.ceil(sortedItems.length / ITEMS_PER_PAGE)}
                     page={page}
                     onChange={(_, val) => setPage(val)}

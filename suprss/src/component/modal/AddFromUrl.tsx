@@ -25,7 +25,6 @@ const AddFeedFromUrl = () => {
       frequency,
       description,
     };
-    console.log('Submitting new feed:', feedData);
   };
 
   return (

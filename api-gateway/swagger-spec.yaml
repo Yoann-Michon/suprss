@@ -1,0 +1,809 @@
+openapi: 3.0.0
+info:
+  title: Trafine API Gateway
+  description: |
+    API Gateway pour l'application SUPRSS.
+  version: '1.0.0'
+servers:
+  - url: '/api'
+    description: API Gateway
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: Authentication
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+          description: "Adresse email de l'utilisateur"
+        password:
+          type: string
+          format: password
+          example: "Password123!"
+          description: "Mot de passe (min. 6 caractères, 1 majuscule, 1 chiffre, 1 caractère spécial)"
+    
+    RegisterRequest:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+          minLength: 3
+          maxLength: 50
+          example: "johndoe"
+          description: "Nom d'utilisateur (3-50 caractères)"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+          description: "Adresse email valide"
+        password:
+          type: string
+          format: password
+          minLength: 6
+          maxLength: 50
+          example: "Password123!"
+          description: "Mot de passe (min. 6 caractères, 1 majuscule, 1 chiffre, 1 caractère spécial)"
+        role:
+          type: string
+          enum: [USER, MODERATOR, ADMIN]
+          default: USER
+          description: "Rôle de l'utilisateur (par défaut: USER)"
+    
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        username:
+          type: string
+          example: "johndoe"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+        role:
+          type: string
+          enum: [USER, MODERATOR, ADMIN]
+          example: USER
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        username:
+          type: string
+          example: "johndoe"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+        role:
+          type: string
+          enum: [USER, MODERATOR, ADMIN]
+          example: USER
+        authProvider:
+          type: string
+          nullable: true
+          example: "google"
+        authProviderId:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+    UpdateUserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 3
+          maxLength: 50
+          example: "johndoe"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+        password:
+          type: string
+          format: password
+          minLength: 6
+          maxLength: 50
+          example: "NewPassword123!"
+          description: "Mot de passe (min. 6 caractères, 1 majuscule, 1 chiffre, 1 caractère spécial)"
+        role:
+          type: string
+          enum: [USER, MODERATOR, ADMIN]
+          example: USER
+        authProvider:
+          type: string
+          example: "google"
+        authProviderId:
+          type: string
+
+    GeoLocation:
+      type: object
+      required:
+        - type
+        - coordinates
+      properties:
+        type:
+          type: string
+          enum: [Point]
+          example: Point
+        coordinates:
+          type: array
+          items:
+            type: number
+          minItems: 2
+          maxItems: 2
+          example: [5.917781, 45.564601]
+          description: "[longitude, latitude]"
+
+    CreateIncidentDto:
+      type: object
+      required:
+        - type
+        - location
+        - severity
+        - status
+        - reportedBy
+      properties:
+        type:
+          type: string
+          enum: [obstacle, accident, traffic_jam, road_closure, police_checkpoint, other]
+          example: accident
+          description: "Type d'incident"
+        description:
+          type: string
+          minLength: 5
+          maxLength: 500
+          example: "Accident entre deux voitures"
+        location:
+          $ref: '#/components/schemas/GeoLocation'
+        severity:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 4
+          description: "Gravité de l'incident (1-5)"
+        status:
+          type: string
+          enum: [pending, confirmed, resolved, rejected]
+          example: pending
+          description: "Statut de l'incident"
+        reportedBy:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+          description: "ID de l'utilisateur ayant signalé l'incident"
+        source:
+          type: string
+          enum: [user, system, tomtom]
+          default: user
+          description: "Source de l'incident"
+        details:
+          type: object
+          description: "Détails supplémentaires spécifiques au type d'incident"
+        locationAccuracy:
+          type: number
+          minimum: 0
+          description: "Précision de la localisation en mètres"
+
+    IncidentResponse:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "60a12e4b5c6f7d001234abcd"
+        type:
+          type: string
+          enum: [obstacle, accident, traffic_jam, road_closure, police_checkpoint, other]
+          example: accident
+        description:
+          type: string
+          example: "Accident entre deux voitures"
+        location:
+          $ref: '#/components/schemas/GeoLocation'
+        severity:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 4
+        status:
+          type: string
+          enum: [pending, confirmed, resolved, rejected]
+          example: confirmed
+        reportedBy:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        confirmedBy:
+          type: array
+          items:
+            type: string
+            format: uuid
+          example: ["123e4567-e89b-12d3-a456-426614174000", "223e4567-e89b-12d3-a456-426614174111"]
+        rejectedBy:
+          type: array
+          items:
+            type: string
+            format: uuid
+          example: []
+        createdAt:
+          type: string
+          format: date-time
+        resolvedAt:
+          type: string
+          format: date-time
+          nullable: true
+        isActive:
+          type: boolean
+          example: true
+        source:
+          type: string
+          enum: [user, system, tomtom]
+          example: user
+        details:
+          type: object
+
+    UpdateIncidentDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: mongodb
+          example: "60a12e4b5c6f7d001234abcd"
+        type:
+          type: string
+          enum: [obstacle, accident, traffic_jam, road_closure, police_checkpoint, other]
+        description:
+          type: string
+          minLength: 5
+          maxLength: 500
+          example: "Accident entre deux voitures et un camion"
+        location:
+          $ref: '#/components/schemas/GeoLocation'
+        severity:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 5
+        status:
+          type: string
+          enum: [pending, confirmed, resolved, rejected]
+        isActive:
+          type: boolean
+          example: true
+        confirm:
+          type: boolean
+          description: "Confirmer l'incident"
+          example: true
+        reject:
+          type: boolean
+          description: "Rejeter l'incident"
+          example: false
+
+    Waypoint:
+      type: object
+      required:
+        - lat
+        - lon
+      properties:
+        lat:
+          type: number
+          format: float
+          example: 45.564601
+          description: "Latitude"
+        lon:
+          type: number
+          format: float
+          example: 5.917781
+          description: "Longitude"
+        name:
+          type: string
+          example: "Chambéry Centre"
+          description: "Nom optionnel du point"
+
+    CreateRouteDto:
+      type: object
+      required:
+        - name
+        - waypoints
+      properties:
+        name:
+          type: string
+          example: "Trajet domicile-travail"
+          description: "Nom de l'itinéraire"
+        waypoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/Waypoint'
+          description: "Liste des points de passage (origine, points intermédiaires, destination)"
+
+    RouteOptions:
+      type: object
+      properties:
+        avoidTolls:
+          type: boolean
+          default: false
+          description: "Éviter les routes à péage"
+        avoidHighways:
+          type: boolean
+          default: false
+          description: "Éviter les autoroutes"
+        traffic:
+          type: boolean
+          default: true
+          description: "Prendre en compte les conditions de circulation"
+        maxAlternatives:
+          type: integer
+          minimum: 1
+          maximum: 5
+          default: 3
+          description: "Nombre maximum d'itinéraires alternatifs à calculer"
+
+    RouteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        name:
+          type: string
+          example: "Trajet domicile-travail"
+        userId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        waypoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/Waypoint'
+        routeData:
+          type: object
+          description: "Données complètes de l'itinéraire (polyline, instructions, etc.)"
+        distanceMeters:
+          type: number
+          format: float
+          example: 15400
+          description: "Distance en mètres"
+        durationSeconds:
+          type: integer
+          example: 1500
+          description: "Durée en secondes"
+        isShared:
+          type: boolean
+          example: true
+          description: "Indique si l'itinéraire est partagé"
+        shareCode:
+          type: string
+          example: "ABC123XYZ"
+          description: "Code de partage unique"
+        shareExpiration:
+          type: string
+          format: date-time
+          description: "Date d'expiration du partage"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ShareRouteDto:
+      type: object
+      properties:
+        expiresAt:
+          type: string
+          format: date-time
+          description: "Date d'expiration du partage"
+          example: "2025-12-31T23:59:59Z"
+
+    SelectRouteDto:
+      type: object
+      required:
+        - routeId
+      properties:
+        routeId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+          description: "ID de l'itinéraire à sélectionner"
+        name:
+          type: string
+          example: "Mon trajet quotidien"
+          description: "Nom personnalisé pour l'itinéraire"
+        saveRoute:
+          type: boolean
+          default: true
+          description: "Enregistrer l'itinéraire dans les favoris"
+
+    CalculateRouteRequest:
+      type: object
+      required:
+        - origin
+        - destination
+      properties:
+        origin:
+          $ref: '#/components/schemas/Waypoint'
+          description: "Point de départ"
+        destination:
+          $ref: '#/components/schemas/Waypoint'
+          description: "Point d'arrivée"
+        options:
+          $ref: '#/components/schemas/RouteOptions'
+
+    Error:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: "Validation failed"
+        error:
+          type: string
+          example: "Bad Request"
+
+paths:
+  /auth/login:
+    post:
+      summary: Connexion utilisateur
+      description: Authentifie un utilisateur et retourne son profil avec un cookie de session
+      tags:
+        - Authentification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Authentification réussie
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: Authentication=token; Path=/; HttpOnly
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '401':
+          description: Identifiants incorrects
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/register:
+    post:
+      summary: Inscription utilisateur
+      description: Crée un nouveau compte utilisateur
+      tags:
+        - Authentification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Compte créé avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Données invalides
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Nom d'utilisateur ou email déjà utilisé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/logout:
+    post:
+      summary: Déconnexion
+      description: Déconnecte l'utilisateur actuel en supprimant le cookie d'authentification
+      tags:
+        - Authentification
+      responses:
+        '200':
+          description: Déconnexion réussie
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Logged out successfully"
+
+  /auth/profile:
+    get:
+      summary: Profil utilisateur
+      description: Retourne les informations du profil de l'utilisateur connecté
+      tags:
+        - Authentification
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Profil de l'utilisateur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '401':
+          description: Non authentifié
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users:
+    post:
+      summary: Créer un utilisateur
+      description: Crée un nouvel utilisateur (accessible publiquement pour inscription)
+      tags:
+        - Utilisateurs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Utilisateur créé avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Données invalides
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      summary: Liste des utilisateurs
+      description: Retourne la liste de tous les utilisateurs (admin uniquement)
+      tags:
+        - Utilisateurs
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Liste des utilisateurs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Non authentifié
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Non autorisé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/id/{id}:
+    get:
+      summary: Détails d'un utilisateur par ID
+      description: Retourne les détails d'un utilisateur spécifique (admin ou propriétaire)
+      tags:
+        - Utilisateurs
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Détails de l'utilisateur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Non authentifié
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Non autorisé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Utilisateur non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/email/{email}:
+    get:
+      summary: Détails d'un utilisateur par email
+      description: Retourne les détails d'un utilisateur par son email (admin uniquement)
+      tags:
+        - Utilisateurs
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+            format: email
+      responses:
+        '200':
+          description: Détails de l'utilisateur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Non authentifié
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Non autorisé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Utilisateur non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/{id}:
+    patch:
+      summary: Modifier un utilisateur
+      description: Modifie les informations d'un utilisateur (admin ou propriétaire)
+      tags:
+        - Utilisateurs
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+      responses:
+        '200':
+          description: Utilisateur modifié avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Non authentifié
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Non autorisé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Utilisateur non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Supprimer un utilisateur
+      description: Supprime un utilisateur (admin uniquement)
+      tags:
+        - Utilisateurs
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Utilisateur supprimé avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User deleted successfully"
+        '401':
+          description: Non authentifié
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Non autorisé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Utilisateur non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
