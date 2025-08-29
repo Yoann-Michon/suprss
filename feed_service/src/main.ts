@@ -1,8 +1,19 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { FeedModule } from './feed.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(process.env.PORT ?? 3000);
+  const app = await NestFactory.createMicroservice(FeedModule,{
+    logger: ['log', 'warn', 'error', 'debug', 'verbose'], 
+    transport: Transport.RMQ,
+    options: {
+      urls: [process.env.RABBITMQ_HOST],
+      queue: process.env.RABBITMQ_FEED_QUEUE,
+      queueOptions: {
+        durable: true
+      },
+    },
+  });
+  await app.listen();
 }
 bootstrap();
+

@@ -50,16 +50,15 @@ const Sidebar = () => {
     const nav = {
         header: [
             { id: "sidebar_home", text: t('sidebar.home'), icon: <HomeRoundedIcon />, path: '/home' },
-            { id: "sidebar_myFeed", text: t('sidebar.myFeed'), icon: <FormatListBulletedIcon />, path: '/my_feed' },
             {
                 id: "sidebar_sharedCollections",
                 text: t('sidebar.sharedCollections'), icon: <PeopleOutlineIcon />, path: '/shared_collections',
                 subItems: [
-                    { title: t('sidebar.collection1'), path: '/shared_collections/1' },
-                    { title: t('sidebar.collection2'), path: '/shared_collections/2' },
+                    { title: t('sharedCollections.ownedCollections'), path: '/shared_collections/1' },
+                    { title:t('sharedCollections.sharedCollections'), path: '/shared_collections/2' },
                 ]
             },
-            { id: "sidebar_collections", text: t('sidebar.collections'), icon: <CollectionsBookmarkIcon />, path: '/my_collections' },
+            { id: "sidebar_favorites", text: t('sidebar.favorites'), icon: <CollectionsBookmarkIcon />, path: '/my_favorites' },
         ],
         footer: [
             { id: "sidebar_tutorial", text: t('sidebar.tutorial'), icon: <SchoolIcon />, onclick: () => { localStorage.removeItem("sidebarTutorialDone"); setShowTutorial(true); } },
