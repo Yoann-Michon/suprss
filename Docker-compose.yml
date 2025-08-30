@@ -1,34 +1,54 @@
 services:
+# === GATEWAY SERVICE ===
+  api-gateway:
+    build:
+      context: ./api_gateway
+    container_name: api-gateway
+    env_file:
+      - ./api_gateway/.env
+    #depends_on:
+    #  user-service:
+    #    condition: service_started
+    #  auth-service:
+    #    condition: service_started
+    #  rabbitmq:
+    #    condition: service_healthy
+    ports:
+      - "4000:4000"
+    networks:
+      - suprss-network
+    restart: always
+
   # === USER SERVICE ===
   user-service:
     build:
       context: ./user_service
     container_name: user-service
     env_file:
-      - ./user-service/.env
-    depends_on:
-      user-db:
-        condition: service_started
-      rabbitmq:
-        condition: service_healthy
+      - ./user_service/.env
+    #depends_on:
+    #  user-db:
+    #    condition: service_started
+    #  rabbitmq:
+    #    condition: service_healthy
     networks:
-      - trafine-network
+      - suprss-network
     restart: always
 
   # === AUTH SERVICE ===
   auth-service:
     build:
-      context: ./auth-service
+      context: ./auth_service
     container_name: auth-service
     env_file:
-      - ./auth-service/.env
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      user-service:
-        condition: service_started
+      - ./auth_service/.env
+    #depends_on:
+    #  rabbitmq:
+    #    condition: service_healthy
+    #  user-service:
+    #    condition: service_started
     networks:
-      - trafine-network
+      - suprss-network
     restart: always
 
   # === POSTGRES DB ===
@@ -53,10 +73,35 @@ services:
       retries: 5
       start_period: 10s
 
+  # === RABBITMQ SERVICE ===
+  rabbitmq:
+    image: "rabbitmq:4.1.3-management-alpine"
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_MANAGEMENT_PROMETHEUS_RET U RN_PER_OBJECT_METRICS: "true"
+      RABBITMQ_PROMETHEUS_RETURN_PER_OBJECT_METRICS: "true"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - suprss-network
+    restart: always
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 # === VOLUMES ===
 volumes:
   user-db-data:
+    driver: local
+  rabbitmq-data:
     driver: local
 
 # === NETWORKS ===

@@ -7,13 +7,14 @@ import { UploadImgService } from './upload-img.service';
 import { Setting } from './entities/Setting.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { UserController } from './user.controller';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env' }),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: process.env.JWT_EXPIRES_IN},
+      signOptions: { expiresIn: process.env.JWT_EXPIRATION},
     }),
     ClientsModule.registerAsync([
         {
@@ -59,6 +60,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       }),
     }),
   ],
+  controllers: [UserController],
   providers: [UserService, UploadImgService],
 })
 export class UserModule { }

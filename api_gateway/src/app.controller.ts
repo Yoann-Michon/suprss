@@ -11,7 +11,7 @@ export class AppController {
   ) {}
 
   @Post('login')
-  async login(@Body() login: any, @Res({ passthrough: true }) response: Response) {
+  async login(@Body() login: {email: string,password: string}, @Res({ passthrough: true }) response: Response) {
     const result = await this.appService.login(login);
     
     if (result.token) {
@@ -24,7 +24,7 @@ export class AppController {
   }
 
   @Post('register')
-  async register(@Body() register:any) {
+  async register(@Body() register:{username:string,email: string,password: string}) {
     return await this.appService.register(register);
   }
 
@@ -34,6 +34,7 @@ export class AppController {
     return { message: 'Logged out successfully' };
   }
 
+  //todo
   @UseGuards(JwtAuthGuard, UserOwnerGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.USER)
   @Get('profile')

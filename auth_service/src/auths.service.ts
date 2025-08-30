@@ -1,4 +1,4 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException, Logger } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
 import { ClientProxy } from '@nestjs/microservices';
@@ -7,9 +7,9 @@ import { CreateAuthDto } from './dto/create-auth.dto';
 
 @Injectable()
 export class AuthsService {
+  private readonly logger = new Logger(AuthsService.name);
   constructor(
     @Inject('USER_SERVICE') private readonly userClient: ClientProxy,
-    @Inject('NOTIFICATION_SERVICE') private readonly notificationClient: ClientProxy,
     private readonly jwtService: JwtService
   ) { }
 
@@ -18,14 +18,14 @@ export class AuthsService {
     if (!user) {
       return null;
     }
-
+    this.logger.log(`User validated: ${user}`);
     return user;
   }
 
   async login(loginDto: LoginUserDto) {
     try {
-      
       const user = await this.validateUser(loginDto);
+      this.logger.log(`Login attempt for user: ${user}`);
       if (!user) {
         return { message: 'Invalid credentials' };
       }
@@ -35,25 +35,22 @@ export class AuthsService {
         message: 'Login successful',
       };
     } catch (error) {
-      return { message: 'Error during login: ' + error.message };
+      this.logger.error(`Login error: ${error}`);
+      return { message: 'Error during login: ' + error };
     }
   }
 
   async register(createAuthDto: CreateAuthDto) {
     try {
-      const user =await firstValueFrom(this.userClient.send('createUser', createAuthDto));
-      if (user){
-        this.notificationClient.emit('send.email', {
-          to: user.email,
-          subject: 'Email Confirmation',
-          html: `<p>Click <a href="${process.env.FRONTEND_URL}/api/auth/login">here</a> to enjoy your ride </p>`,
-        });
-      }
+      const user = await firstValueFrom(this.userClient.send('createUser', createAuthDto));
+      this.logger.log(`Login attempt for user: ${user}`);
+
       return {
         message: 'User created successfully',
       };
     } catch (error) {
-      return { message: 'Error during registration: ' + error.message };
+      this.logger.error(`Register error: ${error}`);
+      return { message: 'Error during registration: ' + error };
     }
   }
 

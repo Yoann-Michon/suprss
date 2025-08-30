@@ -1,11 +1,13 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { AuthsService } from './auths.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { LoginUserDto } from './dto/login.dto';
 
-@Controller("auths")
+@Controller()
 export class AuthsController {
+    private readonly logger = new Logger(AuthsController.name);
+  
   constructor(private readonly authsService: AuthsService) {}
 
   @MessagePattern('login')

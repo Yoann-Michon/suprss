@@ -13,7 +13,7 @@ import { Article } from './entities/article.entity';
     ConfigModule.forRoot({ envFilePath: '.env' }),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: process.env.JWT_EXPIRES_IN},
+      signOptions: { expiresIn: process.env.JWT_EXPIRATION},
     }),
     ClientsModule.registerAsync([
         {

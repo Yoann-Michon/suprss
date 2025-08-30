@@ -1,4 +1,3 @@
-import { UserRole } from '@guards/roles_guard/role.enum';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToOne, JoinColumn } from 'typeorm';
 import { Setting } from './Setting.entity';
 
@@ -10,20 +9,14 @@ export class User {
   @Column({ unique: true, nullable: false })
   email: string;
 
-  @Column({ nullable: false })
-  firstname: string;
-
-  @Column({ nullable: false })
-  lastname: string;
-
   @Column({ nullable: true })
-  username?: string;
+  username: string;
 
   @Column({ nullable: false })
   password: string;
 
-  @Column({ type: 'enum', enum: UserRole, default: UserRole.USER, nullable: false })
-  role: UserRole;
+  @Column({ nullable: false })
+  role: string;
 
   @Column({ type: 'boolean', default: true })
   firstVisit: boolean;

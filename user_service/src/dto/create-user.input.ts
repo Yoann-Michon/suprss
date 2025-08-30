@@ -1,18 +1,9 @@
-import { UserRole } from '@guards/roles_guard/role.enum';
-import { Matches, IsNotEmpty, Length, IsEmail, IsOptional, IsEnum } from 'class-validator';
+import { Matches, IsNotEmpty, Length, IsEmail, IsOptional, IsEnum, MinLength } from 'class-validator';
 
 export class CreateUserInput {
   @IsNotEmpty({ message: 'Email is required' })
   @IsEmail({}, { message: 'Invalid email format' })
   email: string;
-
-  @IsNotEmpty({ message: 'First name is required' })
-  @Length(3, 50, { message: 'First name must be between 3 and 50 characters' })
-  firstname: string;
-
-  @IsNotEmpty({ message: 'Last name is required' })
-  @Length(3, 50, { message: 'Last name must be between 3 and 50 characters' })
-  lastname: string;
 
   @IsNotEmpty({ message: 'Password is required' })
   @Length(6, 50, { message: 'Password must be between 6 and 50 characters' })
@@ -22,15 +13,15 @@ export class CreateUserInput {
   password: string;
 
   @IsNotEmpty({ message: 'Role is required' })
-  @IsEnum(UserRole, { message: 'Role must be one of the following: USER' })
-  role: UserRole;
+  role: string;
 
-  @IsOptional()
-  username?: string;
+  @IsNotEmpty({ message: 'Username is required' })
+  @MinLength(3, { message: 'Username must be at least 3 characters long' })
+  username: string;
 
   @IsOptional()
   avatarUrl?: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'First visit status is required' })
   firstVisit: boolean;
 }

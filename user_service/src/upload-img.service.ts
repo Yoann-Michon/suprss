@@ -30,16 +30,27 @@ export class UploadImgService {
           }
         });
   
-        const data = await response.json();
-  
+        const data = await response.json() as {
+          success: boolean;
+          data?: { url: string };
+          error?: { message?: string };
+        };
+
         if (!response.ok || !data.success) {
           throw new HttpException(
             data.error?.message || 'Failed to upload image to ImgBB',
             response.status || HttpStatus.BAD_REQUEST
           );
         }
-  
-        uploadedUrls.push(data.data.url);
+
+        if (data.data?.url) {
+          uploadedUrls.push(data.data.url);
+        } else {
+          throw new HttpException(
+            'No URL returned from ImgBB',
+            HttpStatus.BAD_REQUEST
+          );
+        }
       }
   
       return uploadedUrls;
