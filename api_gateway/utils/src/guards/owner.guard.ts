@@ -1,6 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Role } from '../decorators/role.enum';
+import { UserRole } from '../decorators/role.enum';
 
 @Injectable()
 export class UserOwnerGuard implements CanActivate {
@@ -13,7 +13,7 @@ export class UserOwnerGuard implements CanActivate {
       throw new ForbiddenException('User not authenticated');
     }
     
-    if (user.role === Role.ADMIN) {
+    if (user.role === UserRole.ADMIN) {
       return true;
     }
     

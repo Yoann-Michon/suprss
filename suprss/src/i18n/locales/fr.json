@@ -11,37 +11,45 @@
     "actions": "Actions"
   },
   "auth": {
+    "password": "Mot de passe",
+    "passwordPlaceholder": "Entrez votre mot de passe",
+    "stayInformedTogether": "Restez informé. Ensemble.",
+    "collaborativeDescription": "Suivez vos flux préférés avec votre équipe, en temps réel.",
+    "signUp": "S'inscrire",
+    "email": "Email",
+    "emailPlaceholder": "Entrez votre email",
     "login": {
       "title": "Connexion à votre compte",
-      "username": "Nom d'utilisateur",
-      "usernamePlaceholder": "Entrez votre nom d'utilisateur",
-      "password": "Mot de passe",
-      "passwordPlaceholder": "Entrez votre mot de passe",
       "rememberMe": "Se souvenir de moi",
       "forgotPassword": "Mot de passe oublié ?",
       "loginButton": "Se connecter",
       "orLoginWith": "ou se connecter avec",
-      "noAccount": "Vous n'avez pas de compte ?",
-      "signUp": "S'inscrire",
-      "stayInformedTogether": "Restez informé. Ensemble.",
-      "collaborativeDescription": "Suivez vos flux préférés avec votre équipe, en temps réel."
+      "noAccount": "Vous n'avez pas de compte ?"
     },
     "register": {
       "title": "Créer votre compte",
       "username": "Nom d'utilisateur",
-      "usernamePlaceholder": "Choisissez un nom d'utilisateur",
-      "email": "Email",
-      "emailPlaceholder": "Entrez votre email",
-      "password": "Mot de passe",
+      "usernamePlaceholder": "Entrez votre nom d'utilisateur",
       "passwordPlaceholder": "Créez un mot de passe",
       "confirmPassword": "Confirmer le mot de passe",
       "confirmPasswordPlaceholder": "Ressaisissez votre mot de passe",
       "registerButton": "S'inscrire",
       "orRegisterWith": "ou s'inscrire avec",
       "alreadyHaveAccount": "Vous avez déjà un compte ?",
-      "login": "Se connecter",
-      "stayInformedTogether": "Restez informé. Ensemble.",
-      "collaborativeDescription": "Suivez vos flux préférés avec votre équipe, en temps réel."
+      "passwordMismatch": "Les mots de passe ne correspondent pas"
+    },
+    "api":{
+      "login_success": "Connexion réussie",
+      "register_success": "Inscription réussie",
+      "invalid_credentials": "Email ou mot de passe incorrect",
+      "user_not_found": "Utilisateur non trouvé",
+      "account_locked": "Compte verrouillé",
+      "email_exists": "Cet email existe déjà",
+      "username_exists": "Ce nom d'utilisateur existe déjà",
+      "weak_password": "Le mot de passe est trop faible",
+      "logout_success": "Déconnexion réussie",
+      "profile_not_found": "Profil utilisateur non trouvé",
+      "update_success": "Profil mis à jour avec succès"
     }
   },
   "navigation": {
@@ -75,13 +83,13 @@
       "title": "Paramètres",
       "appearance": {
         "darkMode": "Mode sombre",
-        "darkModeDescription": "Activez le mode sombre pour une expérience de lecture confortable dans des conditions de faible luminosité.",
+        "darkModeDescription": "Activez le mode sombre pour réduire la fatigue visuelle.",
         "language": "Langue",
         "languageDescription": "Choisissez la langue de l'application."
       },
       "notifications": {
         "title": "Notifications",
-        "description": "Configurez vos préférences de notification (à venir)."
+        "description": "Gérez vos préférences de notification ici."
       }
     },
     "myFeed": {
@@ -113,19 +121,26 @@
       "oldest": "Plus ancien"
     },
     "manageFeeds": {
+      "title": "Gestion des flux",
       "editFeed": "Modifier le flux",
+      "addFromUrl": "Ajouter depuis une URL",
+      "addFromFile": "Ajouter depuis un fichier",
       "feedUrl": "URL du flux",
       "selectFile": "Sélectionner un fichier",
-      "exportTitle": "Exporter les flux",
-      "selectExportFormat": "Sélectionnez le format pour exporter vos flux :",
+      "fields": {
+        "title": "Titre",
+        "url": "URL",
+        "tags": "Tags",
+        "frequency": "Fréquence",
+        "description": "Description"
+      },
       "table": {
         "feedTitle": "Titre du flux",
-        "tags": "Étiquettes",
-        "updateFrequency": "Fréquence de mise à jour"
-      },
-      "fields": {
-        "tags": "Étiquettes",
-        "frequency": "Fréquence"
+        "url": "URL",
+        "tags": "Tags",
+        "updateFrequency": "Fréquence de mise à jour",
+        "description": "Description",
+        "actions": "Actions"
       }
     },
     "speedDial": {

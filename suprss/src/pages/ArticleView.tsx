@@ -20,7 +20,7 @@ const ArticleView = () => {
   if (!article) {
     return (
       <Typography color={colors.text.secondary}>
-        {t("pages.myFeed.emptyState.title")}
+        {t("pages.article.emptyState")}
       </Typography>
     );
   }
@@ -56,6 +56,7 @@ const ArticleView = () => {
       <Typography variant="subtitle1" color={colors.text.tertiary}>
         {article.description}
       </Typography>
+      {/* Ajoute ici d'autres champs traduits si besoin */}
     </Box>
   );
 };

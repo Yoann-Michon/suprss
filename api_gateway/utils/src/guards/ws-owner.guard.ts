@@ -1,6 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext, Logger } from '@nestjs/common';
 import { WsException } from '@nestjs/websockets';
-import { Role } from '../decorators/role.enum';
+import { UserRole } from '../decorators/role.enum';
 
 @Injectable()
 export class WsUserOwnerGuard implements CanActivate {
@@ -15,7 +15,7 @@ export class WsUserOwnerGuard implements CanActivate {
       throw new WsException('User not authenticated');
     }
     
-    if (user.role === Role.ADMIN) {
+    if (user.role === UserRole.ADMIN) {
       return true;
     }
     

@@ -1,69 +1,51 @@
-import { Controller, Delete, Get, Inject, Param, Patch, Post, Body, UseGuards, Req } from "@nestjs/common";
+import { Controller, Delete, Get, Inject, Param, Patch, Body, UseGuards, Req, Logger } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { firstValueFrom } from "rxjs";
-import { JwtAuthGuard, Public, Role, Roles, RolesGuard } from "utils/utils";
-import { UserOwnerGuard } from "utils/utils/guards/owner.guard";
+import { JwtAuthGuard, Roles, RolesGuard, UserRole } from "utils/src";
+import { UserOwnerGuard } from "utils/src/guards/owner.guard";
 
 @Controller('users')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, UserOwnerGuard, RolesGuard)
 export class UserController {
+    private readonly logger = new Logger(UserController.name);
     constructor(
-        @Inject('USER_SERVICE') private readonly userClient: ClientProxy){}
-
-    @Post()
-    @Public()
-    async createUser(@Body() createUserDto: any) {
-        return await firstValueFrom(this.userClient.send('createUser', createUserDto));
-    }
+        @Inject('USER_SERVICE') private readonly userClient: ClientProxy) { }
 
     @Get()
-    @Roles(Role.ADMIN)
-    async getAllUsers(@Req() req) {
-        console.log("getAllUsers - Utilisateur transmis:", req.user);
-        return await firstValueFrom(this.userClient.send('findAllUsers', req.user));
+    @Roles(UserRole.ADMIN, UserRole.USER)
+    async getAllUsers() {
+        return await firstValueFrom(this.userClient.send('findAllUsers', {}));
     }
 
     @Get('id/:id')
-    @Roles(Role.ADMIN, Role.USER)
-    @UseGuards(UserOwnerGuard)
-    async getUserById(@Param('id') id: string, @Req() req) {
-        console.log("getUserById - Utilisateur transmis:", req.user);
-        return await firstValueFrom(this.userClient.send('findUserById', { 
-            id,
-            user: req.user 
-        }));
+    @Roles(UserRole.ADMIN)
+    async getUserById(@Param('id') id: string) {
+        return await firstValueFrom(this.userClient.send('findUserById', {id}));
     }
 
     @Get('email/:email')
-    @Roles(Role.ADMIN)
-    async getUserByEmail(@Param('email') email: string, @Req() req) {
-        console.log("getUserByEmail - Utilisateur transmis:", req.user);
-        return await firstValueFrom(this.userClient.send('findUserByEmail', { 
-            email,
-            user: req.user 
-        }));
+    @Roles(UserRole.ADMIN, UserRole.USER)
+    async getUserByEmail(@Param('email') email: string) {
+        return await firstValueFrom(this.userClient.send('findUserByEmail', {email}));
     }
 
     @Patch(':id')
-    @Roles(Role.ADMIN, Role.USER)
-    @UseGuards(UserOwnerGuard)
+    @Roles(UserRole.ADMIN, UserRole.USER)
     async updateUser(@Param('id') id: string, @Body() updateUserDto: any, @Req() req) {
-        console.log("updateUser - Utilisateur transmis:", req.user);
-        return await firstValueFrom(this.userClient.send('updateUser', { 
-            id, 
+        return await firstValueFrom(this.userClient.send('updateUser', {
+            id,
             updateUser: updateUserDto,
-            user: req.user 
+            user: req.user
         }));
     }
-
+    
     @Delete(':id')
-    @Roles(Role.ADMIN)
-    @UseGuards(UserOwnerGuard)
+    @Roles(UserRole.ADMIN, UserRole.USER)
     async deleteUser(@Param('id') id: string, @Req() req) {
-        console.log("deleteUser - Utilisateur transmis:", req.user);
-        return await firstValueFrom(this.userClient.send('removeUser', { 
+        this.logger.log("deleteUser - Utilisateur transmis:", req.user);
+        return await firstValueFrom(this.userClient.send('removeUser', {
             id,
-            user: req.user 
+            user: req.user
         }));
     }
 }

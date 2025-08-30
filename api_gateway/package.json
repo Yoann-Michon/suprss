@@ -84,10 +84,10 @@
     "testEnvironment": "node",
     "roots": [
       "<rootDir>/src/",
-      "<rootDir>/libs/"
+      "<rootDir>/utils/"
     ],
     "moduleNameMapper": {
-      "^utils/utils(|/.*)$": "<rootDir>/libs/utils/src/$1"
+      "^utils/utils(|/.*)$": "<rootDir>/utils/src/$1"
     }
   }
 }

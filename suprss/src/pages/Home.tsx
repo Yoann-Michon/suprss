@@ -211,7 +211,7 @@ const Home = () => {
                         title={t('home.read')}
                         variant="contained"
                         size="small"
-                         onClick={() => openArticle(item)}
+                        onClick={() => openArticle(item)}
                         sx={{
                           textTransform: "none",
                           width: "50px",
@@ -223,7 +223,6 @@ const Home = () => {
                       >
                         {t('home.read')}
                       </Button>
-
                     </CardContent>
                     {item.thumbnail && (
                       <CardMedia

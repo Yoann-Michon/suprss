@@ -15,6 +15,7 @@ import { useState, type MouseEvent } from "react";
 import { useThemeMode, useThemeColors } from "../ThemeModeContext";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useUser } from "../../context/UserContext";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -22,6 +23,7 @@ const Header = () => {
   const colors = useThemeColors();
   const { darkMode, toggleDarkMode } = useThemeMode();
   const { t } = useTranslation();
+  const { logout } = useUser();
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -175,6 +177,10 @@ const Header = () => {
 
         <MenuItem
           id="menu_logout"
+          onClick={async () => {
+            logout();
+            handleClose();
+          }}
           sx={{
             color: colors.text.primary,
             "&:hover": {

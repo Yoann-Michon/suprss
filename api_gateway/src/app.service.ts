@@ -10,12 +10,10 @@ export class AppService {
   ) {}
 
   async login(login: {email: string,password: string}) {
-    this.logger.log(`Login attempt for email: ${login}`);
     return await firstValueFrom(this.authServiceClient.send('login', login));
   }
 
   async register(register:{username:string, email: string, password: string}) {
-    this.logger.log(`Register attempt for email: ${register}`);
     return await firstValueFrom(this.authServiceClient.send('register', register));
   }
 }

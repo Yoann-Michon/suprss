@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { AppService } from './app.service';
-import { UserOwnerGuard } from 'utils/utils/guards/owner.guard';
-import { UtilsService, JwtAuthGuard, RolesGuard, Roles, Role, CurrentUser } from 'utils/utils';
+import { UserOwnerGuard } from 'utils/src/guards/owner.guard';
+import { UtilsService, JwtAuthGuard, RolesGuard, Roles, CurrentUser, UserRole } from 'utils/src';
 
 @Controller("auth")
 export class AppController {
@@ -34,16 +34,16 @@ export class AppController {
     return { message: 'Logged out successfully' };
   }
 
-  //todo
   @UseGuards(JwtAuthGuard, UserOwnerGuard, RolesGuard)
-  @Roles(Role.ADMIN, Role.USER)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @Get('profile')
   getProfile(@CurrentUser() user: any) {
     return { 
       id: user.id, 
-      username: user.username,
       email: user.email,
-      role: user.role
+      username: user.username,
+      role: user.role,
+      settings: user.settings
     };
   }
 }

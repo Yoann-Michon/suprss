@@ -53,7 +53,7 @@ const Account = () => {
         }}
       >
         <Typography variant="h5" fontWeight={600} color={colors.text.primary}>
-          {t('account.title')}
+          {t('pages.account.title')}
         </Typography>
 
         <Stack direction="row" spacing={3} alignItems="center">
@@ -70,10 +70,10 @@ const Account = () => {
               {mockUser.email}
             </Typography>
             <Typography variant="body2" color={colors.text.secondary}>
-              {t('account.joined')}: {mockUser.joined}
+              {t('pages.account.joined')}: {mockUser.joined}
             </Typography>
           </Box>
-          <Tooltip title={t('account.editProfile')}>
+          <Tooltip title={t('pages.account.editProfile')}>
             <IconButton>
               <EditIcon sx={{ color: colors.icon }} />
             </IconButton>
@@ -84,10 +84,10 @@ const Account = () => {
 
         <Stack spacing={2}>
           <Typography variant="subtitle1" fontWeight={500} color={colors.text.primary}>
-            {t('account.linkedProvider')}
+            {t('pages.account.linkedProvider')}
           </Typography>
           <TextField
-            label={t('account.authProvider')}
+            label={t('pages.account.authProvider')}
             value={mockUser.provider}
             disabled
             fullWidth
@@ -110,7 +110,7 @@ const Account = () => {
               },
             }}
           >
-            {t('account.changePassword')}
+            {t('pages.account.changePassword')}
           </Button>
           <Button
             variant="contained"
@@ -118,7 +118,7 @@ const Account = () => {
             color="error"
             sx={{ fontWeight: 600 }}
           >
-            {t('account.logout')}
+            {t('pages.account.logout')}
           </Button>
         </Stack>
       </Paper>

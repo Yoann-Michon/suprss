@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserController } from './user/user.controller';
-import { UtilsModule } from 'utils/utils';
+import { UtilsModule } from 'utils/src';
 
 @Module({
   imports: [

@@ -6,12 +6,15 @@ import 'intro.js/introjs.css';
 import { CssBaseline } from '@mui/material'
 import { ThemeModeProvider } from './component/ThemeModeContext.tsx'
 import './i18n/Config.ts';
+import { UserProvider } from './context/UserContext.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ThemeModeProvider>
-      <CssBaseline />
-      <App />
-    </ThemeModeProvider>
+    <UserProvider>
+      <ThemeModeProvider>
+        <CssBaseline />
+        <App />
+      </ThemeModeProvider>
+    </UserProvider>
   </StrictMode>,
 )

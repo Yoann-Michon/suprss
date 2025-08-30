@@ -9,9 +9,10 @@ import {
     Checkbox,
     Button,
     Divider,
-    Typography, IconButton, InputAdornment
+    Typography, IconButton, InputAdornment,
+    Alert
 } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import TwoWomen from "../../assets/two_women.webp";
 import GoogleIcon from '@mui/icons-material/Google';
 import MicrosoftIcon from '@mui/icons-material/Microsoft';
@@ -19,16 +20,39 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
+import { useUser } from "../../context/UserContext";
 
 const Login = () => {
     const { t } = useTranslation();
+    const { login } = useUser();
     const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState<string>("");
+    const [loading, setLoading] = useState(false);
+    
     const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
-    const navigate = useNavigate();
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        navigate("/home");
+        setError("");
+        setLoading(true);
+
+        const formData = new FormData(event.currentTarget);
+        const email = formData.get("email") as string;
+        const password = formData.get("password") as string;
+
+        if (!email || !password) {
+            setError(t('auth.login.fillAllFields'));
+            setLoading(false);
+            return;
+        }
+
+        try {
+            await login(email, password);
+        } catch (err: any) {
+            setError(err.message || t('auth.login.loginError'));
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -69,23 +93,42 @@ const Login = () => {
                     }}
                 >
                     <Typography variant="h5" sx={{ color: "#FFFFFF", my: 2, fontWeight: 'bold' }}>
-                        {t('login.title')}
+                        {t('auth.login.title')}
                     </Typography>
+
+                    {error && (
+                        <Alert 
+                            severity="error" 
+                            sx={{ 
+                                width: "100%", 
+                                maxWidth: "350px", 
+                                mb: 2,
+                                backgroundColor: "#2D1B1E",
+                                color: "#F87171",
+                                '& .MuiAlert-icon': {
+                                    color: "#F87171"
+                                }
+                            }}
+                        >
+                            {error}
+                        </Alert>
+                    )}
 
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ width: "100%", maxWidth: "350px" }}>
                         <FormControl fullWidth sx={{ mt: 2 }}>
-                            <FormLabel htmlFor="username" sx={{ color: "#FFFFFF", mb: 0.5, alignSelf: "start", fontSize: "0.9rem" }}>
-                                {t('login.username')}
+                            <FormLabel htmlFor="email" sx={{ color: "#FFFFFF", mb: 0.5, alignSelf: "start", fontSize: "0.9rem" }}>
+                                {t('auth.email')}
                             </FormLabel>
                             <TextField
-                                id="username"
-                                type="text"
-                                name="username"
-                                placeholder={t('login.usernamePlaceholder')}
-                                autoComplete="username"
+                                id="email"
+                                type="email"
+                                name="email"
+                                placeholder={t('auth.emailPlaceholder')}
+                                autoComplete="email"
                                 autoFocus
                                 required
                                 fullWidth
+                                disabled={loading}
                                 InputProps={{
                                     sx: {
                                         borderRadius: "8px",
@@ -103,14 +146,12 @@ const Login = () => {
                                     }
                                 }}
                                 InputLabelProps={{ sx: { color: "#E2E8F0" } }}
-                                error={false}
-                                helperText={""}
                             />
                         </FormControl>
 
                         <FormControl fullWidth sx={{ my: 2 }}>
                             <FormLabel htmlFor="password" sx={{ color: "#FFFFFF", mb: 0.5, alignSelf: "start", fontSize: "0.9rem" }}>
-                                {t('login.password')}
+                                {t('auth.password')}
                             </FormLabel>
                             <TextField
                                 id="password"
@@ -119,7 +160,8 @@ const Login = () => {
                                 autoComplete="current-password"
                                 required
                                 fullWidth
-                                placeholder={t('login.passwordPlaceholder')}
+                                disabled={loading}
+                                placeholder={t('auth.passwordPlaceholder')}
                                 InputProps={{
                                     sx: {
                                         borderRadius: "8px",
@@ -138,6 +180,7 @@ const Login = () => {
                                                 onClick={togglePasswordVisibility}
                                                 edge="end"
                                                 sx={{ color: "#E2E8F0" }}
+                                                disabled={loading}
                                             >
                                                 {showPassword ? <VisibilityOff /> : <Visibility />}
                                             </IconButton>
@@ -154,14 +197,14 @@ const Login = () => {
                                     '& .MuiSvgIcon-root': {
                                         fontSize: 20,
                                     }
-                                }} />}
+                                }} disabled={loading} />}
                                 label={<Typography variant="body2" sx={{ color: "#CBD5E0", fontSize: "0.8rem" }}>
-                                    {t('login.rememberMe')}
+                                    {t('auth.login.rememberMe')}
                                 </Typography>}
                             />
                             <Link to="/forgot-password" style={{ textDecoration: 'none' }}>
                                 <Typography variant="body2" sx={{ color: "#63B3ED", '&:hover': { textDecoration: 'underline' }, fontSize: "0.8rem" }}>
-                                    {t('login.forgotPassword')}
+                                    {t('auth.login.forgotPassword')}
                                 </Typography>
                             </Link>
                         </Box>
@@ -170,18 +213,23 @@ const Login = () => {
                             type="submit"
                             variant="contained"
                             fullWidth
+                            disabled={loading}
                             sx={{
                                 color: "#FFFFFF",
                                 backgroundColor: "#63B3ED",
                                 '&:hover': {
                                     backgroundColor: "#4299E1",
                                 },
+                                '&:disabled': {
+                                    backgroundColor: "#4A5568",
+                                    color: "#A0AEC0"
+                                },
                                 borderRadius: "50px",
                                 fontSize: "0.75rem",
                                 fontWeight: "bold"
                             }}
                         >
-                            {t('login.loginButton')}
+                            {loading ? t('auth.login.loggingIn') || 'Connexion...' : t('auth.login.loginButton')}
                         </Button>
                     </Box>
 
@@ -194,7 +242,7 @@ const Login = () => {
                         },
                     }}>
                         <Typography variant="body1" sx={{ color: "#CBD5E0", fontSize: "0.7rem" }}>
-                            {t('login.orLoginWith')}
+                            {t('auth.login.orLoginWith')}
                         </Typography>
                     </Divider>
 
@@ -203,6 +251,7 @@ const Login = () => {
                             variant="outlined"
                             fullWidth
                             startIcon={<GoogleIcon />}
+                            disabled={loading}
                             sx={{
                                 borderColor: "#FFFFFF",
                                 backgroundColor: "#293642",
@@ -222,6 +271,7 @@ const Login = () => {
                             variant="outlined"
                             fullWidth
                             startIcon={<MicrosoftIcon />}
+                            disabled={loading}
                             sx={{
                                 borderColor: "#FFFFFF",
                                 backgroundColor: "#293642",
@@ -240,10 +290,10 @@ const Login = () => {
                     </Box>
 
                     <Typography variant="body1" align="center" sx={{ color: "#CBD5E0", my: 2, fontSize: "0.7rem" }}>
-                        {t('login.noAccount')}{" "}
+                        {t('auth.login.noAccount')}{" "}
                         <Link to="/auth/register" style={{ textDecoration: 'none' }}>
                             <Typography component="span" sx={{ color: "#63B3ED", '&:hover': { textDecoration: 'underline' }, fontSize: "0.7rem" }}>
-                                {t('login.signUp')}
+                                {t('auth.register.registerButton')}
                             </Typography>
                         </Link>
                     </Typography>
@@ -266,10 +316,10 @@ const Login = () => {
                 >
                     <Box sx={{ position: "absolute", top: 40, textAlign: "center", width: "80%" }}>
                         <Typography variant="h4" sx={{ color: "#FFFFFF", mb: 2, fontWeight: 'bold' }}>
-                            {t('login.stayInformedTogether')}
+                            {t('auth.stayInformedTogether')}
                         </Typography>
                         <Typography variant="body1" sx={{ color: "#FFFFFF" }}>
-                            {t('login.collaborativeDescription')}
+                            {t('auth.collaborativeDescription')}
                         </Typography>
                     </Box>
                 </Box>
