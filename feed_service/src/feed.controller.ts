@@ -39,8 +39,8 @@ export class FeedController {
   // === ARTICLES ===
 
   @MessagePattern('getArticlesByFeed')
-  async getArticlesByFeed(@Payload() feedIds: string[] ) {
-    return this.articleService.getArticlesByFeed(feedIds);
+  async getArticlesByFeed(@Payload() feedIds: string[]) {
+    return this.articleService.getArticlesByFeed(feedIds );
   }
 
   @MessagePattern('markArticleAsRead')

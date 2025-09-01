@@ -1,9 +1,10 @@
-import { Entity, Column, ObjectId, ObjectIdColumn } from 'typeorm';
+import { Entity, Column, ObjectIdColumn } from 'typeorm';
+import { ObjectId } from 'mongodb';
 import { FeedFrequency } from './feed.enum';
 
 @Entity('feed')
 export class Feed {
-  @ObjectIdColumn()
+  @ObjectIdColumn({ name: '_id' })
   id: ObjectId;
 
   @Column()

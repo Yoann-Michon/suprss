@@ -4,13 +4,14 @@ import { MongoRepository } from 'typeorm';
 import { RpcException } from '@nestjs/microservices';
 import { Article } from 'src/entities/article.entity';
 import { CreateArticleDto } from 'src/dto/create-article.dto';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class ArticleService {
   constructor(
     @InjectRepository(Article)
     private readonly articleRepository: MongoRepository<Article>,
-  ) {}
+  ) { }
 
   async createArticle(articleDto: CreateArticleDto): Promise<Article> {
     try {
@@ -23,15 +24,21 @@ export class ArticleService {
 
   async getArticlesByFeed(feedIds: string[]): Promise<Article[]> {
     try {
-      return await this.articleRepository.find({ where: { feedId: { $in: feedIds } } });
+      return await this.articleRepository.find({
+        where: {
+          feedId: { $in: feedIds } as any
+        }
+      });
     } catch (error) {
       throw new RpcException(`Failed to fetch articles for feeds [${feedIds.join(', ')}]: ${error}`);
     }
   }
 
-  async markArticleAsRead(articleId: string,userId:string): Promise<Article> {
+  async markArticleAsRead(articleId: string, userId: string): Promise<Article> {
     try {
-      const article = await this.articleRepository.findOneBy({ id: articleId as any });
+      const article = await this.articleRepository.findOneBy({
+        _id: new ObjectId(articleId)
+      });
       if (!article) {
         throw new RpcException('Article not found');
       }

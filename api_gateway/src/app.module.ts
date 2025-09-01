@@ -37,6 +37,18 @@ import { FeedController } from './feed/feed.controller';
             queueOptions: { durable: true },
           },
         }),
+      },{
+        name: 'FEED_SERVICE',
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<string>('RABBITMQ_HOST')!],
+            queue: configService.get<string>('RABBITMQ_FEED_QUEUE'),
+            queueOptions: { durable: true },
+          },
+        }),
       }
     ])],
       controllers: [AppController, UserController, FeedController],

@@ -2,18 +2,17 @@ import { Injectable } from "@nestjs/common";
 import { Feed } from "./entities/feed.entity";
 import { RpcException } from "@nestjs/microservices";
 import { Article } from "./entities/article.entity";
-import { ArticleStatus, FeedFrequency, FrequencyCronMap} from "./entities/feed.enum";
-
+import { FeedFrequency, FrequencyCronMap} from "./entities/feed.enum";
 import * as Parser from 'rss-parser';
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { MongoRepository, Repository } from "typeorm";
 import { Cron } from "@nestjs/schedule";
 
 @Injectable()
 export class RssService {
     private readonly parser = new Parser();
     constructor(
-    @InjectRepository(Article) private readonly articleRepository: Repository<Article>,
+    @InjectRepository(Article) private readonly articleRepository: MongoRepository<Article>,
     @InjectRepository(Feed) private readonly feedRepository: Repository<Feed>
 
   ) { }
@@ -39,7 +38,7 @@ export class RssService {
           author: item.creator ?? item.author ?? 'Unknown',
           excerpt: item.contentSnippet ?? '',
           feedId: feed.id.toString(),
-          status: ArticleStatus.UNREAD,
+          userIdsRead: [],
           favorite: false,
         });
 
