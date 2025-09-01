@@ -15,7 +15,7 @@ const SearchBar = ({ searchText, onSearchChange }: SearchBarProps) => {
   return (
     <TextField
       id="search_bar"
-      placeholder={t('filters.search')}
+      placeholder={t('features.filters.search')}
       variant="outlined"
       fullWidth
       size="small"

@@ -71,7 +71,7 @@ const Header = () => {
           )}
         </IconButton>
 
-        <Tooltip title={t('header.tooltip')}>
+        <Tooltip title={t('navigation.header.tooltip')}>
           <IconButton
             id="header_avatar_btn"
             onClick={handleClick}
@@ -152,7 +152,7 @@ const Header = () => {
             },
           }}
         >
-          <Avatar /> {t('header.profile')}
+          <Avatar /> {t('navigation.header.profile')}
         </MenuItem>
 
         <Divider sx={{ borderColor: colors.divider }} />
@@ -172,7 +172,7 @@ const Header = () => {
           <ListItemIcon sx={{ color: colors.icon }}>
             <Settings fontSize="small" />
           </ListItemIcon>
-          {t('header.settings')}
+          {t('navigation.header.settings')}
         </MenuItem>
 
         <MenuItem
@@ -192,7 +192,7 @@ const Header = () => {
           <ListItemIcon sx={{ color: colors.icon }}>
             <Logout fontSize="small" />
           </ListItemIcon>
-          {t('header.logout')}
+          {t('navigation.header.logout')}
         </MenuItem>
       </Menu>
     </Box>

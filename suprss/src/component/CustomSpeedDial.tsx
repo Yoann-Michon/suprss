@@ -1,9 +1,7 @@
-import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import AddLinkIcon from '@mui/icons-material/AddLink';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import DownloadIcon from '@mui/icons-material/Download';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { SpeedDial, SpeedDialAction } from '@mui/material';
 import { useState } from 'react';
@@ -21,16 +19,10 @@ const CustomSpeedDial = ({
   onAddFromUrl,
   onAddFromFile,
 }: CustomSpeedDialProps) => {
-  const navigate = useNavigate();
   const { t } = useTranslation();
   const [hovered, setHovered] = useState(false);
 
   const actions = [
-    {
-      icon: <ManageSearchIcon />,
-      name: t('myFeed.actions.manageFeeds'),
-      onClick: () => navigate('/my_feed/manage'),
-    },
     {
       icon: <AddLinkIcon />,
       name: t('myFeed.actions.addFromUrl'),

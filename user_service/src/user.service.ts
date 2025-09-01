@@ -46,7 +46,7 @@ export class UserService {
     }
   }
 
-  async findAll(): Promise<User[] | null> {
+  async findAll() {
     try {
       return await this.usersRepository.find() || null;
     } catch (error) {
@@ -54,9 +54,12 @@ export class UserService {
     }
   }
 
-  async findOneById(id: string): Promise<User | null> {
+  async findOneById(id: string){
     try {
-      return await this.usersRepository.findOneBy({ id }) || null;
+      this.logger.log(`Finding user by ID: ${id}`);
+      const user =await this.usersRepository.findOneBy({ id });
+      this.logger.log(`Found user: ${JSON.stringify(user)}`);
+      return user;
     } catch (error) {
       throw new InternalServerErrorException(`Error retrieving user by ID: ${error}`);
     }

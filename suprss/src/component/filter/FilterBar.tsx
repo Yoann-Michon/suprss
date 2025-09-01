@@ -11,8 +11,6 @@ interface FilterBarProps {
   setSelectedCategories: (val: string[]) => void;
   readState: string[];
   setReadState: (val: string[]) => void;
-  favorites: string[];
-  setFavorites: (val: string[]) => void;
   sort: string[];
   setSort: (val: string[]) => void;
 }
@@ -26,8 +24,6 @@ const FilterBar = ({
   setSelectedCategories,
   readState,
   setReadState,
-  favorites,
-  setFavorites,
   sort,
   setSort,
 }: FilterBarProps) => {
@@ -35,38 +31,30 @@ const FilterBar = ({
   return (
     <Stack id={"filters"} direction="row" spacing={1} flexWrap="wrap" paddingBottom={1} justifyContent="center" alignItems="center">
       <FilterDropdown
-        label={t('filters.source')}
+        label={t('features.filters.source')}
         options={sources}
         selected={selectedSources}
         onChange={setSelectedSources}
       />
 
       <FilterDropdown
-        label={t('filters.category')}
+        label={t('features.filters.category')}
         options={categories}
         selected={selectedCategories}
         onChange={setSelectedCategories}
       />
 
       <FilterDropdown
-        label={t('filters.readStatus')}
-        options={[t('filters.read'), t('filters.unread')]}
+        label={t('features.filters.readStatus')}
+        options={[t('features.filters.read'), t('features.filters.unread')]}
         selected={readState}
         onChange={setReadState}
         multiple={false}
       />
 
       <FilterDropdown
-        label={t('filters.favorites')}
-        options={[t('filters.onlyFavorites'), t('filters.all')]}
-        selected={favorites}
-        onChange={setFavorites}
-        multiple={false}
-      />
-
-      <FilterDropdown
-        label={t('filters.sort')}
-        options={[t('filters.newest'), t('filters.oldest')]}
+        label={t('features.filters.sort')}
+        options={[t('features.filters.newest'), t('features.filters.oldest')]}
         selected={sort}
         onChange={setSort}
         multiple={false}

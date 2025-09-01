@@ -7,10 +7,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { Feed } from './entities/feed.entity';
 import { Article } from './entities/article.entity';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ArticleService } from './article.service';
+import { RssService } from './rss.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env' }),
+    ScheduleModule.forRoot(),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: process.env.JWT_EXPIRATION},
@@ -61,6 +65,6 @@ import { Article } from './entities/article.entity';
     }),
   ],
   controllers: [FeedController],
-  providers: [FeedService],
+  providers: [FeedService, ArticleService, RssService],
 })
 export class FeedModule {}

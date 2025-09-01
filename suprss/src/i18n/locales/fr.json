@@ -38,7 +38,7 @@
       "alreadyHaveAccount": "Vous avez déjà un compte ?",
       "passwordMismatch": "Les mots de passe ne correspondent pas"
     },
-    "api":{
+    "api": {
       "login_success": "Connexion réussie",
       "register_success": "Inscription réussie",
       "invalid_credentials": "Email ou mot de passe incorrect",
@@ -63,10 +63,12 @@
       "home": "Accueil",
       "myFeed": "Mon flux",
       "sharedCollections": "Collections partagées",
-      "collection1": "Collection 1",
-      "collection2": "Collection 2",
+      "private": "Privées",
+      "shared": "Partagées",
       "collections": "Collections",
-      "documentation": "Documentation"
+      "documentation": "Documentation",
+      "tutorial": " Tutoriel",
+      "favorites": "Favoris"
     }
   },
   "pages": {
@@ -79,6 +81,11 @@
       "changePassword": "Changer le mot de passe",
       "logout": "Se déconnecter"
     },
+    "home": {
+      "allFeeds": "Tous les flux",
+      "noResults": "Aucun article trouvé",
+      "read": "Lire"
+    },
     "settings": {
       "title": "Paramètres",
       "appearance": {
@@ -90,6 +97,22 @@
       "notifications": {
         "title": "Notifications",
         "description": "Gérez vos préférences de notification ici."
+      },
+      "collections": {
+        "title": "Mes collections",
+        "new": "Nouvelle collection",
+        "newName": "Nom de la collection",
+        "description": "Description",
+        "visibility": "Visibilité",
+        "private": "Privée",
+        "shared": "Partagée",
+        "selectArticles": "Sélectionner des articles",
+        "selectUsers": "Sélectionner des utilisateurs",
+        "articles": "articles",
+        "users": "utilisateurs",
+        "filterAll": "Toutes",
+        "filterPrivate": "Privées",
+        "filterShared": "Partagées"
       }
     },
     "myFeed": {
@@ -118,7 +141,8 @@
       "onlyFavorites": "Favoris uniquement",
       "sort": "Trier",
       "newest": "Plus récent",
-      "oldest": "Plus ancien"
+      "oldest": "Plus ancien",
+      "search": "Rechercher des articles..."
     },
     "manageFeeds": {
       "title": "Gestion des flux",
@@ -163,34 +187,35 @@
     "networkError": "Erreur réseau, veuillez vérifier votre connexion."
   },
   "documentation": {
-  "title": "Documentation",
-  "description": "Apprenez à utiliser SUPRSS et tirez le meilleur parti de vos flux.",
-  "introTitle": "Bien démarrer",
-  "introDescription": "SUPRSS vous aide à gérer et partager vos flux RSS préférés. Vous pouvez importer des flux, les organiser en collections et collaborer en temps réel.",
-  "faqTitle": "Questions fréquentes",
-  "faq": {
-    "q1": "Comment ajouter un flux RSS ?",
-    "a1": "Cliquez sur le Speed Dial en bas à droite puis choisissez 'Ajouter via URL' ou 'via fichier'.",
-    "q2": "Puis-je partager mes flux avec mon équipe ?",
-    "a2": "Oui. Créez une collection partagée et invitez vos coéquipiers à collaborer.",
-    "q3": "Quels formats sont supportés à l'import ?",
-    "a3": "Nous supportons les formats OPML, XML et JSON pour l'import en masse.",
-    "q4": "Un mode sombre est-il disponible ?",
-    "a4": "Oui, vous pouvez activer le mode sombre dans les paramètres ou depuis le menu en haut.",
-    "q5": "À quelle fréquence mes flux sont-ils mis à jour ?",
-    "a5": "Les flux sont mis à jour selon la fréquence choisie lors de leur ajout."
-  },"contact": {
-    "title": "Nous contacter",
-    "description": "Pour toute question, assistance ou suggestion, n'hésitez pas à nous écrire.",
-    "hours": "Heures de support :"
+    "title": "Documentation",
+    "description": "Apprenez à utiliser SUPRSS et tirez le meilleur parti de vos flux.",
+    "introTitle": "Bien démarrer",
+    "introDescription": "SUPRSS vous aide à gérer et partager vos flux RSS préférés. Vous pouvez importer des flux, les organiser en collections et collaborer en temps réel.",
+    "faqTitle": "Questions fréquentes",
+    "faq": {
+      "q1": "Comment ajouter un flux RSS ?",
+      "a1": "Cliquez sur le Speed Dial en bas à droite puis choisissez 'Ajouter via URL' ou 'via fichier'.",
+      "q2": "Puis-je partager mes flux avec mon équipe ?",
+      "a2": "Oui. Créez une collection partagée et invitez vos coéquipiers à collaborer.",
+      "q3": "Quels formats sont supportés à l'import ?",
+      "a3": "Nous supportons les formats OPML, XML et JSON pour l'import en masse.",
+      "q4": "Un mode sombre est-il disponible ?",
+      "a4": "Oui, vous pouvez activer le mode sombre dans les paramètres ou depuis le menu en haut.",
+      "q5": "À quelle fréquence mes flux sont-ils mis à jour ?",
+      "a5": "Les flux sont mis à jour selon la fréquence choisie lors de leur ajout."
+    },
+    "contact": {
+      "title": "Nous contacter",
+      "description": "Pour toute question, assistance ou suggestion, n'hésitez pas à nous écrire.",
+      "hours": "Heures de support :"
+    },
+    "privacy": {
+      "title": "Confidentialité & RGPD",
+      "description": "SUPRSS collecte uniquement les données nécessaires au bon fonctionnement de votre compte (e-mail, flux). Vos activités de lecture restent privées et locales.",
+      "rgpdNotice": "Conformément au RGPD, vous pouvez à tout moment demander l'accès, la modification ou la suppression de vos données."
+    }
   },
-  "privacy": {
-    "title": "Confidentialité & RGPD",
-    "description": "SUPRSS collecte uniquement les données nécessaires au bon fonctionnement de votre compte (e-mail, flux). Vos activités de lecture restent privées et locales.",
-    "rgpdNotice": "Conformément au RGPD, vous pouvez à tout moment demander l'accès, la modification ou la suppression de vos données."
+  "loading": {
+    "message": "Merci de patienter pendant que nous préparons votre tableau de bord..."
   }
-},
-"loading": {
-  "message": "Merci de patienter pendant que nous préparons votre tableau de bord..."
-}
 }

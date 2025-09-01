@@ -13,16 +13,15 @@ export class FeedService {
     private readonly feedRepository: MongoRepository<Feed>,
   ) {}
 
-  async createFeed(createFeedDto: CreateFeedDto, userId: string): Promise<Feed> {
+  async createFeed(createFeedDto: CreateFeedDto){
   try {
     const feed = this.feedRepository.create({
       ...createFeedDto,
       frequency: createFeedDto.frequency as FeedFrequency,
-      userId,
     });
     return await this.feedRepository.save(feed);
   } catch (error) {
-    throw new InternalServerErrorException(`Error creating feed: ${error.message}`);
+    throw new InternalServerErrorException(`Error creating rss feed: ${error}`);
   }
 }
 
@@ -36,7 +35,7 @@ export class FeedService {
     return feed;
   }
 
-  async updateFeed(updateFeedDto: UpdateFeedDto, userId: string): Promise<Feed> {
+  async updateFeed(updateFeedDto: UpdateFeedDto, userId:string): Promise<Feed> {
     const { id, ...rest } = updateFeedDto;
     const feed = await this.feedRepository.findOneBy({ id, userId });
     if (!feed) throw new NotFoundException('Feed not found');

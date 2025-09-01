@@ -3,6 +3,8 @@ export interface IUser {
   email: string;
   password?: string;
   role?: "USER" | "ADMIN";
+  username: string;
+  avatarUrl?: string;
   settings?: ISettings;
 }
 

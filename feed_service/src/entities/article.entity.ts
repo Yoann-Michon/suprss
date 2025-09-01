@@ -1,5 +1,4 @@
 import { Column, Entity, ObjectId, ObjectIdColumn } from "typeorm";
-import { ArticleStatus } from "./feed.enum";
 
 @Entity("article")
 export class Article {
@@ -24,8 +23,8 @@ export class Article {
     @Column({ nullable: true })
     excerpt: string;
 
-    @Column({ default: ArticleStatus.UNREAD })
-    status: ArticleStatus;
+    @Column({ nullable: true })
+    userIdsRead: string[];
 
     @Column({ default: false })
     favorite: boolean;

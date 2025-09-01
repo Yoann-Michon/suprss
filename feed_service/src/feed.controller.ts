@@ -4,7 +4,6 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { FeedService } from './feed.service';
 import { CreateFeedDto } from './dto/create-feed.dto';
 import { UpdateFeedDto } from './dto/update-feed.dto';
-import { CreateArticleDto } from './dto/create-article.dto';
 import { FeedFrequency } from './entities/feed.enum';
 import { ArticleService } from './article.service';
 import { RssService } from './rss.service';
@@ -18,18 +17,18 @@ export class FeedController {
 
   // === FEED ===
   @MessagePattern('createFeed')
-  async createFeed(@Payload() data: { feed: CreateFeedDto; userId: string }) {
-    return this.feedService.createFeed(data.feed, data.userId);
+  async createFeed(@Payload() data: CreateFeedDto) {
+    return this.feedService.createFeed(data);
   }
 
   @MessagePattern('updateFeed')
-  async updateFeed(@Payload() data: { feedId: string; update: UpdateFeedDto }) {
-    return this.feedService.updateFeed(data.update,data.feedId);
+  async updateFeed(@Payload() data: { update: UpdateFeedDto, userId: string }) {
+    return this.feedService.updateFeed(data.update, data.userId);
   }
 
   @MessagePattern('getFeeds')
-  async getFeeds(@Payload() data: { userId: string }) {
-    return this.feedService.findAll(data.userId);
+  async getFeeds(@Payload() userId: string ) {
+    return this.feedService.findAll(userId);
   }
 
   @MessagePattern('deleteFeed')
@@ -38,19 +37,15 @@ export class FeedController {
   }
 
   // === ARTICLES ===
-  @MessagePattern('createArticle')
-  async createArticle(@Payload() article: CreateArticleDto) {
-    return this.articleService.createArticle(article);
-  }
 
   @MessagePattern('getArticlesByFeed')
-  async getArticlesByFeed(@Payload() data: { feedId: string }) {
-    return this.articleService.getArticlesByFeed(data.feedId);
+  async getArticlesByFeed(@Payload() feedIds: string[] ) {
+    return this.articleService.getArticlesByFeed(feedIds);
   }
 
   @MessagePattern('markArticleAsRead')
-  async markArticleAsRead(@Payload() data: { articleId: string }) {
-    return this.articleService.markArticleAsRead(data.articleId);
+  async markArticleAsRead(@Payload() data: { articleId: string , userId: string }) {
+    return this.articleService.markArticleAsRead(data.articleId, data.userId);
   }
 
   // === RSS FETCH ===

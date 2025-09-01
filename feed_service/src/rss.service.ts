@@ -7,7 +7,7 @@ import { ArticleStatus, FeedFrequency, FrequencyCronMap} from "./entities/feed.e
 import * as Parser from 'rss-parser';
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Cron, CronExpression } from "@nestjs/schedule";
+import { Cron } from "@nestjs/schedule";
 
 @Injectable()
 export class RssService {

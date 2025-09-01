@@ -10,6 +10,7 @@ import ArticlePage from "./pages/ArticleView";
 import { ArticleProvider } from "./context/ArticleContext";
 import { useUser } from "./context/UserContext";
 
+const ManageCollection = lazy(()=>import("./pages/ManageCollection"));
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/auth/Login"));
 const Register = lazy(() => import("./pages/auth/Register"));
@@ -54,7 +55,8 @@ const App = () => {
             <Route element={<PrivateRoute />}>
               <Route element={<Layout />}>
                 <Route path="/home" element={<Home />} />
-                <Route path="/shared_collections" element={<ManageFeeds />} />
+                <Route path="/manage_feed" element={<ManageFeeds />} />
+                <Route path="/shared_collections" element={<ManageCollection />} />
                 <Route path="/article/:slug" element={<ArticlePage />} />
                 <Route path="/account" element={<Account />} />
                 <Route path="/settings" element={<Settings />} />

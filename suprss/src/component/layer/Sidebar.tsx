@@ -1,10 +1,10 @@
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import RssFeedIcon from '@mui/icons-material/RssFeed';
 
 import { useEffect, useState } from 'react';
 import {
@@ -49,20 +49,21 @@ const Sidebar = () => {
 
     const nav = {
         header: [
-            { id: "sidebar_home", text: t('sidebar.home'), icon: <HomeRoundedIcon />, path: '/home' },
+            { id: "sidebar_home", text: t('navigation.sidebar.home'), icon: <HomeRoundedIcon />, path: '/home' },
+            {id:"sidebar_flux", text:t('navigation.sidebar.flux'), icon:<RssFeedIcon/>, path:'/manage_feed'},
             {
                 id: "sidebar_sharedCollections",
-                text: t('sidebar.sharedCollections'), icon: <PeopleOutlineIcon />, path: '/shared_collections',
+                text: t('navigation.sidebar.sharedCollections'), icon: <PeopleOutlineIcon />, path: '/shared_collections',
                 subItems: [
-                    { title: t('sharedCollections.ownedCollections'), path: '/shared_collections/1' },
-                    { title:t('sharedCollections.sharedCollections'), path: '/shared_collections/2' },
+                    { title: t('navigation.sidebar.private'), path: '/shared_collections/1' },
+                    { title: t('navigation.sidebar.shared'), path: '/shared_collections/2' },
                 ]
             },
-            { id: "sidebar_favorites", text: t('sidebar.favorites'), icon: <CollectionsBookmarkIcon />, path: '/my_favorites' },
+            { id: "sidebar_favorites", text: t('navigation.sidebar.favorites'), icon: <CollectionsBookmarkIcon />, path: '/my_favorites' },
         ],
         footer: [
-            { id: "sidebar_tutorial", text: t('sidebar.tutorial'), icon: <SchoolIcon />, onclick: () => { localStorage.removeItem("sidebarTutorialDone"); setShowTutorial(true); } },
-            { id: "sidebar_documentation", text: t('sidebar.documentation'), icon: <AutoStoriesIcon />, path: '/documentation' },
+            { id: "sidebar_tutorial", text: t('navigation.sidebar.tutorial'), icon: <SchoolIcon />, onclick: () => { localStorage.removeItem("sidebarTutorialDone"); setShowTutorial(true); } },
+            { id: "sidebar_documentation", text: t('navigation.sidebar.documentation'), icon: <AutoStoriesIcon />, path: '/documentation' },
         ]
     };
 

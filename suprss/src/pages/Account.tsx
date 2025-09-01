@@ -5,28 +5,58 @@ import {
   Stack,
   Divider,
   Button,
-  IconButton,
-  Tooltip,
   TextField,
   Paper,
 } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LockResetIcon from '@mui/icons-material/LockReset';
 import { useThemeColors } from '../component/ThemeModeContext';
 import { useTranslation } from 'react-i18next';
-
-const mockUser = {
-  name: 'Jane Doe',
-  email: 'jane.doe@example.com',
-  avatar: 'https://i.pravatar.cc/150?img=47',
-  joined: 'March 2023',
-  provider: 'Google',
-};
+import { useUser } from '../context/UserContext';
+import { useState } from 'react';
+import { api } from '../services/api.service';
 
 const Account = () => {
   const colors = useThemeColors();
   const { t } = useTranslation();
+  const { user, refreshUser, logout } = useUser();
+
+  const [editing, setEditing] = useState(false);
+  const [username, setUsername] = useState(user?.username || '');
+  const [email, setEmail] = useState(user?.email || '');
+  const [avatarUrl, setAvatarUrl] = useState(user?.avatarUrl || '');
+
+  async function handleSave() {
+    try {
+      await api(`/users/${user?.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          username,
+          email,
+          avatarUrl
+        }),
+      });
+      await refreshUser();
+      setEditing(false);
+    } catch (err: any) {
+      alert(err.message || 'Erreur lors de la mise à jour');
+    }
+  }
+
+  if (!user) {
+    return (
+      <Box
+        sx={{
+          minHeight: '100vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Typography variant="h6">{t('error.unauthorized')}</Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -58,65 +88,77 @@ const Account = () => {
 
         <Stack direction="row" spacing={3} alignItems="center">
           <Avatar
-            src={mockUser.avatar}
-            alt={mockUser.name}
+            src={avatarUrl}
+            alt={username}
             sx={{ width: 80, height: 80, border: `3px solid ${colors.primary}` }}
           />
           <Box flex={1}>
-            <Typography variant="h6" fontWeight={600} color={colors.text.primary}>
-              {mockUser.name}
-            </Typography>
-            <Typography variant="body2" color={colors.text.secondary}>
-              {mockUser.email}
-            </Typography>
-            <Typography variant="body2" color={colors.text.secondary}>
-              {t('pages.account.joined')}: {mockUser.joined}
-            </Typography>
+            {editing ? (
+              <>
+                <TextField
+                  label="Username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  fullWidth
+                  margin="dense"
+                />
+                <TextField
+                  label="Email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  fullWidth
+                  margin="dense"
+                />
+                <TextField
+                  label="Avatar URL"
+                  value={avatarUrl}
+                  onChange={(e) => setAvatarUrl(e.target.value)}
+                  fullWidth
+                  margin="dense"
+                />
+              </>
+            ) : (
+              <>
+                <Typography variant="h6" fontWeight={600} color={colors.text.primary}>
+                  {username}
+                </Typography>
+                <Typography variant="body2" color={colors.text.secondary}>
+                  {email}
+                </Typography>
+              </>
+            )}
           </Box>
-          <Tooltip title={t('pages.account.editProfile')}>
-            <IconButton>
-              <EditIcon sx={{ color: colors.icon }} />
-            </IconButton>
-          </Tooltip>
         </Stack>
 
         <Divider sx={{ borderColor: colors.border }} />
-
-        <Stack spacing={2}>
-          <Typography variant="subtitle1" fontWeight={500} color={colors.text.primary}>
-            {t('pages.account.linkedProvider')}
-          </Typography>
-          <TextField
-            label={t('pages.account.authProvider')}
-            value={mockUser.provider}
-            disabled
-            fullWidth
-            InputProps={{ sx: { color: colors.text.primary } }}
-          />
-        </Stack>
 
         <Divider sx={{ borderColor: colors.border }} />
 
         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between">
-          <Button
-            variant="outlined"
-            startIcon={<LockResetIcon />}
-            sx={{
-              color: colors.primary,
-              borderColor: colors.primary,
-              '&:hover': {
+          {editing && (
+            <Button
+              variant="outlined"
+              startIcon={<LockResetIcon />}
+              sx={{
+                color: colors.primary,
                 borderColor: colors.primary,
-                backgroundColor: colors.primary + '10',
-              },
-            }}
-          >
-            {t('pages.account.changePassword')}
-          </Button>
+                '&:hover': {
+                  borderColor: colors.primary,
+                  backgroundColor: colors.primary + '10',
+                },
+              }}
+              onClick={handleSave}
+            >
+              {t('common.save')}
+            </Button>
+          )}
           <Button
             variant="contained"
             startIcon={<LogoutIcon />}
             color="error"
             sx={{ fontWeight: 600 }}
+            onClick={logout}
           >
             {t('pages.account.logout')}
           </Button>

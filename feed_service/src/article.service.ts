@@ -4,7 +4,6 @@ import { MongoRepository } from 'typeorm';
 import { RpcException } from '@nestjs/microservices';
 import { Article } from 'src/entities/article.entity';
 import { CreateArticleDto } from 'src/dto/create-article.dto';
-import { ArticleStatus } from 'src/entities/feed.enum';
 
 @Injectable()
 export class ArticleService {
@@ -18,28 +17,30 @@ export class ArticleService {
       const article = this.articleRepository.create(articleDto);
       return await this.articleRepository.save(article);
     } catch (error) {
-      throw new RpcException(`Failed to create article: ${error.message}`);
+      throw new RpcException(`Failed to create article: ${error}`);
     }
   }
 
-  async getArticlesByFeed(feedId: string): Promise<Article[]> {
+  async getArticlesByFeed(feedIds: string[]): Promise<Article[]> {
     try {
-      return await this.articleRepository.find({ where: { feedId } });
+      return await this.articleRepository.find({ where: { feedId: { $in: feedIds } } });
     } catch (error) {
-      throw new RpcException(`Failed to fetch articles for feed ${feedId}: ${error.message}`);
+      throw new RpcException(`Failed to fetch articles for feeds [${feedIds.join(', ')}]: ${error}`);
     }
   }
 
-  async markArticleAsRead(articleId: string): Promise<Article> {
+  async markArticleAsRead(articleId: string,userId:string): Promise<Article> {
     try {
       const article = await this.articleRepository.findOneBy({ id: articleId as any });
       if (!article) {
         throw new RpcException('Article not found');
       }
-      article.status = ArticleStatus.READ;
+      if (!article.userIdsRead.includes(userId)) {
+        article.userIdsRead.push(userId);
+      }
       return await this.articleRepository.save(article);
     } catch (error) {
-      throw new RpcException(`Failed to mark article as read: ${error.message}`);
+      throw new RpcException(`Failed to mark article as read: ${error}`);
     }
   }
 }

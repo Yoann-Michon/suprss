@@ -5,6 +5,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserController } from './user/user.controller';
 import { UtilsModule } from 'utils/src';
+import { FeedController } from './feed/feed.controller';
 
 @Module({
   imports: [
@@ -38,7 +39,7 @@ import { UtilsModule } from 'utils/src';
         }),
       }
     ])],
-      controllers: [AppController, UserController],
+      controllers: [AppController, UserController, FeedController],
       providers: [AppService],
 })
 export class AppModule { }

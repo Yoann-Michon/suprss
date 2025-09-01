@@ -1,6 +1,5 @@
-import { IsBoolean, IsDate, IsEnum, IsNotEmpty, IsOptional, IsString, IsUrl } from "class-validator";
+import { IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString, IsUrl } from "class-validator";
 import { Type } from "class-transformer";
-import { ArticleStatus } from "../entities/feed.enum";
 
 export class CreateArticleDto {
     @IsString({ message: 'Title must be a string' })
@@ -28,9 +27,9 @@ export class CreateArticleDto {
     @IsNotEmpty({ message: 'Feed ID is required' })
     feedId: string;
 
-    @IsEnum(ArticleStatus, { message: 'Status must be READ or UNREAD' })
     @IsOptional()
-    status?: ArticleStatus;
+    @IsString({ each: true, message: 'Each userId must be a string' })
+    userIdsRead?: string[];
 
     @IsBoolean({ message: 'Favorite must be a boolean' })
     @IsOptional()

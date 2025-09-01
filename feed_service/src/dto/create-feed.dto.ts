@@ -23,5 +23,9 @@ export class CreateFeedDto {
   @IsString({ each: true, message: 'Each tag must be a string' })
   @IsOptional()
   tags?: string[];
+
+  @IsString({ message: 'UserId must be a string' })
+  @IsNotEmpty({ message: 'UserId is required' })
+  userId: string;
   
 }

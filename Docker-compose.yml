@@ -11,6 +11,8 @@ services:
     #    condition: service_started
     #  auth-service:
     #    condition: service_started
+    #  feed-service:
+    #    condition: service_started
     #  rabbitmq:
     #    condition: service_healthy
     ports:
@@ -51,6 +53,24 @@ services:
       - suprss-network
     restart: always
 
+  # === FEED SERVICE ===
+  feed-service:
+    build:
+      context: ./feed_service
+    container_name: feed-service
+    env_file:
+      - ./feed_service/.env
+    #depends_on:
+    #  rabbitmq:
+    #    condition: service_healthy
+    #  user-service:
+    #    condition: service_started
+    #  feed-db:
+    #    condition: service_started
+    networks:
+      - suprss-network
+    restart: always
+
   # === POSTGRES DB ===
   user-db:
     image: postgres:17
@@ -68,6 +88,28 @@ services:
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U user -d user_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  
+    # === MONGO DB ===
+  feed-db:
+    image: mongo:latest
+    container_name: feed-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: feed
+      MONGO_INITDB_ROOT_PASSWORD: feed
+      MONGO_INITDB_DATABASE: feed_db
+    ports:
+      - "27017:27017"
+    networks:
+      - suprss-network 
+    restart: always
+    volumes:
+      - feed-db-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -100,6 +142,8 @@ services:
 # === VOLUMES ===
 volumes:
   user-db-data:
+    driver: local
+  feed-db-data:
     driver: local
   rabbitmq-data:
     driver: local

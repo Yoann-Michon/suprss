@@ -51,7 +51,6 @@ const Home = () => {
   const [selectedSources, setSelectedSources] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [readState, setReadState] = useState<string[]>([]);
-  const [favorites, setFavorites] = useState<string[]>([]);
   const [sort, setSort] = useState<string[]>(["Newest"]);
 
   const colors = useThemeColors();
@@ -133,13 +132,11 @@ const Home = () => {
         setSelectedCategories={setSelectedCategories}
         readState={readState}
         setReadState={setReadState}
-        favorites={favorites}
-        setFavorites={setFavorites}
         sort={sort}
         setSort={setSort}
       />
       <Typography variant="h5" fontWeight="bold" gutterBottom>
-        {t('home.allFeeds')}
+        {t('pages.home.allFeeds')}
       </Typography>
 
       {loading ? (
@@ -150,7 +147,7 @@ const Home = () => {
         <>
           {sortedItems.length === 0 ? (
             <Typography variant="body2" color="text.secondary">
-              {t('home.noResults')}
+              {t('pages.home.noResults')}
             </Typography>
           ) : (
             <>
@@ -208,7 +205,7 @@ const Home = () => {
                         }}
                       />
                       <Button
-                        title={t('home.read')}
+                        title={t('pages.home.read')}
                         variant="contained"
                         size="small"
                         onClick={() => openArticle(item)}
@@ -221,7 +218,7 @@ const Home = () => {
                           borderRadius: 50,
                         }}
                       >
-                        {t('home.read')}
+                        {t('pages.home.read')}
                       </Button>
                     </CardContent>
                     {item.thumbnail && (

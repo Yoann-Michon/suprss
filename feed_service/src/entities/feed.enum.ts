@@ -9,8 +9,3 @@ export const FrequencyCronMap = {
   [FeedFrequency.DAILY]: '0 0 * * *',
   [FeedFrequency.WEEKLY]: '0 0 * * 0',
 };
-
-export enum ArticleStatus {
-  READ = 'Read',
-  UNREAD = 'Unread',
-}

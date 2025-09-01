@@ -16,7 +16,7 @@ const SettingsPage = () => {
   return (
     <Box p={{ xs: 2, md: 4 }} height="100%">
       <Typography variant="h4" gutterBottom>
-        {t('settings.title')}
+        {t('pages.settings.title')}
       </Typography>
 
       <Paper
@@ -27,23 +27,21 @@ const SettingsPage = () => {
           backgroundColor: colors.background.paper,
         }}
       >
-        {/* Dark Mode */}
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
           <Box>
-            <Typography variant="h6">{t('settings.appearance.darkMode')}</Typography>
+            <Typography variant="h6">{t('pages.settings.appearance.darkMode')}</Typography>
             <Typography variant="body2" color="text.secondary">
-              {t('settings.appearance.darkModeDescription')}
+              {t('pages.settings.appearance.darkModeDescription')}
             </Typography>
           </Box>
           <Switch checked={darkMode} onChange={toggleDarkMode} color="primary" />
         </Box>
 
-        {/* Language Selector */}
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Box>
-            <Typography variant="h6">{t('settings.appearance.language')}</Typography>
+            <Typography variant="h6">{t('pages.settings.appearance.language')}</Typography>
             <Typography variant="body2" color="text.secondary">
-              {t('settings.appearance.languageDescription')}
+              {t('pages.settings.appearance.languageDescription')}
             </Typography>
           </Box>
           <LanguageSelector />
@@ -58,10 +56,10 @@ const SettingsPage = () => {
         }}
       >
         <Typography variant="h6" gutterBottom>
-          {t('settings.notifications.title')}
+          {t('pages.settings.notifications.title')}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {t('settings.notifications.description')}
+          {t('pages.settings.notifications.description')}
         </Typography>
       </Paper>
     </Box>
