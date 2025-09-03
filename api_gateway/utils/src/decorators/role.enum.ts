@@ -4,7 +4,6 @@ export enum UserRole {
 }
 
 export enum CollectionRole {
-    OWNER='OWNER',
     MODERATOR='MODERATOR',
     VIEWER='VIEWER'
 }

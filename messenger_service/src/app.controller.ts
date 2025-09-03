@@ -1,43 +1,18 @@
 import { Controller, Logger } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
+import { Ctx, EventPattern, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { CreateMessageDto } from './dto/create-message.dto';
+import { ChatGateway } from './chat/chat.gateway';
 
-@Controller('Messenger')
+@Controller()
 export class AppController {
  private readonly logger = new Logger(AppController.name);
 
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService,
+      private readonly chatGateway: ChatGateway
+  ) {}
 
-  @MessagePattern('create_message')
-  async createMessage(@Payload() data: CreateMessageDto, @Ctx() context: RmqContext) {
-    this.logger.log('Réception message RabbitMQ: create_message');
-    
-    try {
-      const channel = context.getChannelRef();
-      const originalMsg = context.getMessage();
-      
-      const result = await this.appService.createMessage(data);
-      
-      channel.ack(originalMsg);
-      
-      this.logger.log(`Message créé avec succès: ${result.id}`);
-      return {
-        success: true,
-        data: result,
-        message: 'Message créé avec succès'
-      };
-    } catch (error) {
-      this.logger.error('Erreur lors de la création du message:', error.message);
-      const channel = context.getChannelRef();
-      const originalMsg = context.getMessage();
-      channel.nack(originalMsg, false, false); 
-      throw error;
-    }
-  }
-
-  @MessagePattern('get_messages')
+  @MessagePattern('getMessages')
   async getMessages(@Payload() data: { collectionId: string }, @Ctx() context: RmqContext) {
     this.logger.log(`Réception message RabbitMQ: get_messages - Collection: ${data.collectionId}`);
     
@@ -64,7 +39,7 @@ export class AppController {
     }
   }
 
-  @MessagePattern('get_message_by_id')
+  @MessagePattern('getMessageById')
   async getMessageById(@Payload() data: { id: string }, @Ctx() context: RmqContext) {
     this.logger.log(`Réception message RabbitMQ: get_message_by_id - ID: ${data.id}`);
     
@@ -91,7 +66,7 @@ export class AppController {
     }
   }
 
-  @MessagePattern('create_comment')
+  @MessagePattern('createComment')
   async createComment(@Payload() data: CreateCommentDto, @Ctx() context: RmqContext) {
     this.logger.log('Réception message RabbitMQ: create_comment');
     
@@ -118,7 +93,7 @@ export class AppController {
     }
   }
 
-  @MessagePattern('get_comments_by_article')
+  @MessagePattern('getCommentsByArticle')
   async getComments(@Payload() data: { articleId: string }, @Ctx() context: RmqContext) {
     this.logger.log(`Réception message RabbitMQ: get_comments_by_article - Article: ${data.articleId}`);
     
@@ -145,7 +120,7 @@ export class AppController {
     }
   }
 
-  @MessagePattern('delete_comment')
+  @MessagePattern('deleteComment')
   async deleteComment(@Payload() data: { id: string }, @Ctx() context: RmqContext) {
     this.logger.log(`Réception message RabbitMQ: delete_comment - ID: ${data.id}`);
     
@@ -171,24 +146,29 @@ export class AppController {
     }
   }
 
-  @MessagePattern('health_check')
-  async healthCheck(@Ctx() context: RmqContext) {
-    this.logger.log('Réception message RabbitMQ: health_check');
+  @MessagePattern('createChatroom')
+  async handleCreateChatroom(@Payload() collection: { id: string, name?: string }, @Ctx() context: RmqContext) {
+    this.logger.log(`Réception message RabbitMQ: createChatroom - Collection: ${collection.id}`);
     
     try {
       const channel = context.getChannelRef();
       const originalMsg = context.getMessage();
       
+      this.chatGateway.sendSystemMessage(collection.id, `Chatroom créée pour la collection ${collection.name || collection.id}`, 'success');
+      
       channel.ack(originalMsg);
       
+      this.logger.log(`Chatroom initialisée pour la collection ${collection.id}`);
       return {
         success: true,
-        status: 'healthy',
-        timestamp: new Date().toISOString(),
-        service: 'messenger-service'
+        message: 'Chatroom créée avec succès',
+        data: { collectionId: collection.id }
       };
     } catch (error) {
-      this.logger.error('Erreur lors du health check:', error.message);
+      this.logger.error('Erreur lors de la création de la chatroom:', error.message);
+      const channel = context.getChannelRef();
+      const originalMsg = context.getMessage();
+      channel.nack(originalMsg, false, false);
       throw error;
     }
   }

@@ -19,6 +19,7 @@ export class FeedService {
 
   async createFeed(createFeedDto: CreateFeedDto) {
     try {
+      
       const feed = this.feedRepository.create({
         ...createFeedDto,
         frequency: createFeedDto.frequency as FeedFrequency,

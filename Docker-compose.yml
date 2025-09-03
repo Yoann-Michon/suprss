@@ -71,6 +71,41 @@ services:
       - suprss-network
     restart: always
 
+  # === COLLECTION SERVICE ===
+  collection-service:
+    build:
+      context: ./collection_service
+    container_name: collection-service
+    env_file:
+      - ./collection_service/.env
+    #depends_on:
+    #  rabbitmq:
+    #    condition: service_healthy
+    #  feed-service:
+    #    condition: service_started
+    networks:
+      - suprss-network
+    restart: always
+
+  # === MESSENGER SERVICE ===
+  messenger-service:
+    build:
+      context: ./messenger_service
+    container_name: messenger-service
+    env_file:
+      - ./messenger_service/.env
+    #depends_on:
+    #  rabbitmq:
+    #    condition: service_healthy
+    #  collection-service:
+    #    condition: service_started
+    #  messenger-db:
+    #    condition: service_started
+    ports:
+      - "4007:4007"
+    networks:
+      - suprss-network
+    restart: always
   # === POSTGRES DB ===
   user-db:
     image: postgres:17
@@ -115,6 +150,48 @@ services:
       retries: 5
       start_period: 10s
 
+  collection-db:
+    image: mongo:latest
+    container_name: collection-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: collection
+      MONGO_INITDB_ROOT_PASSWORD: collection
+      MONGO_INITDB_DATABASE: collection_db
+    ports:
+      - "27018:27017"
+    networks:
+      - suprss-network 
+    restart: always
+    volumes:
+      - collection-db-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  messenger-db:
+    image: mongo:latest
+    container_name: messenger-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: messenger
+      MONGO_INITDB_ROOT_PASSWORD: messenger
+      MONGO_INITDB_DATABASE: messenger_db
+    ports:
+      - "27019:27017"
+    networks:
+      - suprss-network 
+    restart: always
+    volumes:
+      - messenger-db-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
   # === RABBITMQ SERVICE ===
   rabbitmq:
     image: "rabbitmq:4.1.3-management-alpine"
@@ -144,6 +221,10 @@ volumes:
   user-db-data:
     driver: local
   feed-db-data:
+    driver: local
+  collection-db-data:
+    driver: local
+  messenger-db-data:
     driver: local
   rabbitmq-data:
     driver: local

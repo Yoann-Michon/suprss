@@ -1,10 +1,11 @@
-import { Entity, ObjectIdColumn, ObjectId, Column, CreateDateColumn, Index } from 'typeorm';
+import { Entity, ObjectIdColumn, Column, CreateDateColumn, Index } from 'typeorm';
 import { IsNotEmpty, IsString } from 'class-validator';
+import { ObjectId } from 'mongodb';
 
 @Entity('comments')
 @Index(['articleId', 'createdAt'])
 export class Comments {
-  @ObjectIdColumn()
+  @ObjectIdColumn({ name: '_id' })
   id: ObjectId;
 
   @Column()

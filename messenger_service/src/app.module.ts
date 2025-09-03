@@ -9,7 +9,34 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 @Module({
-  imports: [
+  imports: [ClientsModule.registerAsync([
+        {
+        name: 'API_GATEWAY_SERVICE',
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<string>('RABBITMQ_HOST') || ''],
+            queue: configService.get<string>('RABBITMQ_API_GATEWAY_QUEUE'),
+            queueOptions: { durable: true },
+          },
+        }),
+      },
+      {
+        name: 'COLLECTION_SERVICE',
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<string>('RABBITMQ_HOST') || ''],
+            queue: configService.get<string>('RABBITMQ_COLLECTION_QUEUE'),
+            queueOptions: { durable: true },
+          },
+        }),
+      }
+    ]),
     TypeOrmModule.forFeature([Comments, Messages]),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

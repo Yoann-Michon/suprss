@@ -1,10 +1,11 @@
-import { Entity, ObjectIdColumn, ObjectId, Column, CreateDateColumn, Index } from 'typeorm';
+import { Entity, ObjectIdColumn, Column, CreateDateColumn, Index } from 'typeorm';
 import { IsNotEmpty, IsString, Length } from 'class-validator';
+import { ObjectId } from 'mongodb';
 
 @Entity('messages')
-@Index(['room', 'createdAt'])
+@Index(['collectionId', 'createdAt'])
 export class Messages {
-  @ObjectIdColumn()
+  @ObjectIdColumn({ name: '_id' })
   id: ObjectId;
 
   @Column()

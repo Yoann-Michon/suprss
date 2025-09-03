@@ -6,6 +6,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserController } from './user/user.controller';
 import { UtilsModule } from 'utils/src';
 import { FeedController } from './feed/feed.controller';
+import { CollectionController } from './collection/collection.controller';
+import { CommentController } from './comment/comment.controller';
 
 @Module({
   imports: [
@@ -37,7 +39,7 @@ import { FeedController } from './feed/feed.controller';
             queueOptions: { durable: true },
           },
         }),
-      },{
+      }, {
         name: 'FEED_SERVICE',
         imports: [ConfigModule],
         inject: [ConfigService],
@@ -49,9 +51,33 @@ import { FeedController } from './feed/feed.controller';
             queueOptions: { durable: true },
           },
         }),
+      }, {
+        name: 'COLLECTION_SERVICE',
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<string>('RABBITMQ_HOST')!],
+            queue: configService.get<string>('RABBITMQ_COLLECTION_QUEUE'),
+            queueOptions: { durable: true },
+          },
+        }),
+      }, {
+        name: 'MESSENGER_SERVICE',
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<string>('RABBITMQ_HOST')!],
+            queue: configService.get<string>('RABBITMQ_MESSENGER_QUEUE'),
+            queueOptions: { durable: true },
+          },
+        }),
       }
     ])],
-      controllers: [AppController, UserController, FeedController],
-      providers: [AppService],
+  controllers: [AppController, UserController, FeedController, CollectionController, CommentController],
+  providers: [AppService],
 })
 export class AppModule { }
