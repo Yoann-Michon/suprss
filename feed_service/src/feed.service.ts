@@ -1,4 +1,10 @@
-import { Injectable, InternalServerErrorException, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  BadRequestException,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { Feed } from './entities/feed.entity';
@@ -13,11 +19,12 @@ import * as xml2js from 'xml2js';
 @Injectable()
 export class FeedService {
   private readonly logger = new Logger(FeedService.name);
+
   constructor(
     @InjectRepository(Feed)
     private readonly feedRepository: MongoRepository<Feed>,
-    private readonly rssService: RssService
-  ) { }
+    private readonly rssService: RssService,
+  ) {}
 
   async createFeed(createFeedDto: CreateFeedDto) {
     try {
@@ -29,7 +36,7 @@ export class FeedService {
       await this.rssService.fetchFeedArticles(savedFeed);
       return savedFeed;
     } catch (error) {
-      throw new InternalServerErrorException(`Error creating rss feed: ${error}`);
+      throw new InternalServerErrorException('error.feed.create_failed');
     }
   }
 
@@ -38,37 +45,52 @@ export class FeedService {
   }
 
   async findOneFeed(id: string, userId: string) {
-    const feed = await this.feedRepository.findOneBy({ _id: new ObjectId(id), userId });
-    if (!feed) throw new NotFoundException('Feed not found');
+    const feed = await this.feedRepository.findOneBy({
+      _id: new ObjectId(id),
+      userId,
+    });
+    if (!feed) throw new NotFoundException('error.feed.not_found');
     return feed;
   }
 
   async updateFeed(updateFeedDto: UpdateFeedDto, userId: string) {
     try {
       const { id, ...rest } = updateFeedDto;
-      this.logger.log(`updateFeed - Data received: ${JSON.stringify(updateFeedDto)}`);
-      
-      const feed = await this.feedRepository.findOneBy({ _id: new ObjectId(id), userId });
-      if (!feed) throw new NotFoundException('Feed not found');
+      this.logger.log(
+        `updateFeed - Data received: ${JSON.stringify(updateFeedDto)}`,
+      );
+
+      const feed = await this.feedRepository.findOneBy({
+        _id: new ObjectId(id),
+        userId,
+      });
+      if (!feed) throw new NotFoundException('error.feed.not_found');
 
       const oldTags = feed.tags;
       const newTags = rest.tags;
-      const tagsChanged = JSON.stringify(oldTags?.sort()) !== JSON.stringify(newTags?.sort());
+      const tagsChanged =
+        JSON.stringify(oldTags?.sort()) !== JSON.stringify(newTags?.sort());
 
       Object.assign(feed, rest);
       const updatedFeed = await this.feedRepository.save(feed);
 
       if (tagsChanged) {
-        this.logger.log(`Tags changed for feed ${id}. Updating existing articles...`);
-        this.logger.log(`Old tags: ${oldTags?.join(', ') || 'None'}`);
-        this.logger.log(`New tags: ${newTags?.join(', ') || 'None'}`);
-        
+        this.logger.log(
+          `Tags changed for feed ${id}. Updating existing articles...`,
+        );
         setImmediate(async () => {
           try {
-            const updatedCount = await this.rssService.updateArticleTagsForFeed(id, newTags);
-            this.logger.log(`Successfully updated tags for ${updatedCount} articles in feed ${id}`);
+            const updatedCount = await this.rssService.updateArticleTagsForFeed(
+              id,
+              newTags,
+            );
+            this.logger.log(
+              `Successfully updated tags for ${updatedCount} articles in feed ${id}`,
+            );
           } catch (error) {
-            this.logger.error(`Failed to update article tags for feed ${id}: ${error.message}`);
+            this.logger.error(
+              `Failed to update article tags for feed ${id}: ${error.message}`,
+            );
           }
         });
       }
@@ -76,19 +98,23 @@ export class FeedService {
       return updatedFeed;
     } catch (error) {
       this.logger.error(`Error updating rss feed: ${error.message}`);
-      throw new InternalServerErrorException(`Error updating rss feed: ${error}`);
+      throw new InternalServerErrorException('error.feed.update_failed');
     }
   }
 
   async removeFeed(id: string, userId: string) {
-    const result = await this.feedRepository.deleteOne({ _id: new ObjectId(id), userId });
-    if (result.deletedCount === 0) throw new NotFoundException('Feed not found');
+    const result = await this.feedRepository.deleteOne({
+      _id: new ObjectId(id),
+      userId,
+    });
+    if (result.deletedCount === 0)
+      throw new NotFoundException('error.feed.not_found');
     return result;
   }
 
   async importFeeds(file: Express.Multer.File, userId: string) {
     if (!file) {
-      throw new BadRequestException('No file uploaded');
+      throw new BadRequestException('error.feed.no_file');
     }
 
     const ext = file.originalname.split('.').pop()?.toLowerCase();
@@ -117,7 +143,7 @@ export class FeedService {
           const result = await parser.parseStringPromise(xml);
 
           if (!result.opml?.body?.[0]?.outline) {
-            throw new BadRequestException('Invalid OPML structure');
+            throw new BadRequestException('error.feed.invalid_opml');
           }
 
           feeds = this.flattenOpml(result.opml.body[0].outline);
@@ -125,14 +151,13 @@ export class FeedService {
         }
 
         default:
-          throw new BadRequestException('Unsupported file type. Use JSON, CSV, or OPML files.');
+          throw new BadRequestException('error.feed.unsupported_type');
       }
 
       return await this.createFeedsFromImport(feeds, userId);
-
     } catch (error) {
       this.logger.error(`Import failed: ${error.message}`);
-      throw new BadRequestException(`Import failed: ${error.message}`);
+      throw new BadRequestException('error.feed.import_failed');
     }
   }
 
@@ -141,13 +166,13 @@ export class FeedService {
 
     const traverse = (items: any[]) => {
       if (!Array.isArray(items)) items = [items];
-      
+
       for (const item of items) {
         if (item.$?.xmlUrl) {
-          feeds.push({ 
-            url: item.$.xmlUrl, 
+          feeds.push({
+            url: item.$.xmlUrl,
             name: item.$.title || item.$.text || 'Unknown Feed',
-            description: item.$.description || ''
+            description: item.$.description || '',
           });
         }
         if (item.outline) {
@@ -165,22 +190,23 @@ export class FeedService {
       total: feeds.length,
       imported: 0,
       skipped: 0,
-      errors: [] as string[]
+      errors: [] as string[],
     };
 
     const existingFeeds = await this.feedRepository.find({
       where: { userId },
-      select: ['url']
+      select: ['url'],
     });
-    const existingUrls = new Set(existingFeeds.map(f => f.url));
+    const existingUrls = new Set(existingFeeds.map((f) => f.url));
 
     for (const feedData of feeds) {
       try {
         const url = feedData.url || feedData.xmlUrl || feedData.feedUrl;
-        const name = feedData.name || feedData.title || feedData.text || 'Unknown Feed';
-        
+        const name =
+          feedData.name || feedData.title || feedData.text || 'Unknown Feed';
+
         if (!url) {
-          results.errors.push(`Feed skipped: missing URL`);
+          results.errors.push('error.feed.missing_url');
           continue;
         }
 
@@ -192,22 +218,23 @@ export class FeedService {
         const createFeedDto: CreateFeedDto = {
           url,
           name,
-          frequency: FeedFrequency.DAILY, 
+          frequency: FeedFrequency.DAILY,
           description: feedData.description || '',
           tags: feedData.tags || [],
-          userId
+          userId,
         };
 
         await this.createFeed(createFeedDto);
         results.imported++;
-        existingUrls.add(url); 
-
+        existingUrls.add(url);
       } catch (error) {
-        results.errors.push(`Error importing feed "${feedData.name || feedData.url}": ${error.message}`);
+        results.errors.push('error.feed.import_item_failed');
       }
     }
 
-    this.logger.log(`Import completed: ${results.imported}/${results.total} feeds imported, ${results.skipped} skipped`);
+    this.logger.log(
+      `Import completed: ${results.imported}/${results.total} feeds imported, ${results.skipped} skipped`,
+    );
     return results;
   }
 }

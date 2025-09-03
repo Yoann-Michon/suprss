@@ -8,7 +8,12 @@
     "title": "Titre",
     "url": "URL",
     "description": "Description",
-    "actions": "Actions"
+    "actions": "Actions",
+    "back": "Retour",
+    "share": "Partager",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "close": "Fermer"
   },
   "auth": {
     "password": "Mot de passe",
@@ -23,8 +28,11 @@
       "rememberMe": "Se souvenir de moi",
       "forgotPassword": "Mot de passe oublié ?",
       "loginButton": "Se connecter",
+      "loggingIn": "Connexion en cours...",
       "orLoginWith": "ou se connecter avec",
-      "noAccount": "Vous n'avez pas de compte ?"
+      "noAccount": "Vous n'avez pas de compte ?",
+      "fillAllFields": "Veuillez remplir tous les champs",
+      "loginError": "Erreur de connexion"
     },
     "register": {
       "title": "Créer votre compte",
@@ -69,7 +77,8 @@
       "collections": "Collections",
       "documentation": "Documentation",
       "tutorial": "Tutoriel",
-      "favorites": "Favoris"
+      "favorites": "Favoris",
+      "chat": "Chat"
     }
   },
   "pages": {
@@ -86,6 +95,23 @@
       "allFeeds": "Tous les flux",
       "noResults": "Aucun article trouvé",
       "read": "Lire"
+    },
+    "article": {
+      "readOriginal": "Lire l'original",
+      "unknownAuthor": "Auteur inconnu",
+      "content": "Contenu de l'article",
+      "contentError": "Impossible de charger le contenu de l'article",
+      "clickReadOriginal": "Cliquez sur \"Lire l'original\" pour voir l'article complet",
+      "readComplete": "Lire l'article complet",
+      "addToFavorites": "Ajouter aux favoris",
+      "removeFromFavorites": "Retirer des favoris"
+    },
+    "favorites": {
+      "title": "Articles favoris",
+      "empty": "Vous n'avez aucun article favori",
+      "emptyDescription": "Les articles que vous marquez comme favoris apparaîtront ici",
+      "by": "Par",
+      "view": "Voir l'article"
     },
     "settings": {
       "title": "Paramètres",
@@ -169,7 +195,7 @@
       },
       "messages": {
         "errorLoad": "Erreur lors du chargement des flux",
-        "errorAdd": "Erreur lors de l’ajout du flux",
+        "errorAdd": "Erreur lors de l'ajout du flux",
         "errorEdit": "Erreur lors de la mise à jour du flux",
         "errorDelete": "Erreur lors de la suppression du flux"
       },
@@ -200,7 +226,25 @@
     "notFound": "Page non trouvée",
     "unauthorized": "Accès non autorisé",
     "serverError": "Erreur du serveur, veuillez réessayer plus tard.",
-    "networkError": "Erreur réseau, veuillez vérifier votre connexion."
+    "networkError": "Erreur réseau, veuillez vérifier votre connexion.",
+    "article": {
+      "create_failed": "Impossible de créer l'article.",
+      "fetch_failed": "Impossible de récupérer les articles.",
+      "not_found": "Article introuvable.",
+      "mark_read_failed": "Impossible de marquer l'article comme lu.",
+      "favorite_failed": "Impossible de mettre à jour l'état de favori."
+    },
+    "feed": {
+      "create_failed": "Impossible de créer le flux.",
+      "update_failed": "Impossible de mettre à jour le flux.",
+      "not_found": "Flux introuvable.",
+      "no_file": "Aucun fichier fourni.",
+      "invalid_opml": "Le fichier OPML est invalide.",
+      "unsupported_type": "Type de fichier non supporté (JSON, CSV ou OPML uniquement).",
+      "import_failed": "Échec de l'importation des flux.",
+      "missing_url": "Flux ignoré : URL manquante.",
+      "import_item_failed": "Erreur lors de l'importation d'un flux."
+    }
   },
   "documentation": {
     "title": "Documentation",
@@ -234,7 +278,7 @@
   "loading": {
     "message": "Merci de patienter pendant que nous préparons votre tableau de bord..."
   },
-  "tutorial":{
+  "tutorial": {
     "intro.next": "Suivant",
     "intro.preview": "Précédent",
     "intro.done": "Terminé"

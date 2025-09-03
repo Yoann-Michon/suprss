@@ -15,10 +15,12 @@ export interface ISettings{
 
 export interface UserContextType {
   user: IUser | null;
-  setUser: (user: IUser | null) => void;
+  setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
   login: (email: string, password: string) => Promise<void>;
   registerUser: (username: string, email: string, password: string) => Promise<void>;
-  refreshUser: () => Promise<void>;
+  refreshUser: () => Promise<IUser | null>;
   logout: () => Promise<void>;
   isLoading: boolean;
+  authError: string | null;
+  clearAuthError: () => void;
 }

@@ -8,23 +8,31 @@
     "title": "Title",
     "url": "URL",
     "description": "Description",
-    "actions": "Actions"
+    "actions": "Actions",
+    "back": "Back",
+    "share": "Share",
+    "edit": "Edit",
+    "delete": "Delete",
+    "close": "Close"
   },
   "auth": {
     "password": "Password",
     "passwordPlaceholder": "Enter your password",
     "stayInformedTogether": "Stay informed. Together.",
     "collaborativeDescription": "Follow your favorite feeds with your team, in real time.",
-    "signUp": "Sign Up",
+    "signUp": "Sign up",
     "email": "Email",
     "emailPlaceholder": "Enter your email",
     "login": {
-      "title": "Log in to your account",
+      "title": "Sign in to your account",
       "rememberMe": "Remember me",
       "forgotPassword": "Forgot password?",
-      "loginButton": "Login",
-      "orLoginWith": "or login with",
-      "noAccount": "Don't have an account?"
+      "loginButton": "Sign in",
+      "loggingIn": "Signing in...",
+      "orLoginWith": "or sign in with",
+      "noAccount": "Don't have an account?",
+      "fillAllFields": "Please fill in all fields",
+      "loginError": "Login error"
     },
     "register": {
       "title": "Create your account",
@@ -33,7 +41,7 @@
       "passwordPlaceholder": "Create a password",
       "confirmPassword": "Confirm password",
       "confirmPasswordPlaceholder": "Re-enter your password",
-      "registerButton": "Register",
+      "registerButton": "Sign up",
       "orRegisterWith": "or sign up with",
       "alreadyHaveAccount": "Already have an account?",
       "passwordMismatch": "Passwords do not match"
@@ -44,8 +52,8 @@
       "invalid_credentials": "Invalid email or password",
       "user_not_found": "User not found",
       "account_locked": "Account locked",
-      "email_exists": "Email already exists",
-      "username_exists": "Username already exists",
+      "email_exists": "This email already exists",
+      "username_exists": "This username already exists",
       "weak_password": "Password is too weak",
       "logout_success": "Logout successful",
       "profile_not_found": "User profile not found",
@@ -69,23 +77,41 @@
       "collections": "Collections",
       "documentation": "Documentation",
       "tutorial": "Tutorial",
-      "favorites": "Favorites"
+      "favorites": "Favorites",
+      "chat": "Chat"
     }
   },
   "pages": {
     "account": {
       "title": "My Account",
       "joined": "Joined on",
-      "editProfile": "Edit Profile",
+      "editProfile": "Edit profile",
       "linkedProvider": "Linked authentication provider",
       "authProvider": "Authentication provider",
       "changePassword": "Change password",
-      "logout": "Logout"
+      "logout": "Sign out"
     },
     "home": {
-      "allFeeds": "All feeds",
+      "allFeeds": "All Feeds",
       "noResults": "No articles found",
       "read": "Read"
+    },
+    "article": {
+      "readOriginal": "Read Original",
+      "unknownAuthor": "Unknown Author",
+      "content": "Article Content",
+      "contentError": "Unable to load article content",
+      "clickReadOriginal": "Click \"Read Original\" to view the full article",
+      "readComplete": "Read the complete article",
+      "addToFavorites": "Add to favorites",
+      "removeFromFavorites": "Remove from favorites"
+    },
+    "favorites": {
+      "title": "Favorite Articles",
+      "empty": "You have no favorite articles",
+      "emptyDescription": "Articles you mark as favorites will appear here",
+      "by": "By",
+      "view": "View article"
     },
     "settings": {
       "title": "Settings",
@@ -101,7 +127,7 @@
       },
       "collections": {
         "title": "My Collections",
-        "new": "New Collection",
+        "new": "New collection",
         "newName": "Collection name",
         "description": "Description",
         "visibility": "Visibility",
@@ -139,19 +165,19 @@
       "read": "Read",
       "unread": "Unread",
       "favorites": "Favorites",
-      "onlyFavorites": "Only Favorites",
+      "onlyFavorites": "Favorites only",
       "sort": "Sort",
       "newest": "Newest",
       "oldest": "Oldest",
       "search": "Search articles..."
     },
     "manageFeeds": {
-      "title": "Manage Feeds",
-      "editFeed": "Edit Feed",
+      "title": "Feed Management",
+      "editFeed": "Edit feed",
       "addFromUrl": "Add from URL",
-      "addFromFile": "Add from File",
+      "addFromFile": "Add from file",
       "feedUrl": "Feed URL",
-      "selectFile": "Select File",
+      "selectFile": "Select file",
       "fields": {
         "title": "Title",
         "url": "URL",
@@ -175,12 +201,12 @@
       },
       "tutorial": {
         "steps": {
-          "home": "Go to your homepage to see the latest feeds.",
+          "home": "Access your homepage to see recent feeds.",
           "flux": "Manage your RSS feeds here.",
           "collections": "View and manage your shared collections.",
           "favorites": "Access your favorite articles.",
           "tutorial": "Restart the interactive tutorial at any time.",
-          "documentation": "Check the full application documentation.",
+          "documentation": "View the complete application documentation.",
           "darkmode_btn": "Enable or disable dark mode for the interface.",
           "avatatr_btn": "Click here to access your profile and settings."
         }
@@ -188,19 +214,37 @@
     }
   },
   "actions": {
-    "manageFeeds": "Manage Feeds",
+    "manageFeeds": "Manage feeds",
     "addFromUrl": "Add from URL",
-    "addFromFile": "Add from File",
-    "addFeed": "Add Feed",
-    "exportFeeds": "Export Feeds",
-    "importFeeds": "Import Feeds",
-    "download": "Download Feeds"
+    "addFromFile": "Add from file",
+    "addFeed": "Add feed",
+    "exportFeeds": "Export feeds",
+    "importFeeds": "Import feeds",
+    "download": "Download feeds"
   },
   "error": {
     "notFound": "Page not found",
     "unauthorized": "Unauthorized access",
     "serverError": "Server error, please try again later.",
-    "networkError": "Network error, please check your connection."
+    "networkError": "Network error, please check your connection.",
+    "article": {
+      "create_failed": "Unable to create article.",
+      "fetch_failed": "Unable to fetch articles.",
+      "not_found": "Article not found.",
+      "mark_read_failed": "Unable to mark article as read.",
+      "favorite_failed": "Unable to update favorite status."
+    },
+    "feed": {
+      "create_failed": "Unable to create feed.",
+      "update_failed": "Unable to update feed.",
+      "not_found": "Feed not found.",
+      "no_file": "No file provided.",
+      "invalid_opml": "Invalid OPML file.",
+      "unsupported_type": "Unsupported file type (JSON, CSV or OPML only).",
+      "import_failed": "Failed to import feeds.",
+      "missing_url": "Feed skipped: missing URL.",
+      "import_item_failed": "Error importing a feed."
+    }
   },
   "documentation": {
     "title": "Documentation",
@@ -210,28 +254,33 @@
     "faqTitle": "Frequently Asked Questions",
     "faq": {
       "q1": "How do I add an RSS feed?",
-      "a1": "Click the Speed Dial in the bottom right and choose 'Add from URL' or 'from file'.",
+      "a1": "Click the Speed Dial at the bottom right then choose 'Add from URL' or 'via file'.",
       "q2": "Can I share my feeds with my team?",
       "a2": "Yes. Create a shared collection and invite your teammates to collaborate.",
-      "q3": "Which formats are supported for import?",
-      "a3": "We support OPML, XML, and JSON for bulk import.",
-      "q4": "Is there a dark mode available?",
+      "q3": "What formats are supported for import?",
+      "a3": "We support OPML, XML and JSON formats for bulk import.",
+      "q4": "Is dark mode available?",
       "a4": "Yes, you can enable dark mode in settings or from the top menu.",
       "q5": "How often are my feeds updated?",
-      "a5": "Feeds are updated according to the frequency chosen when added."
+      "a5": "Feeds are updated according to the frequency chosen when adding them."
     },
     "contact": {
       "title": "Contact Us",
-      "description": "For any questions, support, or suggestions, feel free to write to us.",
+      "description": "For any questions, assistance or suggestions, feel free to write to us.",
       "hours": "Support hours:"
     },
     "privacy": {
       "title": "Privacy & GDPR",
-      "description": "SUPRSS only collects data necessary for your account to function (email, feeds). Your reading activity remains private and local.",
-      "rgpdNotice": "Under GDPR, you can request access, modification, or deletion of your data at any time."
+      "description": "SUPRSS only collects data necessary for your account to function properly (email, feeds). Your reading activities remain private and local.",
+      "rgpdNotice": "In accordance with GDPR, you can request access, modification or deletion of your data at any time."
     }
   },
   "loading": {
     "message": "Please wait while we prepare your dashboard..."
+  },
+  "tutorial": {
+    "intro.next": "Next",
+    "intro.preview": "Previous",
+    "intro.done": "Done"
   }
 }

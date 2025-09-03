@@ -58,6 +58,11 @@ export class FeedController {
     return this.articleService.markArticleAsRead(data.articleId, data.userId);
   }
 
+  @MessagePattern('toggleFavorite')
+  async toggleFavorite(@Payload()  articleId: string) {
+    return this.articleService.toggleFavorite(articleId);
+  }
+
   // === RSS FETCH ===
   @MessagePattern('fetchFeedsByFrequency')
   async fetchFeedsByFrequency(@Payload() data: { frequency: FeedFrequency }) {

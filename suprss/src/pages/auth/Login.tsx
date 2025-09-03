@@ -9,50 +9,93 @@ import {
     Checkbox,
     Button,
     Divider,
-    Typography, IconButton, InputAdornment,
+    Typography, 
+    IconButton, 
+    InputAdornment,
     Alert
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TwoWomen from "../../assets/two_women.webp";
 import GoogleIcon from '@mui/icons-material/Google';
 import MicrosoftIcon from '@mui/icons-material/Microsoft';
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { useUser } from "../../context/UserContext";
 
 const Login = () => {
     const { t } = useTranslation();
-    const { login } = useUser();
+    const { login, authError, clearAuthError, user } = useUser();
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string>("");
     const [loading, setLoading] = useState(false);
     
     const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
+    // Redirection si déjà connecté
+    useEffect(() => {
+        if (user) {
+            navigate("/home");
+        }
+    }, [user, navigate]);
+
+    // Nettoyer les erreurs au montage
+    useEffect(() => {
+        clearAuthError();
+        setError("");
+    }, [clearAuthError]);
+
+    // Synchroniser l'erreur du contexte
+    useEffect(() => {
+        if (authError) {
+            setError(authError);
+        }
+    }, [authError]);
+
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setError("");
+        clearAuthError();
         setLoading(true);
 
         const formData = new FormData(event.currentTarget);
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
 
+        // Validation côté client
         if (!email || !password) {
             setError(t('auth.login.fillAllFields'));
             setLoading(false);
             return;
         }
 
+        if (!email.includes('@')) {
+            setError('Please enter a valid email address');
+            setLoading(false);
+            return;
+        }
+
         try {
+            console.log("Attempting login with:", email);
             await login(email, password);
+            
+            // La redirection sera gérée par useEffect si le login réussit
+            console.log("Login process completed");
+            
         } catch (err: any) {
+            console.error("Login error:", err);
             setError(err.message || t('auth.login.loginError'));
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleSocialLogin = (provider: 'google' | 'microsoft') => {
+        // Rediriger vers l'endpoint d'authentification sociale du backend
+        const baseUrl = import.meta.env.VITE_BACK_API_URL;
+        window.location.href = `${baseUrl}/auth/${provider}`;
     };
 
     return (
@@ -99,6 +142,10 @@ const Login = () => {
                     {error && (
                         <Alert 
                             severity="error" 
+                            onClose={() => {
+                                setError("");
+                                clearAuthError();
+                            }}
                             sx={{ 
                                 width: "100%", 
                                 maxWidth: "350px", 
@@ -139,7 +186,8 @@ const Login = () => {
                                         },
                                         '&.Mui-focused fieldset': {
                                             borderColor: '#63B3ED',
-                                        }, '& input': {
+                                        }, 
+                                        '& input': {
                                             padding: "10px",
                                             fontSize: "0.87rem"
                                         },
@@ -229,7 +277,7 @@ const Login = () => {
                                 fontWeight: "bold"
                             }}
                         >
-                            {loading ? t('auth.login.loggingIn') || 'Connexion...' : t('auth.login.loginButton')}
+                            {loading ? t('auth.login.loggingIn')  : t('auth.login.loginButton')}
                         </Button>
                     </Box>
 
@@ -252,6 +300,7 @@ const Login = () => {
                             fullWidth
                             startIcon={<GoogleIcon />}
                             disabled={loading}
+                            onClick={() => handleSocialLogin('google')}
                             sx={{
                                 borderColor: "#FFFFFF",
                                 backgroundColor: "#293642",
@@ -272,6 +321,7 @@ const Login = () => {
                             fullWidth
                             startIcon={<MicrosoftIcon />}
                             disabled={loading}
+                            onClick={() => handleSocialLogin('microsoft')}
                             sx={{
                                 borderColor: "#FFFFFF",
                                 backgroundColor: "#293642",

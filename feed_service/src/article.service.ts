@@ -11,14 +11,14 @@ export class ArticleService {
   constructor(
     @InjectRepository(Article)
     private readonly articleRepository: MongoRepository<Article>,
-  ) { }
+  ) {}
 
   async createArticle(articleDto: CreateArticleDto): Promise<Article> {
     try {
       const article = this.articleRepository.create(articleDto);
       return await this.articleRepository.save(article);
     } catch (error) {
-      throw new RpcException(`Failed to create article: ${error}`);
+      throw new RpcException('error.article.create_failed');
     }
   }
 
@@ -26,28 +26,49 @@ export class ArticleService {
     try {
       return await this.articleRepository.find({
         where: {
-          feedId: { $in: feedIds } as any
-        }
+          feedId: { $in: feedIds } as any,
+        },
       });
     } catch (error) {
-      throw new RpcException(`Failed to fetch articles for feeds [${feedIds.join(', ')}]: ${error}`);
+      throw new RpcException('error.article.fetch_failed');
     }
   }
 
   async markArticleAsRead(articleId: string, userId: string): Promise<Article> {
     try {
       const article = await this.articleRepository.findOneBy({
-        _id: new ObjectId(articleId)
+        _id: new ObjectId(articleId),
       });
+
       if (!article) {
-        throw new RpcException('Article not found');
+        throw new RpcException('error.article.not_found');
       }
+
       if (!article.userIdsRead.includes(userId)) {
         article.userIdsRead.push(userId);
       }
+
       return await this.articleRepository.save(article);
     } catch (error) {
-      throw new RpcException(`Failed to mark article as read: ${error}`);
+      throw new RpcException('error.article.mark_read_failed');
+    }
+  }
+
+  async toggleFavorite(articleId: string): Promise<Article> {
+    try {
+      const article = await this.articleRepository.findOneBy({
+        _id: new ObjectId(articleId),
+      });
+
+      if (!article) {
+        throw new RpcException('error.article.not_found');
+      }
+
+      article.favorite = !article.favorite;
+
+      return await this.articleRepository.save(article);
+    } catch (error) {
+      throw new RpcException('error.article.favorite_failed');
     }
   }
 }

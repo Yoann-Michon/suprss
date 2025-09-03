@@ -247,7 +247,7 @@ const Register = () => {
                                 mt: 2
                             }}
                         >
-                            {loading ? t('auth.register.registering') || 'Inscription...' : t('auth.register.registerButton')}
+                            {loading ? t('auth.register.registering')  : t('auth.register.registerButton')}
                         </Button>
                     </Box>
 

@@ -112,12 +112,17 @@ export class FeedController {
         return await firstValueFrom(this.feedClient.send('getArticlesByFeed', feedIds));
     }
 
-    @Put('/articles/read')
+    @Patch('/articles/read')
     async markArticleAsRead(@Body() articleId: string, @CurrentUser('id') userId: string) {
         const user = await firstValueFrom(this.userClient.send('findUserById', userId));
         if (!user) {
             throw new Error("User not found");
         }
         return await firstValueFrom(this.feedClient.send('markArticleAsRead', { articleId, userId: userId }));
+    }
+
+    @Post('/articles/:articleId/favorite')
+    async toggleFavorite(@Param("articleId") articleId: string) {
+        return await firstValueFrom(this.feedClient.send('toggleFavorite', articleId));
     }
 }

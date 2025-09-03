@@ -7,6 +7,7 @@ import { Repository, In } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { UpdateSettingInput } from './dto/update-setting.input';
 import { Setting } from './entities/Setting.entity';
+import { UserRole } from 'utils/src';
 
 @Injectable()
 export class UserService {
@@ -31,7 +32,7 @@ export class UserService {
       newUser.email = createUserInput.email;
       newUser.password = hashedPassword;
       newUser.username = createUserInput.username;
-      newUser.role = "Admin";
+      newUser.role = UserRole.USER;
       newUser.avatarUrl = "";
       newUser.firstVisit = true;
       newUser.setting = setting;
