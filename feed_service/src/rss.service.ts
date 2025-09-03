@@ -17,40 +17,75 @@ export class RssService {
 
   ) { }
     async fetchFeedArticles(feed: Feed): Promise<Article[]> {
-    try {
-      const parsed = await this.parser.parseURL(feed.url);
+        try {
+            const parsed = await this.parser.parseURL(feed.url);
 
-      const existingArticles = await this.articleRepository.find({
-        where: { feedId: feed.id.toString() },
-        select: ['link'],
-      });
-      const existingLinks = new Set(existingArticles.map(a => a.link));
+            const existingArticles = await this.articleRepository.find({
+                where: { feedId: feed.id.toString() },
+                select: ['link'],
+            });
+            const existingLinks = new Set(existingArticles.map(a => a.link));
 
-      const newArticles: Article[] = [];
+            const newArticles: Article[] = [];
 
-      for (const item of parsed.items) {
-        if (!item.link || existingLinks.has(item.link)) continue;
+            for (const item of parsed.items) {
+                if (!item.link || existingLinks.has(item.link)) continue;
 
-        const article = this.articleRepository.create({
-          title: item.title ?? 'Untitled',
-          link: item.link,
-          pubDate: item.pubDate ? new Date(item.pubDate) : new Date(),
-          author: item.creator ?? item.author ?? 'Unknown',
-          excerpt: item.contentSnippet ?? '',
-          feedId: feed.id.toString(),
-          userIdsRead: [],
-          favorite: false,
-        });
+                const inheritedTags = this.processInheritedTags(feed.tags);
 
-        await this.articleRepository.save(article);
-        newArticles.push(article);
-      }
+                const article = this.articleRepository.create({
+                    title: item.title ?? 'Untitled',
+                    link: item.link,
+                    pubDate: item.pubDate ? new Date(item.pubDate) : new Date(),
+                    author: item.creator ?? item.author ?? 'Unknown',
+                    excerpt: item.description ?? '',
+                    feedId: feed.id.toString(),
+                    userIdsRead: [],
+                    favorite: false,
+                    tags: inheritedTags
+                });
 
-      return newArticles;
-    } catch (err) {
-      throw new RpcException('RSS fetch error');
+                await this.articleRepository.save(article);
+                newArticles.push(article);
+
+            }
+
+            return newArticles;
+        } catch (err) {
+            throw new RpcException(`RSS fetch error: ${err.message}`);
+        }
     }
-  }
+
+    private processInheritedTags(feedTags?: string[]): string[] | undefined {
+        if (!feedTags || !Array.isArray(feedTags)) {
+            return undefined;
+        }
+
+        return feedTags.filter(tag => {
+            return typeof tag === 'string' && tag.trim().length > 0;
+        }).map(tag => tag.trim());
+    }
+
+    async updateArticleTagsForFeed(feedId: string, newTags?: string[]): Promise<number> {
+        try {
+            const articles = await this.articleRepository.find({
+                where: { feedId: feedId }
+            });
+
+            const processedTags = this.processInheritedTags(newTags);
+
+            let updatedCount = 0;
+            for (const article of articles) {
+                article.tags = processedTags;
+                await this.articleRepository.save(article);
+                updatedCount++;
+            }
+
+            return updatedCount;
+        } catch (error) {
+            throw new RpcException(`Error updating article tags: ${error.message}`);
+        }
+    }
 
    async fetchFeedsByFrequency(frequency: FeedFrequency): Promise<void> {
     const feeds = await this.feedRepository.find({ where: { frequency } });

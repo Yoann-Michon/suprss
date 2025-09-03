@@ -34,4 +34,8 @@ export class CreateArticleDto {
     @IsBoolean({ message: 'Favorite must be a boolean' })
     @IsOptional()
     favorite?: boolean;
+
+    @IsOptional()
+    @IsString({ each: true, message: 'Each tag must be a string' })
+    tags?: string[];
 }

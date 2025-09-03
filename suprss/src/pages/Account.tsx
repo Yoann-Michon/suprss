@@ -9,11 +9,12 @@ import {
   Paper,
 } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
-import LockResetIcon from '@mui/icons-material/LockReset';
+import SaveIcon from '@mui/icons-material/Save';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useThemeColors } from '../component/ThemeModeContext';
 import { useTranslation } from 'react-i18next';
 import { useUser } from '../context/UserContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { api } from '../services/api.service';
 
 const Account = () => {
@@ -22,26 +23,42 @@ const Account = () => {
   const { user, refreshUser, logout } = useUser();
 
   const [editing, setEditing] = useState(false);
-  const [username, setUsername] = useState(user?.username || '');
-  const [email, setEmail] = useState(user?.email || '');
-  const [avatarUrl, setAvatarUrl] = useState(user?.avatarUrl || '');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState('');
 
-  async function handleSave() {
+  useEffect(() => {
+    if (user) {
+      setUsername(user.username || '');
+      setEmail(user.email || '');
+      setAvatarUrl(user.avatarUrl || '');
+    }
+  }, [user]);
+
+  const handleSave = async () => {
     try {
-      await api(`/users/${user?.id}`, {
+      await api(`/users/me`, {
         method: 'PATCH',
-        body: JSON.stringify({
-          username,
-          email,
-          avatarUrl
-        }),
+        body: JSON.stringify({ username, email, password, avatarUrl }),
       });
       await refreshUser();
+      setPassword('');
       setEditing(false);
     } catch (err: any) {
-      alert(err.message || 'Erreur lors de la mise à jour');
+      alert(err.message || t('error.serverError'));
     }
-  }
+  };
+
+  const handleDelete = async () => {
+    if (!confirm(t('pages.account.confirmDelete'))) return;
+    try {
+      await api(`/users/${user?.id}`, { method: 'DELETE' });
+      logout();
+    } catch (err: any) {
+      alert(err.message || t('error.serverError'));
+    }
+  };
 
   if (!user) {
     return (
@@ -96,14 +113,14 @@ const Account = () => {
             {editing ? (
               <>
                 <TextField
-                  label="Username"
+                  label={t('auth.register.username')}
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   fullWidth
                   margin="dense"
                 />
                 <TextField
-                  label="Email"
+                  label={t('auth.email')}
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -111,9 +128,10 @@ const Account = () => {
                   margin="dense"
                 />
                 <TextField
-                  label="Avatar URL"
-                  value={avatarUrl}
-                  onChange={(e) => setAvatarUrl(e.target.value)}
+                  label={t('auth.password')}
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   fullWidth
                   margin="dense"
                 />
@@ -133,34 +151,40 @@ const Account = () => {
 
         <Divider sx={{ borderColor: colors.border }} />
 
-        <Divider sx={{ borderColor: colors.border }} />
-
         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between">
           {editing && (
             <Button
-              variant="outlined"
-              startIcon={<LockResetIcon />}
-              sx={{
-                color: colors.primary,
-                borderColor: colors.primary,
-                '&:hover': {
-                  borderColor: colors.primary,
-                  backgroundColor: colors.primary + '10',
-                },
-              }}
+              variant="contained"
+              startIcon={<SaveIcon />}
               onClick={handleSave}
             >
               {t('common.save')}
             </Button>
           )}
           <Button
-            variant="contained"
-            startIcon={<LogoutIcon />}
+            variant="outlined"
             color="error"
+            startIcon={<LogoutIcon />}
             sx={{ fontWeight: 600 }}
             onClick={logout}
           >
             {t('pages.account.logout')}
+          </Button>
+          {!editing && (
+            <Button
+              variant="outlined"
+              onClick={() => setEditing(true)}
+            >
+              {t('pages.account.editProfile')}
+            </Button>
+          )}
+          <Button
+            variant="contained"
+            color="error"
+            startIcon={<DeleteIcon />}
+            onClick={handleDelete}
+          >
+            {t('pages.account.deleteAccount')}
           </Button>
         </Stack>
       </Paper>

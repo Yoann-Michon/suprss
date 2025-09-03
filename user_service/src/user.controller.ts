@@ -90,9 +90,9 @@ export class UserController {
   }
 
   @MessagePattern('removeUser')
-  async removeUser(@Payload() id: string) {
+  async removeUser(@Payload() userId: string) {
     try {
-      return await this.userService.remove(id);
+      return await this.userService.remove(userId);
     } catch (error) {
       throw new RpcException({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -121,18 +121,6 @@ export class UserController {
     }
   }
 
-  //@MessagePattern('changeRole')
-  //async changeUserRole(@Payload() data: { id: string; role: UserRole }) {
-  //  try {
-  //    return await this.userService.changeUserRole(data.id, data.role);
-  //  } catch (error) {
-  //    throw new RpcException({
-  //      status: HttpStatus.INTERNAL_SERVER_ERROR,
-  //      message: 'Error changing user role',
-  //    });
-//
-  //  }
-  //}
   @MessagePattern('updateSetting')
   async updateSetting(@Payload() data: { id: string; setting: UpdateSettingInput }) {
     try {

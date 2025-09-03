@@ -19,7 +19,8 @@ const Account = lazy(() => import("./pages/Account"));
 const Settings = lazy(() => import("./pages/Settings"));
 const ManageFeeds = lazy(() => import("./pages/ManageFeed"));
 const Documentation = lazy(() => import("./pages/Documentation"));
-const LoadingScreen = lazy(() => import("./pages/LoadingScreen")); // ✨
+const LoadingScreen = lazy(() => import("./pages/LoadingScreen"));
+const Favorite =lazy(() => import("./pages/Favorites"));
 
 const PrivateRoute = () => {
   const { user } = useUser();
@@ -56,8 +57,9 @@ const App = () => {
               <Route element={<Layout />}>
                 <Route path="/home" element={<Home />} />
                 <Route path="/manage_feed" element={<ManageFeeds />} />
-                <Route path="/shared_collections" element={<ManageCollection />} />
+                <Route path="/collections" element={<ManageCollection />} />
                 <Route path="/article/:slug" element={<ArticlePage />} />
+                <Route path="/favorite" element={<Favorite />} />
                 <Route path="/account" element={<Account />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/documentation" element={<Documentation />} />

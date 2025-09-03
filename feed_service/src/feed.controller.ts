@@ -36,6 +36,16 @@ export class FeedController {
     return this.feedService.removeFeed(data.feedId,data.userId);
   }
 
+  @MessagePattern('importFeeds')
+  async importFeeds(@Payload() data: { fileBuffer: Buffer, fileName: string, userId: string }) {
+    const file = {
+      buffer: Buffer.from(data.fileBuffer),
+      originalname: data.fileName
+    } as Express.Multer.File;
+
+    return this.feedService.importFeeds(file, data.userId);
+  }
+
   // === ARTICLES ===
 
   @MessagePattern('getArticlesByFeed')

@@ -8,10 +8,12 @@ import { Setting } from './entities/Setting.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { UserController } from './user.controller';
+import { UtilsModule } from 'utils/src';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env' }),
+    UtilsModule.forRoot(),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: process.env.JWT_EXPIRATION},

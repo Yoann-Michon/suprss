@@ -8,43 +8,48 @@
     "title": "Title",
     "url": "URL",
     "description": "Description",
-    "actions": "Actions",
-    "previous": "Previous",
-    "next": "Next",
-    "back": "Back"
+    "actions": "Actions"
   },
   "auth": {
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "stayInformedTogether": "Stay informed. Together.",
+    "collaborativeDescription": "Follow your favorite feeds with your team, in real time.",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
     "login": {
-      "title": "Login to your account",
-      "username": "Username",
-      "usernamePlaceholder": "Enter your username",
-      "password": "Password",
-      "passwordPlaceholder": "Enter your password",
+      "title": "Log in to your account",
       "rememberMe": "Remember me",
       "forgotPassword": "Forgot password?",
-      "loginButton": "Log In",
+      "loginButton": "Login",
       "orLoginWith": "or login with",
-      "noAccount": "Don't have an account?",
-      "signUp": "Sign up",
-      "stayInformedTogether": "Stay informed. Together.",
-      "collaborativeDescription": "Follow your favorite feeds with your team, in real-time."
+      "noAccount": "Don't have an account?"
     },
     "register": {
       "title": "Create your account",
       "username": "Username",
-      "usernamePlaceholder": "Choose a username",
-      "email": "Email",
-      "emailPlaceholder": "Enter your email",
-      "password": "Password",
+      "usernamePlaceholder": "Enter your username",
       "passwordPlaceholder": "Create a password",
       "confirmPassword": "Confirm password",
       "confirmPasswordPlaceholder": "Re-enter your password",
       "registerButton": "Register",
-      "orRegisterWith": "or register with",
+      "orRegisterWith": "or sign up with",
       "alreadyHaveAccount": "Already have an account?",
-      "login": "Log in",
-      "stayInformedTogether": "Stay informed. Together.",
-      "collaborativeDescription": "Follow your favorite feeds with your team, in real-time."
+      "passwordMismatch": "Passwords do not match"
+    },
+    "api": {
+      "login_success": "Login successful",
+      "register_success": "Registration successful",
+      "invalid_credentials": "Invalid email or password",
+      "user_not_found": "User not found",
+      "account_locked": "Account locked",
+      "email_exists": "Email already exists",
+      "username_exists": "Username already exists",
+      "weak_password": "Password is too weak",
+      "logout_success": "Logout successful",
+      "profile_not_found": "User profile not found",
+      "update_success": "Profile updated successfully"
     }
   },
   "navigation": {
@@ -57,34 +62,58 @@
     "sidebar": {
       "home": "Home",
       "myFeed": "My Feed",
+      "flux": "Feeds",
       "sharedCollections": "Shared Collections",
-      "collection1": "Collection 1",
-      "collection2": "Collection 2",
+      "private": "Private",
+      "shared": "Shared",
       "collections": "Collections",
-      "documentation": "Documentation"
+      "documentation": "Documentation",
+      "tutorial": "Tutorial",
+      "favorites": "Favorites"
     }
   },
   "pages": {
     "account": {
       "title": "My Account",
-      "joined": "Joined",
-      "editProfile": "Edit profile",
-      "linkedProvider": "Linked Authentication Provider",
-      "authProvider": "Authentication Provider",
-      "changePassword": "Change Password",
-      "logout": "Log Out"
+      "joined": "Joined on",
+      "editProfile": "Edit Profile",
+      "linkedProvider": "Linked authentication provider",
+      "authProvider": "Authentication provider",
+      "changePassword": "Change password",
+      "logout": "Logout"
+    },
+    "home": {
+      "allFeeds": "All feeds",
+      "noResults": "No articles found",
+      "read": "Read"
     },
     "settings": {
       "title": "Settings",
       "appearance": {
-        "darkMode": "Dark Mode",
-        "darkModeDescription": "Enable dark mode for a comfortable reading experience in low-light conditions.",
+        "darkMode": "Dark mode",
+        "darkModeDescription": "Enable dark mode to reduce eye strain.",
         "language": "Language",
-        "languageDescription": "Choose the language of the application."
+        "languageDescription": "Choose the application language."
       },
       "notifications": {
         "title": "Notifications",
-        "description": "Configure your notification preferences (coming soon)."
+        "description": "Manage your notification preferences here."
+      },
+      "collections": {
+        "title": "My Collections",
+        "new": "New Collection",
+        "newName": "Collection name",
+        "description": "Description",
+        "visibility": "Visibility",
+        "private": "Private",
+        "shared": "Shared",
+        "selectArticles": "Select articles",
+        "selectUsers": "Select users",
+        "articles": "articles",
+        "users": "users",
+        "filterAll": "All",
+        "filterPrivate": "Private",
+        "filterShared": "Shared"
       }
     },
     "myFeed": {
@@ -113,26 +142,49 @@
       "onlyFavorites": "Only Favorites",
       "sort": "Sort",
       "newest": "Newest",
-      "oldest": "Oldest"
+      "oldest": "Oldest",
+      "search": "Search articles..."
     },
     "manageFeeds": {
+      "title": "Manage Feeds",
       "editFeed": "Edit Feed",
+      "addFromUrl": "Add from URL",
+      "addFromFile": "Add from File",
       "feedUrl": "Feed URL",
       "selectFile": "Select File",
-      "exportTitle": "Export Feeds",
-      "selectExportFormat": "Select the format to export your feeds:",
-      "table": {
-        "feedTitle": "Feed Title",
-        "tags": "Tags",
-        "updateFrequency": "Update Frequency"
-      },
       "fields": {
+        "title": "Title",
+        "url": "URL",
         "tags": "Tags",
-        "frequency": "Frequency"
+        "frequency": "Update frequency",
+        "description": "Description"
+      },
+      "table": {
+        "feedTitle": "Title",
+        "url": "URL",
+        "tags": "Tags",
+        "updateFrequency": "Frequency",
+        "description": "Description",
+        "actions": "Actions"
+      },
+      "messages": {
+        "errorLoad": "Error loading feeds",
+        "errorAdd": "Error adding feed",
+        "errorEdit": "Error updating feed",
+        "errorDelete": "Error deleting feed"
+      },
+      "tutorial": {
+        "steps": {
+          "home": "Go to your homepage to see the latest feeds.",
+          "flux": "Manage your RSS feeds here.",
+          "collections": "View and manage your shared collections.",
+          "favorites": "Access your favorite articles.",
+          "tutorial": "Restart the interactive tutorial at any time.",
+          "documentation": "Check the full application documentation.",
+          "darkmode_btn": "Enable or disable dark mode for the interface.",
+          "avatatr_btn": "Click here to access your profile and settings."
+        }
       }
-    },
-    "speedDial": {
-      "ariaLabel": "Feed actions"
     }
   },
   "actions": {
@@ -154,32 +206,32 @@
     "title": "Documentation",
     "description": "Learn how to use SUPRSS and get the most out of your feeds.",
     "introTitle": "Getting Started",
-    "introDescription": "SUPRSS helps you manage and share your favorite RSS feeds. You can import feeds, organize them into collections, and collaborate with others in real time.",
+    "introDescription": "SUPRSS helps you manage and share your favorite RSS feeds. You can import feeds, organize them into collections, and collaborate in real time.",
     "faqTitle": "Frequently Asked Questions",
     "faq": {
-      "q1": "How do I add a new RSS feed?",
-      "a1": "Click the Speed Dial at the bottom right and select 'Add from URL' or 'Add from File'.",
+      "q1": "How do I add an RSS feed?",
+      "a1": "Click the Speed Dial in the bottom right and choose 'Add from URL' or 'from file'.",
       "q2": "Can I share my feeds with my team?",
-      "a2": "Yes. Create a shared collection and invite your team members to collaborate.",
+      "a2": "Yes. Create a shared collection and invite your teammates to collaborate.",
       "q3": "Which formats are supported for import?",
-      "a3": "We support OPML, XML, and JSON formats for bulk import.",
-      "q4": "Is there a dark mode?",
-      "a4": "Yes. You can toggle dark mode in the settings or from the header menu.",
-      "q5": "How often are feeds updated?",
-      "a5": "Feeds are refreshed based on the update frequency you define during setup."
+      "a3": "We support OPML, XML, and JSON for bulk import.",
+      "q4": "Is there a dark mode available?",
+      "a4": "Yes, you can enable dark mode in settings or from the top menu.",
+      "q5": "How often are my feeds updated?",
+      "a5": "Feeds are updated according to the frequency chosen when added."
     },
     "contact": {
       "title": "Contact Us",
-      "description": "For any support, questions, or suggestions, feel free to reach out to us.",
-      "hours": "Support Hours:"
+      "description": "For any questions, support, or suggestions, feel free to write to us.",
+      "hours": "Support hours:"
     },
     "privacy": {
       "title": "Privacy & GDPR",
-      "description": "SUPRSS only collects the minimum necessary data to operate your account, such as your email and subscribed feeds. Reading activity is private and stored locally.",
-      "rgpdNotice": "In compliance with the GDPR, you can request access, modification, or deletion of your data via the account settings."
+      "description": "SUPRSS only collects data necessary for your account to function (email, feeds). Your reading activity remains private and local.",
+      "rgpdNotice": "Under GDPR, you can request access, modification, or deletion of your data at any time."
     }
   },
   "loading": {
-    "message": "Thank you for your patience while we prepare your dashboard..."
+    "message": "Please wait while we prepare your dashboard..."
   }
 }

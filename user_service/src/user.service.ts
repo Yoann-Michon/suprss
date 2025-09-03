@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException,  Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException, Logger } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
@@ -16,21 +16,21 @@ export class UserService {
     @InjectRepository(Setting) private readonly settingRepository: Repository<Setting>
   ) { }
 
-  async create(createUserInput: CreateUserInput){
+  async create(createUserInput: CreateUserInput) {
     try {
       this.logger.log(`Creating user with: ${createUserInput.email}`);
       const user = await this.findOneByEmail(createUserInput.email);
-      
+
       if (user) {
         throw new BadRequestException('User already exist');
       }
       const hashedPassword = await bcrypt.hash(createUserInput.password, Number(process.env.SALT));
       const setting = this.settingRepository.create();
-      
+
       const newUser = new User();
       newUser.email = createUserInput.email;
       newUser.password = hashedPassword;
-      newUser.username = createUserInput.username ;
+      newUser.username = createUserInput.username;
       newUser.role = "Admin";
       newUser.avatarUrl = "";
       newUser.firstVisit = true;
@@ -54,10 +54,10 @@ export class UserService {
     }
   }
 
-  async findOneById(id: string){
+  async findOneById(id: string) {
     try {
       this.logger.log(`Finding user by ID: ${id}`);
-      const user =await this.usersRepository.findOneBy({ id });
+      const user = await this.usersRepository.findOneBy({ id });
       this.logger.log(`Found user: ${JSON.stringify(user)}`);
       return user;
     } catch (error) {
@@ -72,40 +72,47 @@ export class UserService {
       throw new InternalServerErrorException(`Error retrieving users by IDs: ${error}`);
     }
   }
-  
+
   async findOneByEmail(email: string): Promise<User | null> {
+    try {
+      return await this.usersRepository
+        .createQueryBuilder('user')
+        .where('LOWER(user.email) = LOWER(:email)', { email })
+        .getOne() || null;
+    } catch (error) {
+      throw new InternalServerErrorException(`Error retrieving user by email: ${error}`);
+    }
+  }
+
+  async update(updateUser: UpdateUserInput) {
   try {
-    return await this.usersRepository
-      .createQueryBuilder('user')
-      .where('LOWER(user.email) = LOWER(:email)', { email })
-      .getOne() || null;
+    this.logger.log(`Updating user with data: ${JSON.stringify(updateUser)}`);
+    const user = await this.usersRepository.findOne({
+      where: { id: updateUser.id },
+      select: ["id", "email", "username", "role", "firstVisit", "avatarUrl", "createdAt", "setting"]
+    });
+    if (!user) throw new NotFoundException('User not found');
+
+    if (updateUser.password) {
+      updateUser.password = await bcrypt.hash(updateUser.password, Number(process.env.SALT) || 10);
+    }
+
+    const updatedUser = {
+      ...user,
+      ...updateUser
+    };
+
+    const savedUser = await this.usersRepository.save(updatedUser);
+
+    const { password, ...result } = savedUser as any;
+    return result;
   } catch (error) {
-    throw new InternalServerErrorException(`Error retrieving user by email: ${error}`);
+    this.logger.log(`Error updating user: ${error}`);
+    if (error instanceof NotFoundException) throw error;
+    throw new InternalServerErrorException(`Error updating user: ${error}`);
   }
 }
 
-  async update(updateUserInput: UpdateUserInput) {
-    try {
-      const user = await this.findOneById(updateUserInput.id);
-      if (!user) {
-        throw new NotFoundException('User not found');
-      }
-
-      if (updateUserInput.password) {
-      updateUserInput.password = await bcrypt.hash(updateUserInput.password, Number(process.env.SALT) || 10);
-    }
-      const updatedUser = {
-        ...user,
-        ...updateUserInput
-      };
-      return await this.usersRepository.save(updatedUser);
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error; 
-      }
-      throw new InternalServerErrorException(`Error updating user: ${error}`);
-    }
-  }
 
   async remove(id: string) {
     try {
@@ -122,9 +129,12 @@ export class UserService {
     }
   }
 
-  async validateUser(email:string, password:string): Promise<User | null> {
+  async validateUser(email: string, password: string): Promise<User | null> {
     try {
-      const user = await this.findOneByEmail(email);
+      const user = await this.usersRepository.findOne({
+        where: { email },
+        select: ["id", "email", "password", "username", "role", "firstVisit", "avatarUrl", "createdAt", "setting"]
+      });
       this.logger.log(`Validating user: ${JSON.stringify(user)}`);
       if (!user) {
         return null;
@@ -143,35 +153,32 @@ export class UserService {
     }
   }
 
-  //async changeUserRole(userId: string, role: UserRole): Promise<User> {
-  //  try {
-  //    const user = await this.findOneById(userId);
-  //    if (!user) {
-  //      throw new NotFoundException('User not found');
-  //    }
-  //    
-  //    user.role = role;
-  //    return await this.usersRepository.save(user);
-  //  } catch (error) {
-  //    if (error instanceof NotFoundException) {
-  //      throw error;
-  //    }
-  //    throw new InternalServerErrorException(`Error changing user role: ${error}`);
-  //  }
-  //}
+async updateSetting(userId: string, setting: UpdateSettingInput) {
+  try {
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+      relations: ['setting']
+    });
 
-  async updateSetting(userId: string, prefs: UpdateSettingInput) {
-  const user = await this.usersRepository.findOne({ where: { id: userId }, relations: ['setting'] });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
 
-  if (!user) throw new Error('User not found');
+    if (!user.setting) {
+      user.setting = this.settingRepository.create(setting);
+    } else {
+      Object.assign(user.setting, setting);
+    }
 
-  if (!user.setting) {
-    user.setting = this.settingRepository.create(prefs);
-  } else {
-    Object.assign(user.setting, prefs);
+    return await this.usersRepository.save(user);
+  } catch (error) {
+    if (error instanceof NotFoundException) {
+      throw error;
+    }
+    throw new InternalServerErrorException(
+      `Error updating user settings: ${error.message || error}`
+    );
   }
-
-  return this.usersRepository.save(user);
 }
 
 }

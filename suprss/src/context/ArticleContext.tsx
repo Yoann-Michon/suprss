@@ -2,12 +2,15 @@ import { createContext, useContext, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 
 export interface Article {
+  id:string,
   title: string;
-  description: string;
-  content: string;
-  thumbnail?: string;
-  source?: string;
-  link?: string;
+  link: string;
+  excerpt?: string;
+  favorite: boolean;
+  pubDate: Date;
+  author?: string;
+  feedId: string;
+  userIdsRead?: string[];
 }
 
 interface ArticleContextType {

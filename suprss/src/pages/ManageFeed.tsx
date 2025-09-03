@@ -1,126 +1,162 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
-  Box,
-  Typography,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  IconButton,
-  Paper
+  Box, Typography, Button, Dialog, DialogTitle,
+  DialogContent, DialogActions, TextField, IconButton,
+  Paper, Snackbar, Alert, MenuItem, Select, InputLabel, FormControl
 } from '@mui/material';
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useThemeColors } from '../component/ThemeModeContext';
 import { useTranslation } from 'react-i18next';
 import CustomSpeedDial from '../component/CustomSpeedDial';
 import ModalWrapper from '../component/modal/ModalWrapper';
 import ExportData from '../component/modal/ExportData';
+import { api } from '../services/api.service';
 
-interface Feed {
-  id: number;
-  title: string;
+export interface Feed {
+  id?: string;
+  name: string;        
   url: string;
   tags: string;
-  frequency: string;
+  frequency: 'Daily' | 'Hourly' | 'Weekly';
   description: string;
 }
-
-const initialFeeds: Feed[] = [
-  {
-    id: 1,
-    title: 'Tech News Digest',
-    url: 'https://technews.com/feed',
-    tags: 'Technology, News',
-    frequency: 'Daily',
-    description: 'A daily digest of the latest tech news.',
-  },
-  {
-    id: 2,
-    title: 'Creative Writing Blog',
-    url: 'https://creativewriting.com/feed',
-    tags: 'Writing, Creativity',
-    frequency: 'Weekly',
-    description: 'A blog focused on creative writing tips and prompts.',
-  },
-  {
-    id: 3,
-    title: 'Sustainable Living',
-    url: 'https://sustainableliving.org/feed',
-    tags: 'Sustainability, Lifestyle',
-    frequency: 'Bi-weekly',
-    description: 'Tips and articles on sustainable living practices.',
-  },
-  {
-    id: 4,
-    title: 'Indie Game Reviews',
-    url: 'https://indiegamereviews.com/feed',
-    tags: 'Gaming, Indie',
-    frequency: 'Daily',
-    description: 'Reviews of the latest indie games.',
-  },
-  {
-    id: 5,
-    title: 'Global Politics Update',
-    url: 'https://globalpolitics.com/feed',
-    tags: 'Politics, News',
-    frequency: 'Hourly',
-    description: 'Real-time updates on global political events.',
-  },
-];
 
 const ManageFeeds = () => {
   const colors = useThemeColors();
   const { t } = useTranslation();
-  const [openExportModal, setOpenExportModal] = useState(false);
-  const [feeds, setFeeds] = useState<Feed[]>(initialFeeds);
+
+  const [feeds, setFeeds] = useState<Feed[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const [editForm, setEditForm] = useState<Feed | null>(null);
+  const [newFeedForm, setNewFeedForm] = useState<Feed>({
+    name: '',
+    url: '',
+    frequency: 'Daily',
+    tags: '',
+    description: '',
+  });
+
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openUrlModal, setOpenUrlModal] = useState(false);
   const [openFileModal, setOpenFileModal] = useState(false);
+  const [openExportModal, setOpenExportModal] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleEditClick = (feed: Feed) => {
-    setEditForm(feed);
-    setOpenEditModal(true);
-  };
+  useEffect(() => {
+    const fetchFeeds = async () => {
+      try {
+        const res = await api<Feed[]>('/feed');
+        setFeeds(res);
+      } catch {
+        setError(t('manageFeeds.messages.errorLoad'));
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFeeds();
+  }, []);
 
-  const handleEditSave = () => {
-    if (editForm) {
-      setFeeds((prev) =>
-        prev.map((f) => (f.id === editForm.id ? editForm : f))
+  const handleEditSave = async () => {
+    if (!editForm?.name || !editForm.url || !editForm.frequency) {
+      setError(t('manageFeeds.messages.missingFields'));
+      return;
+    }
+    try {
+      const updated = await api<Feed>(`/feed/${editForm.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(editForm),
+      });
+      setFeeds(prev =>
+        prev.map(f => f.id === updated.id ? updated : f)
       );
       setOpenEditModal(false);
+    } catch {
+      setError(t('manageFeeds.messages.errorEdit'));
+    }
+  };
+
+  const handleAddFromUrl = async () => {
+    if (!newFeedForm.name || !newFeedForm.url || !newFeedForm.frequency) {
+      setError(t('manageFeeds.messages.missingFields'));
+      return;
+    }
+    try {
+      const created = await api<Feed>('/feed', {
+        method: 'POST',
+        body: JSON.stringify(newFeedForm),
+      });
+      setFeeds(prev => [...prev, created]);
+      setNewFeedForm({ name:'', url:'', frequency:'Daily', tags:'', description:'' });
+      setOpenUrlModal(false);
+    } catch {
+      setError(t('manageFeeds.messages.errorAdd'));
+    }
+  };
+
+  const handleDelete = async (id: string | undefined) => {
+    if (!id) return;
+    try {
+      await api(`/feed/${id}`, { method: 'DELETE' });
+      setFeeds(prev => prev.filter(f => f.id !== id));
+    } catch {
+      setError(t('manageFeeds.messages.errorDelete'));
     }
   };
 
   const columns: GridColDef[] = [
-    { field: 'title', headerName: t('manageFeeds.table.feedTitle'), flex: 1 },
+    { field: 'name', headerName: t('manageFeeds.table.feedTitle'), flex: 1 },
     { field: 'url', headerName: t('manageFeeds.table.url'), flex: 1 },
     { field: 'tags', headerName: t('manageFeeds.table.tags'), flex: 1 },
-    {
-      field: 'frequency',
-      headerName: t('manageFeeds.table.updateFrequency'),
-      width: 150,
-    },
-    {
-      field: 'description',
-      headerName: t('manageFeeds.table.description'),
-      flex: 2,
-    },
+    { field: 'frequency', headerName: t('manageFeeds.table.updateFrequency'), width: 150 },
+    { field: 'description', headerName: t('manageFeeds.table.description'), flex: 2 },
     {
       field: 'actions',
       headerName: t('manageFeeds.table.actions'),
-      width: 100,
+      width: 120,
       sortable: false,
       renderCell: ({ row }) => (
-        <IconButton onClick={() => handleEditClick(row)}>
-          <EditIcon />
-        </IconButton>
+        <>
+          <IconButton onClick={() => { setEditForm(row); setOpenEditModal(true); }}>
+            <EditIcon />
+          </IconButton>
+          <IconButton color="error" onClick={() => handleDelete(row.id)}>
+            <DeleteIcon />
+          </IconButton>
+        </>
       ),
     },
   ];
+
+  const renderTextFieldOrSelect = (key: keyof Feed, value: any, onChange: (v: any) => void) => {
+    if (key === 'frequency') {
+      return (
+        <FormControl fullWidth margin="normal">
+          <InputLabel>{t(`manageFeeds.fields.frequency`)}</InputLabel>
+          <Select
+            value={value}
+            label={t(`manageFeeds.fields.frequency`)}
+            onChange={e => onChange(e.target.value)}
+          >
+            <MenuItem value="Daily">Daily</MenuItem>
+            <MenuItem value="Hourly">Hourly</MenuItem>
+            <MenuItem value="Weekly">Weekly</MenuItem>
+          </Select>
+        </FormControl>
+      );
+    }
+    return (
+      <TextField
+        fullWidth
+        margin="normal"
+        label={t(`manageFeeds.fields.${key}`)}
+        value={value}
+        onChange={e => onChange(e.target.value)}
+      />
+    );
+  };
 
   return (
     <Box p={4} sx={{ backgroundColor: colors.background.default, minHeight: '100%' }}>
@@ -132,12 +168,14 @@ const ManageFeeds = () => {
         <DataGrid
           rows={feeds}
           columns={columns}
+          loading={loading}
+          getRowId={row => row.id || row.name}
           disableRowSelectionOnClick
           sx={{
             height: '100%', width: '100%',
             border: 'none',
             '& .MuiDataGrid-cell': { color: colors.text.primary },
-            '& .MuiDataGrid-columnHeaders': { backgroundColor: colors.background.hover }
+            '& .MuiDataGrid-columnHeaders': { backgroundColor: colors.background.hover },
           }}
         />
       </Paper>
@@ -145,36 +183,26 @@ const ManageFeeds = () => {
       <Dialog open={openEditModal} onClose={() => setOpenEditModal(false)} fullWidth>
         <DialogTitle>{t('manageFeeds.editFeed')}</DialogTitle>
         <DialogContent>
-          {editForm &&
-            (['title', 'url', 'tags', 'frequency', 'description'] as (keyof Feed)[]).map((key) => (
-              <TextField
-                key={key}
-                margin="normal"
-                fullWidth
-                label={t(`manageFeeds.fields.${key}`)}
-                value={editForm[key]}
-                onChange={(e) =>
-                  setEditForm({ ...editForm, [key]: e.target.value })
-                }
-              />
-            ))}
+          {editForm && (['name','url','tags','frequency','description'] as (keyof Feed)[]).map(key =>
+            renderTextFieldOrSelect(key, editForm[key], val => setEditForm({...editForm, [key]: val}))
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenEditModal(false)}>{t('common.cancel')}</Button>
-          <Button variant="contained" onClick={handleEditSave}>
-            {t('common.save')}
-          </Button>
+          <Button variant="contained" onClick={handleEditSave}>{t('common.save')}</Button>
         </DialogActions>
       </Dialog>
 
       <Dialog open={openUrlModal} onClose={() => setOpenUrlModal(false)} fullWidth>
         <DialogTitle>{t('manageFeeds.addFromUrl')}</DialogTitle>
         <DialogContent>
-          <TextField fullWidth label={t('manageFeeds.feedUrl')} margin="normal" />
+          {(['name','url','frequency','tags','description'] as (keyof Feed)[]).map(key =>
+            renderTextFieldOrSelect(key, newFeedForm[key], val => setNewFeedForm({...newFeedForm, [key]: val}))
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenUrlModal(false)}>{t('common.cancel')}</Button>
-          <Button variant="contained">{t('common.add')}</Button>
+          <Button variant="contained" onClick={handleAddFromUrl}>{t('common.add')}</Button>
         </DialogActions>
       </Dialog>
 
@@ -191,19 +219,30 @@ const ManageFeeds = () => {
           <Button variant="contained">{t('common.add')}</Button>
         </DialogActions>
       </Dialog>
+
       <CustomSpeedDial
-  showDownload
-  onDownloadClick={() => setOpenExportModal(true)}
-  onAddFromUrl={() => setOpenUrlModal(true)}
-  onAddFromFile={() => setOpenFileModal(true)}
-/>
+        showDownload
+        onDownloadClick={() => setOpenExportModal(true)}
+        onAddFromUrl={() => setOpenUrlModal(true)}
+        onAddFromFile={() => setOpenFileModal(true)}
+      />
 
       <ModalWrapper
-  open={openExportModal}
-  onClose={() => setOpenExportModal(false)}
-  component={<ExportData feeds={feeds} onClose={() => setOpenExportModal(false)} />}
-/>
+        open={openExportModal}
+        onClose={() => setOpenExportModal(false)}
+        component={<ExportData feeds={feeds} onClose={() => setOpenExportModal(false)} />}
+      />
 
+      <Snackbar
+        open={!!error}
+        autoHideDuration={5000}
+        onClose={() => setError(null)}
+        anchorOrigin={{ vertical:'top', horizontal:'center' }}
+      >
+        <Alert onClose={() => setError(null)} severity="error" sx={{ width: '100%' }}>
+          {error}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

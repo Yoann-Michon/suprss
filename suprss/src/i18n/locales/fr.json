@@ -62,12 +62,13 @@
     "sidebar": {
       "home": "Accueil",
       "myFeed": "Mon flux",
+      "flux": "Flux",
       "sharedCollections": "Collections partagées",
       "private": "Privées",
       "shared": "Partagées",
       "collections": "Collections",
       "documentation": "Documentation",
-      "tutorial": " Tutoriel",
+      "tutorial": "Tutoriel",
       "favorites": "Favoris"
     }
   },
@@ -146,7 +147,7 @@
     },
     "manageFeeds": {
       "title": "Gestion des flux",
-      "editFeed": "Modifier le flux",
+      "editFeed": "Éditer le flux",
       "addFromUrl": "Ajouter depuis une URL",
       "addFromFile": "Ajouter depuis un fichier",
       "feedUrl": "URL du flux",
@@ -155,20 +156,35 @@
         "title": "Titre",
         "url": "URL",
         "tags": "Tags",
-        "frequency": "Fréquence",
+        "frequency": "Fréquence de mise à jour",
         "description": "Description"
       },
       "table": {
-        "feedTitle": "Titre du flux",
+        "feedTitle": "Titre",
         "url": "URL",
         "tags": "Tags",
-        "updateFrequency": "Fréquence de mise à jour",
+        "updateFrequency": "Fréquence",
         "description": "Description",
         "actions": "Actions"
+      },
+      "messages": {
+        "errorLoad": "Erreur lors du chargement des flux",
+        "errorAdd": "Erreur lors de l’ajout du flux",
+        "errorEdit": "Erreur lors de la mise à jour du flux",
+        "errorDelete": "Erreur lors de la suppression du flux"
+      },
+      "tutorial": {
+        "steps": {
+          "home": "Accédez à votre page d'accueil pour voir les flux récents.",
+          "flux": "Gérez vos flux RSS ici.",
+          "collections": "Consultez et gérez vos collections partagées.",
+          "favorites": "Accédez à vos articles favoris.",
+          "tutorial": "Relancez le tutoriel interactif à tout moment.",
+          "documentation": "Consultez la documentation complète de l'application.",
+          "darkmode_btn": "Activez ou désactivez le mode sombre pour l'interface.",
+          "avatatr_btn": "Cliquez ici pour accéder à votre profil et vos paramètres."
+        }
       }
-    },
-    "speedDial": {
-      "ariaLabel": "Actions de flux"
     }
   },
   "actions": {
@@ -194,7 +210,7 @@
     "faqTitle": "Questions fréquentes",
     "faq": {
       "q1": "Comment ajouter un flux RSS ?",
-      "a1": "Cliquez sur le Speed Dial en bas à droite puis choisissez 'Ajouter via URL' ou 'via fichier'.",
+      "a1": "Cliquez sur le Speed Dial en bas à droite puis choisissez 'Ajouter depuis URL' ou 'via fichier'.",
       "q2": "Puis-je partager mes flux avec mon équipe ?",
       "a2": "Oui. Créez une collection partagée et invitez vos coéquipiers à collaborer.",
       "q3": "Quels formats sont supportés à l'import ?",
@@ -217,5 +233,10 @@
   },
   "loading": {
     "message": "Merci de patienter pendant que nous préparons votre tableau de bord..."
+  },
+  "tutorial":{
+    "intro.next": "Suivant",
+    "intro.preview": "Précédent",
+    "intro.done": "Terminé"
   }
 }

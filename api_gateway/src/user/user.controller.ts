@@ -6,46 +6,57 @@ import { UserOwnerGuard } from "utils/src/guards/owner.guard";
 
 @Controller('users')
 @UseGuards(JwtAuthGuard, UserOwnerGuard, RolesGuard)
+@Roles(UserRole.ADMIN, UserRole.USER)
 export class UserController {
     private readonly logger = new Logger(UserController.name);
     constructor(
         @Inject('USER_SERVICE') private readonly userClient: ClientProxy) { }
 
     @Get()
-    @Roles(UserRole.ADMIN, UserRole.USER)
     async getAllUsers() {
         return await firstValueFrom(this.userClient.send('findAllUsers', {}));
     }
 
     @Get('id/:id')
-    @Roles(UserRole.ADMIN)
     async getUserById(@Param('id') id: string) {
         return await firstValueFrom(this.userClient.send('findUserById', id));
     }
 
     @Get('email/:email')
-    @Roles(UserRole.ADMIN, UserRole.USER)
     async getUserByEmail(@Param('email') email: string) {
         return await firstValueFrom(this.userClient.send('findUserByEmail', email));
     }
-
-    @Patch(':id')
-    @Roles(UserRole.ADMIN, UserRole.USER)
-    async updateUser(@Param('id') id: string, @Body() updateUserDto: any, @CurrentUser("id") userId: string) {
-        return await firstValueFrom(this.userClient.send('updateUser', {
-            id,
-            updateUser: updateUserDto,
-            user: userId
+    
+    @Delete(":id")
+    async deleteUser(@Param("id") id: string, @CurrentUser("id") userId: string) {
+        this.logger.log(`Deleting user ${id} by user ${userId}`);
+        return await firstValueFrom(this.userClient.send('removeUser', {
+            userId: id
         }));
     }
-    
-    @Delete(':id')
-    @Roles(UserRole.ADMIN, UserRole.USER)
-    async deleteUser(@Param('id') id: string, @Req() req) {
-        this.logger.log("deleteUser - Utilisateur transmis:", req.user);
-        return await firstValueFrom(this.userClient.send('removeUser', {
-            id,
-            user: req.user
+
+    @Patch('/settings')
+    async updateUserSettings(@Body() data:{language?:string,darkmode?:string}, @CurrentUser("id") userId: string) {
+        return await firstValueFrom(this.userClient.send('updateSetting', {
+            setting: data,
+            id: userId
         }));
+    }
+
+    @Patch('me')
+    async updateMyProfile(
+        @Body() updateUserDto: { username?: string; avatarUrl?: string , password?: string , firstVisit?: boolean,email?:string},
+        @CurrentUser("id") userId: string
+    ) {
+        this.logger.log(`User ${userId} updating own profile`);
+
+    const updateUser = {
+      ...updateUserDto,
+      id:userId,
+    };
+
+    return await firstValueFrom(
+      this.userClient.send("updateUser", updateUser)
+    );
     }
 }

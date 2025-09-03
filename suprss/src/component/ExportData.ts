@@ -1,12 +1,5 @@
-// utils/exportData.ts
-export interface Feed {
-  id: number;
-  title: string;
-  url: string;
-  tags: string;
-  frequency: string;
-  description: string;
-}
+import type { Feed } from "../pages/ManageFeed";
+
 
 export const exportFeedData = (feeds: Feed[], format: 'json' | 'csv' | 'opml') => {
   const fileName = `feeds_export.${format}`;
@@ -30,8 +23,8 @@ export const exportFeedData = (feeds: Feed[], format: 'json' | 'csv' | 'opml') =
   <body>
     ${feeds.map(feed => `
     <outline 
-      text="${feed.title}" 
-      title="${feed.title}" 
+      text="${feed.name}" 
+      title="${feed.name}" 
       type="rss" 
       xmlUrl="${feed.url}" 
       description="${feed.description}" 

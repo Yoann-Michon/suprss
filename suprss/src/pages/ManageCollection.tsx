@@ -28,6 +28,7 @@ import { useThemeColors } from "../component/ThemeModeContext";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import { api } from "../services/api.service";
+import { useArticle, type Article } from "../context/ArticleContext";
 
 interface Collection {
   id: string;
@@ -38,11 +39,6 @@ interface Collection {
   users: string[];
 }
 
-interface Article {
-  id: string;
-  title: string;
-}
-
 interface User {
   id: string;
   email: string;
@@ -51,6 +47,7 @@ interface User {
 const ManageCollection = () => {
   const colors = useThemeColors();
   const { t } = useTranslation();
+  const { showArticle } = useArticle();
 
   const [collections, setCollections] = useState<Collection[]>([]);
   const [filter, setFilter] = useState<"ALL" | "PRIVATE" | "SHARED">("ALL");
@@ -73,8 +70,9 @@ const ManageCollection = () => {
 
   async function fetchCollections() {
     try {
-      const data = await api<Collection[]>("/collections");
-      setCollections(data);
+      const owned = await api<Collection[]>("/api/v1/collection/owned");
+      const collaborated = await api<Collection[]>("/api/v1/collection/collaborated");
+      setCollections([...owned, ...collaborated]);
     } catch (err: any) {
       console.error("Erreur chargement collections", err);
     }
@@ -82,14 +80,14 @@ const ManageCollection = () => {
 
   async function fetchArticles() {
     try {
-      const data = await api<Article[]>("/articles");
+      const data = await api<Article[]>("/api/v1/articles");
       setAllArticles(data);
     } catch {}
   }
 
   async function fetchUsers() {
     try {
-      const data = await api<User[]>("/users");
+      const data = await api<User[]>("/api/v1/users");
       setAllUsers(data);
     } catch {}
   }
@@ -97,7 +95,7 @@ const ManageCollection = () => {
   async function handleCreateCollection() {
     if (!newName) return;
     try {
-      await api("/collections", {
+      await api("/api/v1/collection", {
         method: "POST",
         body: JSON.stringify({
           name: newName,
@@ -132,7 +130,7 @@ const ManageCollection = () => {
     >
       <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="h5" fontWeight={600} color={colors.text.primary}>
-          {t("pages.collections.title")}
+          {t("pages.settings.collections.title")}
         </Typography>
         <Select
           value={filter}
@@ -140,9 +138,9 @@ const ManageCollection = () => {
           size="small"
           sx={{ bgcolor: colors.background.paper, minWidth: 150 }}
         >
-          <MenuItem value="ALL">{t("pages.collections.filterAll")}</MenuItem>
-          <MenuItem value="PRIVATE">{t("pages.collections.filterPrivate")}</MenuItem>
-          <MenuItem value="SHARED">{t("pages.collections.filterShared")}</MenuItem>
+          <MenuItem value="ALL">{t("pages.settings.collections.filterAll")}</MenuItem>
+          <MenuItem value="PRIVATE">{t("pages.settings.collections.filterPrivate")}</MenuItem>
+          <MenuItem value="SHARED">{t("pages.settings.collections.filterShared")}</MenuItem>
         </Select>
       </Stack>
 
@@ -168,9 +166,21 @@ const ManageCollection = () => {
                 {col.description || ""}
               </Typography>
               <Stack direction="row" spacing={1} alignItems="center" mt={1}>
-                <Chip icon={<ArticleIcon />} label={`${col.articles} ${t("pages.collections.articles")}`} size="small" />
-                <Chip icon={<GroupIcon />} label={`${col.users.length} ${t("pages.collections.users")}`} size="small" />
-                <Chip label={t(`pages.collections.${col.visibility.toLowerCase()}`)} size="small" color={col.visibility === "SHARED" ? "primary" : "default"} />
+                <Chip
+                  icon={<ArticleIcon />}
+                  label={`${col.articles} ${t("pages.settings.collections.articles")}`}
+                  size="small"
+                />
+                <Chip
+                  icon={<GroupIcon />}
+                  label={`${col.users.length} ${t("pages.settings.collections.users")}`}
+                  size="small"
+                />
+                <Chip
+                  label={t(`pages.settings.collections.${col.visibility.toLowerCase()}`)}
+                  size="small"
+                  color={col.visibility === "SHARED" ? "primary" : "default"}
+                />
               </Stack>
             </CardContent>
             <CardActions>
@@ -180,7 +190,6 @@ const ManageCollection = () => {
         ))}
       </Stack>
 
-      {/* FAB pour créer une collection */}
       <Fab
         color="primary"
         aria-label="add"
@@ -195,20 +204,19 @@ const ManageCollection = () => {
         <AddIcon />
       </Fab>
 
-      {/* Modal de création de collection */}
       <Dialog open={openModal} onClose={() => setOpenModal(false)} fullWidth maxWidth="sm">
-        <DialogTitle>{t("pages.collections.new")}</DialogTitle>
+        <DialogTitle>{t("pages.settings.collections.new")}</DialogTitle>
         <DialogContent>
           <Stack spacing={2} mt={1}>
             <TextField
-              label={t("pages.collections.newName")}
+              label={t("pages.settings.collections.newName")}
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               fullWidth
               required
             />
             <TextField
-              label={t("pages.collections.description")}
+              label={t("pages.settings.collections.description")}
               value={newDescription}
               onChange={(e) => setNewDescription(e.target.value)}
               fullWidth
@@ -216,23 +224,24 @@ const ManageCollection = () => {
               rows={2}
             />
             <FormControl fullWidth>
-              <InputLabel>{t("pages.collections.visibility")}</InputLabel>
+              <InputLabel>{t("pages.settings.collections.visibility")}</InputLabel>
               <Select
                 value={newVisibility}
-                label={t("pages.collections.visibility")}
+                label={t("pages.settings.collections.visibility")}
                 onChange={(e) => setNewVisibility(e.target.value as "PRIVATE" | "SHARED")}
               >
-                <MenuItem value="PRIVATE">{t("pages.collections.private")}</MenuItem>
-                <MenuItem value="SHARED">{t("pages.collections.shared")}</MenuItem>
+                <MenuItem value="PRIVATE">{t("pages.settings.collections.private")}</MenuItem>
+                <MenuItem value="SHARED">{t("pages.settings.collections.shared")}</MenuItem>
               </Select>
             </FormControl>
+
             <FormControl fullWidth>
-              <InputLabel>{t("pages.collections.selectArticles")}</InputLabel>
+              <InputLabel>{t("pages.settings.collections.selectArticles")}</InputLabel>
               <Select
                 multiple
                 value={selectedArticles}
                 onChange={(e) => setSelectedArticles(e.target.value as string[])}
-                input={<OutlinedInput label={t("pages.collections.selectArticles")} />}
+                input={<OutlinedInput label={t("pages.settings.collections.selectArticles")} />}
                 renderValue={(selected) =>
                   allArticles
                     .filter((a) => selected.includes(a.id))
@@ -243,19 +252,29 @@ const ManageCollection = () => {
                 {allArticles.map((article) => (
                   <MenuItem key={article.id} value={article.id}>
                     <Checkbox checked={selectedArticles.indexOf(article.id) > -1} />
-                    <ListItemText primary={article.title} />
+                    <ListItemText
+                      primary={
+                        <span
+                          style={{ cursor: "pointer", textDecoration: "underline" }}
+                          onClick={() => showArticle(article, allArticles)}
+                        >
+                          {article.title}
+                        </span>
+                      }
+                    />
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
+
             {newVisibility === "SHARED" && (
               <FormControl fullWidth>
-                <InputLabel>{t("pages.collections.selectUsers")}</InputLabel>
+                <InputLabel>{t("pages.settings.collections.selectUsers")}</InputLabel>
                 <Select
                   multiple
                   value={selectedUsers}
                   onChange={(e) => setSelectedUsers(e.target.value as string[])}
-                  input={<OutlinedInput label={t("pages.collections.selectUsers")} />}
+                  input={<OutlinedInput label={t("pages.settings.collections.selectUsers")} />}
                   renderValue={(selected) =>
                     allUsers
                       .filter((u) => selected.includes(u.id))

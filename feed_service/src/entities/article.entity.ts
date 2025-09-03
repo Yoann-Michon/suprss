@@ -29,4 +29,7 @@ export class Article {
 
     @Column({ default: false })
     favorite: boolean;
+
+    @Column('simple-array', { nullable: true })
+    tags?: string[];
 }

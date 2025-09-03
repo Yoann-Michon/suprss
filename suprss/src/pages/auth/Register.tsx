@@ -44,21 +44,20 @@ const Register = () => {
         const password = formData.get("password") as string;
         const confirmPassword = formData.get("confirmPassword") as string;
 
-        // Validations
         if (!username || !email || !password || !confirmPassword) {
-            setError(t('auth.register.fillAllFields') || 'Veuillez remplir tous les champs');
+            setError(t('auth.register.fillAllFields'));
             setLoading(false);
             return;
         }
 
         if (password !== confirmPassword) {
-            setError(t('auth.register.passwordsDontMatch') || 'Les mots de passe ne correspondent pas');
+            setError(t('auth.register.passwordsDontMatch'));
             setLoading(false);
             return;
         }
 
         if (password.length < 6) {
-            setError(t('auth.register.passwordTooShort') || 'Le mot de passe doit contenir au moins 6 caractères');
+            setError(t('auth.register.passwordTooShort'));
             setLoading(false);
             return;
         }
@@ -70,9 +69,8 @@ const Register = () => {
             });
             
             setUser(user);
-            // La redirection sera automatique grâce au contexte et aux routes
         } catch (err: any) {
-            setError(err.message || t('auth.register.registerError') || 'Erreur lors de l\'inscription');
+            setError(err.message || t('auth.register.registerError'));
         } finally {
             setLoading(false);
         }

@@ -5,45 +5,21 @@ import {
   Stack,
   Card,
   CardContent,
-  CardMedia,
   Button,
   Pagination,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useThemeColors } from "../component/ThemeModeContext";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import SearchBar from "../component/filter/SearchBar";
 import FilterBar from "../component/filter/FilterBar";
-import { useArticle } from "../context/ArticleContext";
-
-export interface FeedItem {
-  title: string;
-  link: string;
-  description: string;
-  content: string;
-  thumbnail: string;
-  source: string;
-}
-
-const feedUrls = [
-  {
-    label: "TechCrunch",
-    url: "https://api.rss2json.com/v1/api.json?rss_url=https://techcrunch.com/feed/",
-  },
-  {
-    label: "Wired",
-    url: "https://api.rss2json.com/v1/api.json?rss_url=https://www.wired.com/feed/rss",
-  },
-  {
-    label: "The Verge",
-    url: "https://api.rss2json.com/v1/api.json?rss_url=https://www.theverge.com/rss/index.xml",
-  },
-];
+import { useArticle, type Article } from "../context/ArticleContext";
+import { api } from "../services/api.service";
 
 const ITEMS_PER_PAGE = 3;
 
 const Home = () => {
-  const [feeds, setFeeds] = useState<FeedItem[]>([]);
+  const [articles, setArticles] = useState<Article[]>([]);
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -56,47 +32,32 @@ const Home = () => {
   const colors = useThemeColors();
   const { t } = useTranslation();
   const { showArticle } = useArticle();
-  const availableSources = feedUrls.map(feed => feed.label);
-  const availableCategories = ["AI", "Mobile", "Web", "Hardware"];
-
-  const openArticle = (item: FeedItem) => {
-    showArticle(item);
-  };
 
   useEffect(() => {
     (async () => {
-      const items: FeedItem[] = [];
-      for (const feed of feedUrls) {
-        try {
-          const res = await fetch(feed.url);
-          const json = await res.json();
-          if (json.items) {
-            items.push(
-              ...json.items.slice(0, 3).map((item: any) => ({
-                title: item.title,
-                link: item.link,
-                content: item.content || item.description,
-                description: item.description,
-                thumbnail: item.thumbnail || item.enclosure?.link || "",
-                source: feed.label,
-              }))
-            );
-          }
-        } catch (error) {
-          console.error("Failed to fetch feed:", feed.label, error);
-        }
+      try {
+        setLoading(true);
+        const items = await api<Article[]>("/feed/articles", { method: "POST" });
+        console.log(items);
+        
+        setArticles(items);
+      } catch (error) {
+        console.error("Failed to fetch articles:", error);
+      } finally {
+        setLoading(false);
       }
-      setFeeds(items);
-      setLoading(false);
     })();
   }, []);
 
-  const filteredItems = feeds.filter((item) => {
-    const matchesSearch = (item.title + item.description)
-      .toLowerCase()
-      .includes(searchText.toLowerCase());
+  const filteredItems = articles.filter((item) => {
+    const matchesSearch =
+      (item.title + (item.excerpt ?? ""))
+        .toLowerCase()
+        .includes(searchText.toLowerCase());
 
-    const matchesSource = selectedSources.length === 0 || selectedSources.includes(item.source);
+    const matchesSource =
+      selectedSources.length === 0 || selectedSources.includes(item.feedId);
+
     const matchesCategory = selectedCategories.length === 0;
 
     return matchesSearch && matchesSource && matchesCategory;
@@ -104,9 +65,9 @@ const Home = () => {
 
   const sortedItems = [...filteredItems].sort((a, b) => {
     if (sort.includes("Oldest")) {
-      return a.title.localeCompare(b.title);
+      return new Date(a.pubDate).getTime() - new Date(b.pubDate).getTime();
     }
-    return b.title.localeCompare(a.title);
+    return new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime();
   });
 
   const paginatedItems = sortedItems.slice(
@@ -123,9 +84,10 @@ const Home = () => {
           setPage(1);
         }}
       />
+
       <FilterBar
-        sources={availableSources}
-        categories={availableCategories}
+        sources={[]} 
+        categories={["AI", "Mobile", "Web", "Hardware"]}
         selectedSources={selectedSources}
         setSelectedSources={setSelectedSources}
         selectedCategories={selectedCategories}
@@ -135,121 +97,103 @@ const Home = () => {
         sort={sort}
         setSort={setSort}
       />
+
       <Typography variant="h5" fontWeight="bold" gutterBottom>
-        {t('pages.home.allFeeds')}
+        {t("pages.home.allFeeds")}
       </Typography>
 
       {loading ? (
         <Box display="flex" justifyContent="center" py={4}>
           <CircularProgress />
         </Box>
+      ) : sortedItems.length === 0 ? (
+        <Typography variant="body2" color="text.secondary">
+          {t("pages.home.noResults")}
+        </Typography>
       ) : (
         <>
-          {sortedItems.length === 0 ? (
-            <Typography variant="body2" color="text.secondary">
-              {t('pages.home.noResults')}
-            </Typography>
-          ) : (
-            <>
-              <Stack spacing={3}>
-                {paginatedItems.map((item, index) => (
-                  <Card
-                    key={index}
+          <Stack spacing={3}>
+            {paginatedItems.map((item) => (
+              <Card
+                key={item.id}
+                sx={{
+                  display: "flex",
+                  bgcolor: "transparent",
+                  boxShadow: "none",
+                  alignItems: "center",
+                  maxHeight: 200,
+                }}
+              >
+                <CardContent
+                  sx={{
+                    flex: 1,
+                    p: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    textAlign: "left",
+                  }}
+                >
+                  <Typography
+                    variant="subtitle2"
+                    fontWeight={300}
+                    color={colors.text.tertiary}
+                    fontSize={13}
+                  >
+                    {item.author ?? "Unknown"}
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    fontWeight={500}
+                    fontSize={15}
+                    gutterBottom
+                  >
+                    {item.title}
+                  </Typography>
+                  <Typography
+                    variant="body2"
                     sx={{
-                      display: "flex",
-                      bgcolor: "transparent",
-                      border: "none",
-                      boxShadow: "none",
-                      alignItems: "center",
-                      maxHeight: 200,
+                      mt: 1,
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      color: colors.text.tertiary,
+                    }}
+                    dangerouslySetInnerHTML={{
+                      __html: item.excerpt ?? "",
+                    }}
+                  />
+                  <Button
+                    title={t("pages.home.read")}
+                    variant="contained"
+                    size="small"
+                    onClick={() => showArticle(item)}
+                    sx={{
+                      textTransform: "none",
+                      width: "50px",
+                      my: 1,
+                      bgcolor: colors.background.selected,
+                      color: colors.text.secondary,
+                      borderRadius: 50,
                     }}
                   >
-                    <CardContent
-                      sx={{
-                        flex: 1,
-                        p: "16px !important",
-                        display: "flex",
-                        flexDirection: "column",
-                        textAlign: "left",
-                      }}
-                    >
-                      <Typography
-                        variant="subtitle2"
-                        fontWeight={300}
-                        color={colors.text.tertiary}
-                        fontSize={13}
-                      >
-                        {item.source}
-                      </Typography>
-                      <Typography
-                        variant="h6"
-                        fontWeight={500}
-                        fontSize={15}
-                        gutterBottom
-                      >
-                        {item.title}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          mt: 1,
-                          display: "-webkit-box",
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: "vertical",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          color: colors.text.tertiary,
-                        }}
-                        dangerouslySetInnerHTML={{
-                          __html: item.description,
-                        }}
-                      />
-                      <Button
-                        title={t('pages.home.read')}
-                        variant="contained"
-                        size="small"
-                        onClick={() => openArticle(item)}
-                        sx={{
-                          textTransform: "none",
-                          width: "50px",
-                          my: 1,
-                          bgcolor: colors.background.selected,
-                          color: colors.text.secondary,
-                          borderRadius: 50,
-                        }}
-                      >
-                        {t('pages.home.read')}
-                      </Button>
-                    </CardContent>
-                    {item.thumbnail && (
-                      <CardMedia
-                        component="img"
-                        image={item.thumbnail}
-                        alt={item.title}
-                        sx={{
-                          width: 300,
-                          objectFit: "cover",
-                          aspectRatio: "16/9",
-                          m: 1,
-                          borderRadius: 3,
-                        }}
-                      />
-                    )}
-                  </Card>
-                ))}
-              </Stack>
+                    {t("pages.home.read")}
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </Stack>
 
-              {sortedItems.length > ITEMS_PER_PAGE && (
-                <Box mt={4} display="flex" justifyContent="center">
-                  <Pagination
-                    id="pagination"
-                    count={Math.ceil(sortedItems.length / ITEMS_PER_PAGE)}
-                    page={page}
-                    onChange={(_, val) => setPage(val)}
-                  />
-                </Box>
-              )}
-            </>
+          {sortedItems.length > ITEMS_PER_PAGE && (
+            <Box mt={4} display="flex" justifyContent="center">
+              <Pagination
+                id="pagination"
+                count={Math.ceil(sortedItems.length / ITEMS_PER_PAGE)}
+                page={page}
+                onChange={(_, val) => setPage(val)}
+              />
+            </Box>
           )}
         </>
       )}
